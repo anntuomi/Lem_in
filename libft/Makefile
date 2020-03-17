@@ -60,7 +60,7 @@ OBJECT2 = addr.o base.o char_and_string.o conversion.o \
 all: $(NAME)
 
 $(NAME):
-			gcc -Wall -Wextra -Werror -I $(INC) -c $(SRC) $(SRC2)
+			gcc -I $(INC) -c $(SRC) $(SRC2)
 			ar rc $(NAME) $(OBJECT) $(OBJECT2)
 			ranlib $(NAME)
 
