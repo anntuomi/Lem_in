@@ -26,11 +26,9 @@ $(NAME):
 			gcc $(OBJECT) libft/libft.a -o $(NAME)
 	
 clean:
-			/bin/rm -f $(OBJECT) $(OBJECT2)
-			make -C libft/ clean
+			/bin/rm -f $(OBJECT)
 
 fclean:		clean
-			make -C libft/ fclean
-			/bin/rm -f $(NAME) $(NAME2)
+			/bin/rm -f $(NAME)
 
 re:			fclean all
