@@ -2,8 +2,9 @@
 
 int main(int argc, char **argv)
 {
-    t_room *rooms;
-    char *line;
+    t_room  *rooms;
+    t_link  *link;
+    char    *line;
 
     create_room_list(&rooms, &line);
     while (rooms != NULL)
@@ -11,6 +12,6 @@ int main(int argc, char **argv)
         printf("%s |x %d|y %d! type %d\n", rooms->name, rooms->x, rooms->y, rooms->type);
         rooms = rooms->next;
     }
-    printf("%s", line);
+    link = get_links(line);
     return (0);
 }

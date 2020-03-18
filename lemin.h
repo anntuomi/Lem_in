@@ -24,6 +24,15 @@ typedef struct	s_room
     void *next;
 }				t_room;
 
-void    create_room_list(t_room **rooms, char **line);
+typedef struct	s_link
+{
+    char    *room1;
+    char    *room2;
+    void    *next;
+}				t_link;
+
+void            create_room_list(t_room **rooms, char **line);
+t_link          *get_links(char *line);
+void            handle_error(void);
 
 #endif
