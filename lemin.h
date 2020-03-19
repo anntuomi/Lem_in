@@ -17,11 +17,11 @@
 
 typedef struct	s_room
 {
-    char *name;
-    int x;
-    int y;
-    int type;
-    void *next;
+    char    *name;
+    int     x;
+    int     y;
+    int     type;
+    void    *next;
 }				t_room;
 
 typedef struct	s_link
@@ -34,6 +34,6 @@ typedef struct	s_link
 void            create_room_list(t_room **rooms, char **line);
 void            handle_links(t_link **links, char *line);
 void            handle_error(void);
-t_link          *get_links(char *line);
+t_link          *get_links(char *line, t_room *room);
 
 #endif

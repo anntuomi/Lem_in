@@ -1,5 +1,16 @@
 #include "lemin.h"
 
+static int      is_room(t_room *room, char *input)
+{
+    while (room)
+    {
+        if (ft_strequ(input, room->name))
+            return (1);
+        room = room->next;
+    }
+    return (0);
+}
+
 static int      count_words(char **array)
 {
     int     words;
@@ -10,13 +21,14 @@ static int      count_words(char **array)
     return (words);
 }
 
-static t_link   *get_link(char *line)
+static t_link   *get_link(char *line, t_room *room)
 {
     t_link  *link;
     char    **rooms;
 
     if (!(link = (t_link *)malloc(sizeof(t_link))) ||
-    !(rooms = ft_strsplit(line, '-')) || count_words(rooms) != 2)
+    !(rooms = ft_strsplit(line, '-')) || count_words(rooms) != 2 ||
+    !is_room(room, rooms[0]) || !is_room(room, rooms[1]))
         handle_error();
     free(line);
     link->room1 = rooms[0];
@@ -26,17 +38,17 @@ static t_link   *get_link(char *line)
     return (link);
 }
 
-t_link          *get_links(char *line)
+t_link          *get_links(char *line, t_room *room)
 {
     t_link  *head;
     t_link  *link;
     char    **rooms;
 
-    head = get_link(line);
+    head = get_link(line, room);
     link = head;
     while (get_next_line(0, &line) == 1)
     {
-        link->next = get_link(line);
+        link->next = get_link(line, room);
         link = link->next;
     }
     return (head);
