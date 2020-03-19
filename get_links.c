@@ -10,40 +10,37 @@ static int      count_words(char **array)
     return (words);
 }
 
-static t_link   *get_link(char *line)
+void	save_link(t_link **links, char *line)
 {
-    t_link  *link;
-    char    **rooms;
+    t_link *new;
+    char **input;
 
-    if (!(link = (t_link *)malloc(sizeof(t_link))) ||
-    !(rooms = ft_strsplit(line, '-')) || count_words(rooms) != 2)
+    if (!(new = (t_link *)malloc(sizeof(t_link))) ||
+    !(input = ft_strsplit(line, '-')) ||
+     count_words(input) != 2)
         handle_error();
-    free(line);
-    link->room1 = rooms[0];
-    link->room2 = rooms[1];
-    free(rooms);
-    link->next = NULL;
-    return (link);
+    new->room1 = ft_strdup(input[0]);
+    new->room2 = ft_strdup(input[1]);
+    ft_2ddel(input);
+	new->next = *links;
+	*links = new;
 }
 
-t_link          *get_links(char *line)
+void    get_links(t_link **links, char *line)
 {
-    t_link  *head;
-    t_link  *link;
-    char    **rooms;
+    int ret;
 
-    head = get_link(line);
-    link = head->next;
-    while (get_next_line(0, &line) == 1)
+    ret = 1;
+    *links = NULL;
+    save_link(links, line);
+    free(line);
+    while (ret != 0)
     {
-        link = get_link(line);
-        link = link->next;
+        ret = get_next_line(0, &line);
+        if (line)
+        {
+            save_link(links, line);
+        }
+        free(line);
     }
-    link = head;
-    while (link)
-    {
-        printf("%s-%s\n", link->room1, link->room2);
-        link = link->next;
-    }
-    return (head);
 }

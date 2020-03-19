@@ -12,34 +12,23 @@ int      validate_room_input(char **input)
         ft_2ddel(input);
         return (NOTROOM);
     }
-    if (size != 3)
-        exit(2);
-    if (ft_isnum(input[1]) != 1 || ft_isnum(input[2]) != 1)
-        exit(3);
+    if (size != 3 || (ft_isnum(input[1]) != 1 || ft_isnum(input[2]) != 1))
+        handle_error();
     return (ISROOM);
 }
 
-t_room    *save_room(int room_type, char **input)
-{
-    t_room *room;
-
-    room = (t_room *)malloc(sizeof(t_room));
-    if (room == NULL)
-        exit(1);
-    room->name = ft_strdup(input[0]);
-    room->x = ft_atoi(input[1]);
-    room->y = ft_atoi(input[2]);
-    room->type = room_type;
-    room->next = NULL;
-    ft_2ddel(input);
-    return (room);
-}
-
-void	append_room(t_room **rooms, int room_type, char **input)
+void	save_room(t_room **rooms, int room_type, char **input)
 {
     t_room *new;
 
-    new = save_room(room_type, input);
+    new = (t_room *)malloc(sizeof(t_room));
+    if (new == NULL)
+        exit(1);
+    new->name = ft_strdup(input[0]);
+    new->x = ft_atoi(input[1]);
+    new->y = ft_atoi(input[2]);
+    new->type = room_type;
+    ft_2ddel(input);
 	new->next = *rooms;
 	*rooms = new;
 }
@@ -56,17 +45,13 @@ int     determine_room_type(char *line)
 
 void    create_room_list(t_room **rooms, char **line)
 {
-    int ret;
     int room_type;
-    int i;
     char **input;
 
-    i = 0;
-    ret = 1;
     room_type = NORMAL;
-    while (ret != 0)
+    *rooms = NULL;
+    while (get_next_line(0, line))
     {
-        ret = get_next_line(0, line);
         if (*line)
         {
             if (*line[0] == '#')
@@ -76,14 +61,10 @@ void    create_room_list(t_room **rooms, char **line)
                 input = ft_strsplit(*line, ' ');
                 if (validate_room_input(input) == NOTROOM)
                     break ;
-                if (i == 0)
-                    *rooms = save_room(room_type, input);
-                else
-                    append_room(rooms, room_type, input);
+                save_room(rooms, room_type, input);
                 room_type = NORMAL;
             }
         }
         free(*line);
-        i++;
     }
 }
