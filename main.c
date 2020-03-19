@@ -1,5 +1,22 @@
 #include "lemin.h"
 
+void   print_input(t_room *rooms, t_link *links)
+{
+    while (rooms)
+    {
+        if (rooms->type == START)
+            printf("##start\n");
+        else if (rooms->type == END)
+            printf("##end\n");
+        printf("%s %d %d\n", rooms->name, rooms->x, rooms->y);
+        rooms = rooms->next;
+    }
+    while (links)
+    {
+        printf("%s-%s\n", links->room1, links->room2);
+        links = links->next;
+    }
+}
 int main(int argc, char **argv)
 {
     t_room  *rooms;
@@ -10,19 +27,6 @@ int main(int argc, char **argv)
     if (!(line))
         handle_error();
     links = get_links(line, rooms);
-    while (rooms)
-    {
-        if (rooms->type == 0)
-            printf("##start\n");
-        else if (rooms->type == 2)
-            printf("##end\n");
-        printf("%s %d %d\n", rooms->name, rooms->x, rooms->y);
-        rooms = rooms->next;
-    }
-    while (links)
-    {
-        printf("%s-%s\n", links->room1, links->room2);
-        links = links->next;
-    }
+    print_input(rooms, links);
     return (0);
 }

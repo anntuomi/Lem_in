@@ -17,7 +17,7 @@ int      validate_room_input(char **input)
     return (ISROOM);
 }
 
-void	save_room(t_room **rooms, int room_type, char **input)
+t_room	*new_room(int room_type, char **input)
 {
     t_room *new;
 
@@ -29,8 +29,8 @@ void	save_room(t_room **rooms, int room_type, char **input)
     new->y = ft_atoi(input[2]);
     new->type = room_type;
     ft_2ddel(input);
-	new->next = *rooms;
-	*rooms = new;
+	new->next = NULL;
+    return (new);
 }
 
 int     determine_room_type(char *line)
@@ -43,13 +43,29 @@ int     determine_room_type(char *line)
         return (NORMAL);
 }
 
-void    create_room_list(t_room **rooms, char **line)
+t_room    *save_room(t_room *room, t_room **head, char **input, int *room_type)
+{
+    if (room == NULL)
+    {
+        room = new_room(*room_type, input);
+        *head = room;
+    }
+    else
+    {
+        room->next = new_room(*room_type, input);
+        room = room->next;
+    }                
+    *room_type = NORMAL;
+    return (room);
+}
+void    create_room_list(t_room **head, char **line)
 {
     int room_type;
     char **input;
+    t_room *room;
 
     room_type = NORMAL;
-    *rooms = NULL;
+    room = NULL;
     while (get_next_line(0, line))
     {
         if (*line)
@@ -61,8 +77,7 @@ void    create_room_list(t_room **rooms, char **line)
                 input = ft_strsplit(*line, ' ');
                 if (validate_room_input(input) == NOTROOM)
                     break ;
-                save_room(rooms, room_type, input);
-                room_type = NORMAL;
+                room = save_room(room, head, input, &room_type);
             }
         }
         free(*line);
