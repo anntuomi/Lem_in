@@ -33,16 +33,10 @@ t_link          *get_links(char *line)
     char    **rooms;
 
     head = get_link(line);
-    link = head->next;
+    link = head;
     while (get_next_line(0, &line) == 1)
     {
-        link = get_link(line);
-        link = link->next;
-    }
-    link = head;
-    while (link)
-    {
-        printf("%s-%s\n", link->room1, link->room2);
+        link->next = get_link(line);
         link = link->next;
     }
     return (head);
