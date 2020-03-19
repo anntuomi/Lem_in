@@ -32,7 +32,8 @@ typedef struct	s_link
 }				t_link;
 
 void            create_room_list(t_room **rooms, char **line);
-void            get_links(t_link **links, char *line);
+void            handle_links(t_link **links, char *line);
 void            handle_error(void);
+t_link          *get_links(char *line);
 
 #endif

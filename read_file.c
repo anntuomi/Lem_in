@@ -9,7 +9,7 @@ int main(int argc, char **argv)
     create_room_list(&rooms, &line);
     if (!(line))
     handle_error();
-    get_links(&links, line);
+    handle_links(&links, line);
     while (rooms != NULL)
     {
         printf("%s |x %d|y %d! type %d\n", rooms->name, rooms->x, rooms->y, rooms->type);
