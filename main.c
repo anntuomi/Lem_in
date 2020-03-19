@@ -1,7 +1,8 @@
 #include "lemin.h"
 
-void   print_input(t_room *rooms, t_link *links)
+void   print_input(int amount, t_room *rooms, t_link *links)
 {
+    printf("%d\n", amount);
     while (rooms)
     {
         if (rooms->type == START)
@@ -19,14 +20,18 @@ void   print_input(t_room *rooms, t_link *links)
 }
 int main(int argc, char **argv)
 {
+    char    **ants;
+    int     amount;
     t_room  *rooms;
     t_link  *links;
     char    *line;
 
+    ants = get_ants(&amount);
     create_room_list(&rooms, &line);
     if (!(line))
         handle_error();
+    add_start_room(ants, amount, rooms);
     links = get_links(line, rooms);
-    print_input(rooms, links);
+    print_input(amount, rooms, links);
     return (0);
 }
