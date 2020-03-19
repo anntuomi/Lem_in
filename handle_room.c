@@ -1,6 +1,6 @@
 #include "lemin.h"
 
-int      validate_room_input(char **input)
+static int      validate_room_input(char **input)
 {
     int size;
 
@@ -17,7 +17,7 @@ int      validate_room_input(char **input)
     return (ISROOM);
 }
 
-t_room	*new_room(int room_type, char **input)
+static t_room	*new_room(int room_type, char **input)
 {
     t_room *new;
 
@@ -33,7 +33,7 @@ t_room	*new_room(int room_type, char **input)
     return (new);
 }
 
-int     determine_room_type(char *line)
+static int     determine_room_type(char *line)
 {
     if (ft_strcmp(line, "##start") == 0)
         return (START);
@@ -43,7 +43,7 @@ int     determine_room_type(char *line)
         return (NORMAL);
 }
 
-t_room    *save_room(t_room *room, t_room **head, char **input, int *room_type)
+static t_room    *save_room(t_room *room, t_room **head, char **input, int *room_type)
 {
     if (room == NULL)
     {
@@ -58,6 +58,7 @@ t_room    *save_room(t_room *room, t_room **head, char **input, int *room_type)
     *room_type = NORMAL;
     return (room);
 }
+
 void    create_room_list(t_room **head, char **line)
 {
     int room_type;

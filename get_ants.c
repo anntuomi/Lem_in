@@ -1,15 +1,13 @@
 #include "lemin.h"
 
-void    add_start_room(char **ants, int amount, t_room *room)
+void    ants_to_start(char **ants, int amount, t_room *start)
 {
-    int     i;
+    int i;
 
-    while (room && room->type != 0)
-        room = room->next;
     i = 0;
     while (i < amount)
     {
-        if (!(ants[i++] = ft_strdup(room->name)))
+        if (!(ants[i++] = ft_strdup(start->name)))
             handle_error();
     }
     ants[i] = NULL;

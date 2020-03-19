@@ -18,20 +18,36 @@ void   print_input(int amount, t_room *rooms, t_link *links)
         links = links->next;
     }
 }
+
+void    find_edges(t_room *room, t_room **start, t_room **end)
+{
+    *start = NULL;
+    *end = NULL;
+    while (room)
+    {
+        if (room->type == START)
+            *start = room;
+        if (room->type == END)
+            *end = room;
+        room = room->next;
+    }
+    if (*start == NULL || *end == NULL)
+        handle_error();
+}
+
 int main(int argc, char **argv)
 {
-    char    **ants;
+    t_farm  farm;
     int     amount;
-    t_room  *rooms;
-    t_link  *links;
     char    *line;
 
-    ants = get_ants(&amount);
-    create_room_list(&rooms, &line);
+    farm.ants = get_ants(&amount);
+    create_room_list(&farm.rooms, &line);
     if (!(line))
         handle_error();
-    add_start_room(ants, amount, rooms);
-    links = get_links(line, rooms);
-    print_input(amount, rooms, links);
+    find_edges(farm.rooms, &farm.start, &farm.end);
+    ants_to_start(farm.ants, amount, farm.start);
+    farm.links = get_links(line, farm.rooms);
+    print_input(amount, farm.rooms, farm.links);
     return (0);
 }
