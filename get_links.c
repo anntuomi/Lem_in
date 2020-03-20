@@ -30,7 +30,6 @@ static t_link   *get_link(char *line, t_room *room)
     !(rooms = ft_strsplit(line, '-')) || count_words(rooms) != 2 ||
     !is_room(room, rooms[0]) || !is_room(room, rooms[1]))
         handle_error();
-    free(line);
     link->room1 = rooms[0];
     link->room2 = rooms[1];
     free(rooms);
@@ -45,11 +44,16 @@ t_link          *get_links(char *line, t_room *room)
     char    **rooms;
 
     head = get_link(line, room);
+    free(line);
     link = head;
     while (get_next_line(0, &line) == 1)
     {
-        link->next = get_link(line, room);
-        link = link->next;
+        if (line[0] != '#')
+        {
+            link->next = get_link(line, room);
+            link = link->next;
+        }
+        free(line);
     }
     return (head);
 }
