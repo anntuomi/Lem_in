@@ -50,8 +50,8 @@ typedef struct	s_farm
 char            **get_ants(int *amount);
 void            create_room_list(t_room **rooms, char **line);
 void            ants_to_start(char **ants, int amount, t_room *room);
-void            handle_links(t_link **links, char *line);
-void            handle_error(void);
 t_link          *get_links(char *line, t_room *room);
+void            set_link(t_room *rooms_head, t_link *links_head);
+void            handle_error(void);
 
 #endif

@@ -35,61 +35,12 @@ void    find_edges(t_room *room, t_room **start, t_room **end)
         handle_error();
 }
 
-t_path  *get_path(char *room1, t_link *link, t_room *room)
-{
-    t_path  *path;
-    char    *room2;
-
-    if (!(path = (t_path *)malloc(sizeof(t_path))))
-            handle_error();
-    room2 = ft_strequ(room1, link->room1) ? link->room2 : link->room1;
-    while (room && !ft_strequ(room->name, room2))
-        room = room->next;
-    path->content = room;
-    path->next = NULL;
-    return (path);
-}
-
-void    set_link(t_room *rooms_head, t_link *links_head)
-{
-    t_room  *room;
-    t_link  *link;
-    t_path  *head;
-    t_path  *path;
-
-    room = rooms_head;
-    while (room)
-    {
-        head = NULL;
-        link = links_head;
-        while (link)
-        {
-            if (ft_strequ(link->room1, room->name) ||
-            ft_strequ(link->room2, room->name))
-            {
-                if (!head)
-                {
-                    head = get_path(room->name, link, rooms_head);
-                    path = head;
-                }
-                else
-                {
-                    path->next = get_path(room->name, link, rooms_head);
-                    path = path->next;
-                }
-            }
-            link = link->next;
-        }
-        room->paths = head;
-        room = room->next;
-    }
-}
-
 int     main(void)
 {
     t_farm  farm;
     int     amount;
     char    *line;
+    t_room  *room;
 
     farm.ants = get_ants(&amount);
     create_room_list(&farm.rooms, &line);
@@ -100,5 +51,15 @@ int     main(void)
     farm.links = get_links(line, farm.rooms);
     print_input(amount, farm.rooms, farm.links);
     set_link(farm.rooms, farm.links);
+    while (farm.rooms)
+    {
+        while (farm.rooms->paths)
+        {
+            room = farm.rooms->paths->content;
+            printf("%s -> %s\n", farm.rooms->name, room->name);
+            farm.rooms->paths = farm.rooms->paths->next;
+        }
+        farm.rooms = farm.rooms->next;
+    }
     return (0);
 }
