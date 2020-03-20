@@ -40,7 +40,6 @@ int     main(void)
     t_farm  farm;
     int     amount;
     char    *line;
-    t_room  *room;
 
     farm.ants = get_ants(&amount);
     create_room_list(&farm.rooms, &line);
@@ -51,15 +50,5 @@ int     main(void)
     farm.links = get_links(line, farm.rooms);
     print_input(amount, farm.rooms, farm.links);
     set_link(farm.rooms, farm.links);
-    while (farm.rooms)
-    {
-        while (farm.rooms->paths)
-        {
-            room = farm.rooms->paths->content;
-            printf("%s -> %s\n", farm.rooms->name, room->name);
-            farm.rooms->paths = farm.rooms->paths->next;
-        }
-        farm.rooms = farm.rooms->next;
-    }
     return (0);
 }
