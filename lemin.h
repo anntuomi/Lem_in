@@ -17,8 +17,8 @@
 
 typedef struct	s_path
 {
-	void			*content;
-	struct s_path	*next;
+	void	*content;
+	void    *next;
 }				t_path;
 
 typedef struct	s_room
