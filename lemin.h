@@ -15,12 +15,19 @@
 #define NOTROOM 0
 #define ISROOM 1
 
+typedef struct	s_path
+{
+	void			*content;
+	struct s_path	*next;
+}				t_path;
+
 typedef struct	s_room
 {
     char    *name;
     int     x;
     int     y;
     int     type;
+    t_path  *paths;
     void    *next;
 }				t_room;
 

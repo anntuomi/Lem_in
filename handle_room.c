@@ -28,6 +28,7 @@ static t_room	*new_room(int room_type, char **input)
     new->x = ft_atoi(input[1]);
     new->y = ft_atoi(input[2]);
     new->type = room_type;
+    new->paths = NULL;
     ft_2ddel(input);
 	new->next = NULL;
     return (new);
