@@ -1,8 +1,9 @@
 #include "lemin.h"
 
-static int      validate_room_input(char **input)
+static int      validate_room_input(char **input, t_room **head)
 {
     int size;
+    t_room *room;
 
     size = 0;
     while (input[size] != NULL)
@@ -14,6 +15,13 @@ static int      validate_room_input(char **input)
     }
     if (size != 3 || (ft_isnum(input[1]) != 1 || ft_isnum(input[2]) != 1))
         handle_error();
+    room = *head;
+    while (room)
+    {
+        if (ft_strequ(input[0], room->name) == 1)
+            handle_error();
+        room = room->next;
+    }
     return (ISROOM);
 }
 
@@ -72,12 +80,14 @@ void    create_room_list(t_room **head, char **line)
     {
         if (*line)
         {
+            if (*line[0] == 'L')
+                handle_error();
             if (*line[0] == '#')
                 room_type = determine_room_type(*line);
             else
             {
                 input = ft_strsplit(*line, ' ');
-                if (validate_room_input(input) == NOTROOM)
+                if (validate_room_input(input, head) == NOTROOM)
                     break ;
                 room = save_room(room, head, input, &room_type);
             }
