@@ -16,7 +16,7 @@ void    ants_to_start(t_room **ants, int amount, t_room *start)
 
 t_room  **get_ants(int *amount)
 {
-    void    *ants;
+    t_room  **ants;
     char    *line;
 
     if (get_next_line(0, &line) != 1 || ft_isnum(line) != 1 ||
