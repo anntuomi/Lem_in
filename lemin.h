@@ -41,7 +41,7 @@ typedef struct  s_link
 
 typedef struct  s_farm
 {
-    char    **ants;
+    t_room  **ants;
     t_room  *rooms;
     t_link  *links;
     t_room  *start;
@@ -50,10 +50,10 @@ typedef struct  s_farm
 
 t_link          *get_links(char *line, t_room *room);
 
-char            **get_ants(int *amount);
+t_room          **get_ants(int *amount);
 
 void            create_room_list(t_room **rooms, char **line);
-void            ants_to_start(char **ants, int amount, t_room *room);
+void            ants_to_start(t_room **ants, int amount, t_room *start);
 void            set_link(t_room *rooms_head, t_link *links_head);
 void            handle_error(void);
 
