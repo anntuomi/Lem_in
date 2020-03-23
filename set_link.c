@@ -29,9 +29,9 @@ static void     set_path(t_link *link, int room1, t_path **head, t_path **path)
 {
     t_room  *room2;
 
-    if (link->room1->id == room1)
+    if (link->room1->id == room1 && link->room2->id != room1)
         room2 = link->room2;
-    else if (link->room2->id == room1)
+    else if (link->room2->id == room1 && link->room1->id != room1)
         room2 = link->room1;
     else
         room2 = NULL;
