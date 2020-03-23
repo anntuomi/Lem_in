@@ -36,6 +36,7 @@ static t_room   *new_room(int room_type, char **input)
     new->name = ft_strdup(input[0]);
     new->x = ft_atoi(input[1]);
     new->y = ft_atoi(input[2]);
+    new->visited = 0;
     new->type = room_type;
     new->id = id++;
     new->paths = NULL;

@@ -50,6 +50,7 @@ int         main(void)
     farm.links = get_links(line, farm.rooms);
     print_input(amount, farm.rooms, farm.links);
     set_link(farm.rooms, farm.links);
-    printf("%d\n", find_end(farm.start, NULL));
+    printf("%d\n", find_end(farm.start));
+    printf("%d!\n", farm.start->visited);
     return (0);
 }
