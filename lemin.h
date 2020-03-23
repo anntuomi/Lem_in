@@ -17,26 +17,26 @@
 
 typedef struct  s_path
 {
-	void    *content;
-	void    *next;
+	void            *content;
+	struct s_path   *next;
 }               t_path;
 
 typedef struct  s_room
 {
-    char    *name;
-    int     x;
-    int     y;
-    int     type;
-    int     id;
-    t_path  *paths;
-    void    *next;
+    char            *name;
+    int             x;
+    int             y;
+    int             type;
+    int             id;
+    t_path          *paths;
+    struct s_room   *next;
 }               t_room;
 
 typedef struct  s_link
 {
-    char    *room1;
-    char    *room2;
-    void    *next;
+    t_room          *room1;
+    t_room          *room2;
+    struct s_link   *next;
 }               t_link;
 
 typedef struct  s_farm

@@ -14,7 +14,7 @@ static void print_input(int amount, t_room *rooms, t_link *links)
     }
     while (links)
     {
-        printf("%s-%s\n", links->room1, links->room2);
+        printf("%s-%s\n", links->room1->name, links->room2->name);
         links = links->next;
     }
 }
