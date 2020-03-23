@@ -1,6 +1,6 @@
 #include "lemin.h"
 
-void    print_input(int amount, t_room *rooms, t_link *links)
+static void print_input(int amount, t_room *rooms, t_link *links)
 {
     printf("%d\n", amount);
     while (rooms)
@@ -19,7 +19,7 @@ void    print_input(int amount, t_room *rooms, t_link *links)
     }
 }
 
-void    find_edges(t_room *room, t_room **start, t_room **end)
+static void find_edges(t_room *room, t_room **start, t_room **end)
 {
     *start = NULL;
     *end = NULL;
@@ -35,7 +35,7 @@ void    find_edges(t_room *room, t_room **start, t_room **end)
         handle_error();
 }
 
-int     main(void)
+int         main(void)
 {
     t_farm  farm;
     int     amount;

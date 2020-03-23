@@ -2,8 +2,8 @@
 
 static int      validate_room_input(char **input, t_room **head)
 {
-    int size;
-    t_room *room;
+    int     size;
+    t_room  *room;
 
     size = 0;
     while (input[size] != NULL)
@@ -25,9 +25,10 @@ static int      validate_room_input(char **input, t_room **head)
     return (ISROOM);
 }
 
-static t_room	*new_room(int room_type, char **input)
+static t_room   *new_room(int room_type, char **input)
 {
-    t_room *new;
+    t_room      *new;
+    static int  id = 0;
 
     new = (t_room *)malloc(sizeof(t_room));
     if (new == NULL)
@@ -36,13 +37,14 @@ static t_room	*new_room(int room_type, char **input)
     new->x = ft_atoi(input[1]);
     new->y = ft_atoi(input[2]);
     new->type = room_type;
+    new->id = id++;
     new->paths = NULL;
     ft_2ddel(input);
 	new->next = NULL;
     return (new);
 }
 
-static int     determine_room_type(char *line)
+static int      determine_room_type(char *line)
 {
     if (ft_strcmp(line, "##start") == 0)
         return (START);
@@ -52,7 +54,8 @@ static int     determine_room_type(char *line)
         return (NORMAL);
 }
 
-static t_room    *save_room(t_room *room, t_room **head, char **input, int *room_type)
+static t_room   *save_room(t_room *room, t_room **head, char **input,
+int *room_type)
 {
     if (room == NULL)
     {
@@ -63,16 +66,16 @@ static t_room    *save_room(t_room *room, t_room **head, char **input, int *room
     {
         room->next = new_room(*room_type, input);
         room = room->next;
-    }                
+    }
     *room_type = NORMAL;
     return (room);
 }
 
-void    create_room_list(t_room **head, char **line)
+void            create_room_list(t_room **head, char **line)
 {
-    int room_type;
-    char **input;
-    t_room *room;
+    int     room_type;
+    char    **input;
+    t_room  *room;
 
     room_type = NORMAL;
     room = NULL;
