@@ -55,7 +55,7 @@ void            create_room_list(t_room **head, char **line);
 void            ants_to_start(t_room **ants, int amount, t_room *start);
 t_link          *get_links(char *line, t_room *room);
 void            set_link(t_room *rooms_head, t_link *links_head);
-int             find_end(t_room *current);
+int             find_end(t_room *current, int len);
 void            handle_error(void);
 
 #endif

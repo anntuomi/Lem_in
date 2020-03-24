@@ -2,19 +2,19 @@
 
 static void print_input(int amount, t_room *rooms, t_link *links)
 {
-    ft_printf("%d\n", amount);
+    printf("%d\n", amount);
     while (rooms)
     {
         if (rooms->type == START)
-            ft_printf("##start\n");
+            printf("##start\n");
         else if (rooms->type == END)
-            ft_printf("##end\n");
-        ft_printf("%s %d %d\n", rooms->name, rooms->x, rooms->y);
+            printf("##end\n");
+        printf("%s %d %d\n", rooms->name, rooms->x, rooms->y);
         rooms = rooms->next;
     }
     while (links)
     {
-        ft_printf("%s-%s\n", links->room1->name, links->room2->name);
+        printf("%s-%s\n", links->room1->name, links->room2->name);
         links = links->next;
     }
 }
@@ -50,7 +50,6 @@ int         main(void)
     farm.links = get_links(line, farm.rooms);
     print_input(amount, farm.rooms, farm.links);
     set_link(farm.rooms, farm.links);
-    printf("%d\n", find_end(farm.start));
-    printf("%d!\n", farm.start->visited);
+    printf("%d\n", find_end(farm.start, 0));
     return (0);
 }
