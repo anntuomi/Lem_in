@@ -8,6 +8,7 @@
 # include <fcntl.h>
 # include "libft.h"
 # include "get_next_line.h"
+# include "ft_printf.h"
 
 # define START 0
 # define NORMAL 1
