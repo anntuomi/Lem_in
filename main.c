@@ -2,19 +2,19 @@
 
 static void print_input(int amount, t_room *rooms, t_link *links)
 {
-    ft_printf("%d\n", amount);
+    printf("%d\n", amount);
     while (rooms)
     {
         if (rooms->type == START)
-            ft_printf("##start\n");
+            printf("##start\n");
         else if (rooms->type == END)
-            ft_printf("##end\n");
-        ft_printf("%s %d %d\n", rooms->name, rooms->x, rooms->y);
+            printf("##end\n");
+        printf("%s %d %d\n", rooms->name, rooms->x, rooms->y);
         rooms = rooms->next;
     }
     while (links)
     {
-        ft_printf("%s-%s\n", links->room1->name, links->room2->name);
+        printf("%s-%s\n", links->room1->name, links->room2->name);
         links = links->next;
     }
 }
