@@ -1,4 +1,4 @@
-# map5.txt
+# map6.txt
 #
 # A map with two two-way crossroads
 #
