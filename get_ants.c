@@ -19,9 +19,11 @@ t_room  **get_ants(int *amount)
     t_room  **ants;
     char    *line;
 
-    if (get_next_line(0, &line) != 1 || ft_isnum(line) != 1 ||
-    (*amount = ft_atoi(line)) < 1)
+    while (get_next_line(0, &line) == 1 && line[0] == '#')
+        free(line);
+    if (!line || ft_isnum(line) != 1 || (*amount = ft_atoi(line)) < 1)
         handle_error();
+    free(line);
     if (!(ants = (t_room **)malloc(sizeof(t_room *) * *amount)))
         handle_error();
     return (ants);
