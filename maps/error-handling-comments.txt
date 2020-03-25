@@ -1,0 +1,15 @@
+# A comment at the beginning of the file
+1
+# A comment before the declarations of the rooms
+##start
+# A comment between a command and a room declaration
+s 1 1
+# A comment between the declarations of the rooms
+b 2 2
+##end
+e 3 3
+# A comment after the declarations of the rooms
+s-b
+# A comment between the declarations of the links
+b-e
+# A comment at the end of the file

@@ -1,0 +1,12 @@
+1
+##start
+s 1 1
+b 2 2
+##end
+e 3 3
+s-b
+s-b
+b-s
+b-b
+b-c
+b-e
