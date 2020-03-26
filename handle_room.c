@@ -32,7 +32,7 @@ static t_room   *new_room(int room_type, char **input)
 
     new = (t_room *)malloc(sizeof(t_room));
     if (new == NULL)
-        exit(1);
+        handle_error();
     new->name = ft_strdup(input[0]);
     new->x = ft_atoi(input[1]);
     new->y = ft_atoi(input[2]);
