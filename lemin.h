@@ -41,13 +41,29 @@ typedef struct  s_link
     struct s_link   *next;
 }               t_link;
 
+typedef struct  s_route
+{
+    t_room          *room;
+    struct s_route  *next;
+}               t_route;
+
+typedef struct  s_routes
+{
+    t_route         *route;
+    int             rooms;
+    struct s_routes *next;
+}               t_routes;
+
 typedef struct  s_farm
 {
-    t_room  **ants;
-    t_room  *rooms;
-    t_link  *links;
-    t_room  *start;
-    t_room  *end;
+    int         amount;
+    t_room      **ants;
+    t_room      *rooms;
+    t_link      *links;
+    t_room      *start;
+    t_room      *end;
+    t_routes    *routes;
+    t_routes    *shortest_route;
 }               t_farm;
 
 t_room          **get_ants(int *amount);
@@ -56,6 +72,15 @@ void            ants_to_start(t_room **ants, int amount, t_room *start);
 t_link          *get_links(char *line, t_room *room);
 void            set_link(t_room *rooms_head, t_link *links_head);
 int             find_end(t_room *current, int len);
+t_routes        *get_routes_to_end(t_room *start);
+void            set_routes(t_routes *routes, t_room *room);
+t_routes        *get_routes(t_room *start);
+void            *set_route_before_fork(t_routes *routes, t_routes *before_fork);
+t_route         *get_route(t_room *room);
+int             count_unvisited(t_path *path, t_route *route);
+int             is_unvisited(t_room *room, t_route *route);
+t_routes        *del_dead_ends(t_routes *routes);
+t_routes        *get_shortest_route(t_routes *routes);
 void            handle_error(void);
 
 #endif
