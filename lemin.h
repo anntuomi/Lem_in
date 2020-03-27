@@ -30,6 +30,7 @@ typedef struct  s_room
     int             type;
     int             id;
     int             visited;
+    int             ant_count;
     t_path          *paths;
     struct s_room   *next;
 }               t_room;
@@ -57,7 +58,7 @@ typedef struct  s_routes
 typedef struct  s_farm
 {
     int         amount;
-    t_room      **ants;
+    t_route     **ants;
     t_room      *rooms;
     t_link      *links;
     t_room      *start;
@@ -66,9 +67,9 @@ typedef struct  s_farm
     t_routes    *shortest_route;
 }               t_farm;
 
-t_room          **get_ants(int *amount);
+t_route        **get_ants(int *amount);
 void            create_room_list(t_room **head, char **line);
-void            ants_to_start(t_room **ants, int amount, t_room *start);
+void            ants_to_start(t_route **ants, int amount, t_routes *shortest);
 t_link          *get_links(char *line, t_room *room);
 void            set_link(t_room *rooms_head, t_link *links_head);
 int             find_end(t_room *current, int len);

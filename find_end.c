@@ -22,7 +22,7 @@ int     count_paths(t_path *head, t_room **unvisited)
     return (count);
 }
 
-int     find_end(t_room *current, int len)
+/*int     find_end(t_room *current, int len)
 {
     int path_count;
     t_room *unvisited;
@@ -31,26 +31,19 @@ int     find_end(t_room *current, int len)
     int tmp_len;
 
     len++;
-    //end recursion if we are at the end room
+    current->visited = 1;
     if (current->type == END)
     {
         printf("End room: %s\n", current->name);
+        current->visited = 0;
         return (len);
     }
-    //Set the current room as visited
-    current->visited = 1;
-    //Count how many paths current room has, and save the first unvisited room you
-    //can access from current room to *unvisited
     path_count = count_paths(current->paths, &unvisited);
     if (path_count > 1)
     {
-        //If you can access more than 1 room from current room,
-        //save current room as a "crossroads" or a fork in the route.
         fork = current;
         shortest_len = len;
         tmp_len = len;
-        //Goes to the unvisited room we saved earlier and checks
-        //if you can access the end room from current room
         if ((shortest_len = find_end(unvisited, len)) != 0)
         {
             while ((path_count = count_paths(fork->paths, &unvisited)) > 0)
@@ -64,18 +57,136 @@ int     find_end(t_room *current, int len)
         }
         else
         {
-            //If the tested room doesn't lead to the end room,
-            //Save it to visited rooms, and return to the fork room, and
-            //try again with the next path.
             return (find_end(fork, len));
         }    
     }
     else if (path_count == 1)
     {
-        //Simply move to the next room if there is only unvisited
-        //path in the current room
         return (find_end(unvisited, len));
     }
-    //Function will return 0 if there are no unvisited paths left.
+    return (0);
+}*/
+
+int     count_rooms(t_room *head)
+{
+    int len;
+    t_room *current;
+    t_room *next;
+    t_path *path;
+
+    current = head;
+    len = 1;
+    while (current->type != END)
+    {
+        path = current->paths;
+        current->visited = 1;
+            printf("%s!\n", current->name);
+        while (path != NULL)
+        {
+            next = path->content;
+            printf("Next visited: %s %d\n", next->name, next->visited);
+            if (next->visited == 0)
+                break ;
+            path = path->next;
+        }
+        if (path == NULL)
+        {
+            len = 0;
+            break ;
+            current->next = NULL;
+        }
+        len++;
+        current->next = path->content;
+        current = path->content;
+    }
+    current = head;
+    while (current && current->type != END)
+    {
+        current->visited = 0;
+        current = current->next;
+    }
+    current->visited = 0;
+    printf("branch len: %d\n", len);
+    return (len);
+}
+
+t_room     *find_shortest(t_room *fork)
+{
+    int branch_len;
+    t_room *next;
+    t_path *path;
+    int shortest_len;
+    t_room *shortest;
+    t_room *clear;
+
+    shortest_len = 2147483647;
+    path = fork->paths;
+    while (path != NULL)
+    {
+        printf("Fork: %s\n", fork->name);
+        next = path->content;
+        if (next->visited == 0)
+        {
+            printf("Next: %s\n", next->name);
+            branch_len = find_end(next, 0);
+            printf("Branch len: %d\n", branch_len);
+            if (branch_len < shortest_len && branch_len != 0)
+            {
+                shortest_len = branch_len;
+                shortest = next;
+            }
+        }
+        path = path->next;
+    }
+    return (shortest);
+}
+
+int     find_end(t_room *head, int len)
+{
+    int path_count;
+    t_room *unvisited;
+    t_room *fork;
+    t_room *current;
+    int branch_len;
+    t_room *next;
+    t_room *clear;
+
+    current = head;
+    while (1)
+    {
+        len++;
+        if (current->type == END)
+        {
+            current->next = NULL;
+            printf("Current: %s len: %d\n", current->name, len);
+            return (len);
+        }
+        current->visited = 1;
+        path_count = count_paths(current->paths, &unvisited);
+        if (path_count > 1)
+        {
+            printf("Current: %s\n", current->name);
+            next = find_shortest(current);
+            clear = next;
+            while (clear)
+            {
+                printf("Clearing: %s\n", clear->name);
+                clear->visited = 0;
+                clear = clear->next;
+            }
+            current->next = next;
+            current = next;
+        }
+        else if (path_count == 1)
+        {
+            printf("Current: %s\n", current->name);
+            current->next = unvisited;
+            current = unvisited;
+        }
+        else
+        {
+            break ;
+        }       
+    }
     return (0);
 }
