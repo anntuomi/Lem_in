@@ -3,36 +3,28 @@
 static void print_shortest_route(t_routes *shortest_route)
 {
     t_route *route;
-    int i;
 
-    i = 1;
     printf("shortest route (%d rooms)\n", shortest_route->rooms);
     route = shortest_route->route;
     while (route)
     {
-        printf("%s\n", route->room->name);
-        route->index = i;
+        printf("%d. %s\n", route->index, route->room->name);
         route = route->next;
-        i++;
     }
 }
 
 static void print_routes(t_routes *routes)
 {
     t_route *route;
-    int i;
 
     while (routes)
     {
         printf("route (%d rooms)\n", routes->rooms);
         route = routes->route;
-        i = 1;
         while (route)
         {
-            printf("%s\n", route->room->name);
-            route->index = i;
+            printf("%d. %s\n", route->index, route->room->name);
             route = route->next;
-            i++;
         }
         routes = routes->next;
     }
@@ -73,26 +65,6 @@ static void find_edges(t_room *room, t_room **start, t_room **end)
         handle_error();
 }
 
-void        set_index_to_routes(t_routes **route_list)
-{
-    int i;
-    t_routes *route;
-
-    route = *route_list;
-    while (route)
-    {
-        i = 1;
-        while (route->route)
-        {
-            route->route->index = i;
-            i++;
-            route->route = route->route->next;
-        }
-        route = route->next;
-    }
-    route = *route_list;
-}
-
 int         main(void)
 {
     t_farm  farm;
@@ -107,7 +79,6 @@ int         main(void)
     set_link(farm.rooms, farm.links);
     farm.routes = get_routes_to_end(farm.start);
     print_input(farm.amount, farm.rooms, farm.links);
-    //set_index_to_routes(&farm.routes);
     print_routes(farm.routes);
     farm.shortest_route = get_shortest_route(farm.routes);
     print_shortest_route(farm.shortest_route);

@@ -49,7 +49,7 @@ static t_route  *get_current_route(t_routes **routes, t_room *room)
         route = (*routes)->route;
         while (route->next)
             route = route->next;
-        route->next = get_route(room);
+        route->next = get_route(room, route->index + 1);
         route = route->next;
         (*routes)->rooms++;
     }
@@ -75,7 +75,7 @@ void            set_routes(t_routes *routes, t_room *room)
             while (!is_unvisited(path->content, routes->route))
                 path = path->next;
             room = path->content;
-            route->next = get_route(room);
+            route->next = get_route(room, route->index + 1);
             route = route->next;
             routes->rooms++;
         }

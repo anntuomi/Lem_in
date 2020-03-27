@@ -78,7 +78,7 @@ t_routes        *get_routes_to_end(t_room *start);
 void            set_routes(t_routes *routes, t_room *room);
 t_routes        *get_routes(t_room *start);
 void            *set_route_before_fork(t_routes *routes, t_routes *before_fork);
-t_route         *get_route(t_room *room);
+t_route         *get_route(t_room *room, int index);
 int             count_unvisited(t_path *path, t_route *route);
 int             is_unvisited(t_room *room, t_route *route);
 t_routes        *del_dead_ends(t_routes *routes);

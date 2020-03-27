@@ -25,13 +25,14 @@ int         count_unvisited(t_path *path, t_route *route)
     return (unvisited);
 }
 
-t_route     *get_route(t_room *room)
+t_route     *get_route(t_room *room, int index)
 {
     t_route     *route;
 
     if (!(route = (t_route *)malloc(sizeof(t_route))))
         handle_error();
     route->room = room;
+    route->index = index;
     route->next = NULL;
     return (route);
 }
@@ -45,7 +46,7 @@ void        *set_route_before_fork(t_routes *routes, t_routes *before_fork)
     bf = before_fork->route->next;
     while (bf)
     {
-        route->next = get_route(bf->room);
+        route->next = get_route(bf->room, bf->index);
         route = route->next;
         bf = bf->next;
     }
@@ -58,7 +59,7 @@ t_routes    *get_routes(t_room *start)
 
     if (!(routes = (t_routes *)malloc(sizeof(t_routes))))
         handle_error();
-    routes->route = get_route(start);
+    routes->route = get_route(start, 1);
     routes->rooms = 1;
     routes->next = NULL;
     return (routes);
