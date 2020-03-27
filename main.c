@@ -104,14 +104,14 @@ int         main(void)
         handle_error();
     find_edges(farm.rooms, &farm.start, &farm.end);
     farm.links = get_links(line, farm.rooms);
-    print_input(farm.amount, farm.rooms, farm.links);
     set_link(farm.rooms, farm.links);
     farm.routes = get_routes_to_end(farm.start);
+    print_input(farm.amount, farm.rooms, farm.links);
     //set_index_to_routes(&farm.routes);
     print_routes(farm.routes);
     farm.shortest_route = get_shortest_route(farm.routes);
-    ants_to_start(farm.ants, farm.amount, farm.shortest_route);
     print_shortest_route(farm.shortest_route);
+    ants_to_start(farm.ants, farm.amount, farm.shortest_route);
     farm.start->ant_count = farm.amount;
     solve(farm.ants, farm.amount, farm.routes, farm.end);
     return (0);
