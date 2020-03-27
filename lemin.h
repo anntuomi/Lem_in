@@ -46,6 +46,7 @@ typedef struct  s_route
 {
     t_room          *room;
     struct s_route  *next;
+    int             index;
 }               t_route;
 
 typedef struct  s_routes
@@ -83,5 +84,6 @@ int             is_unvisited(t_room *room, t_route *route);
 t_routes        *del_dead_ends(t_routes *routes);
 t_routes        *get_shortest_route(t_routes *routes);
 void            handle_error(void);
+void            solve(t_route **ants, int amount, t_routes *route_list, t_room *end);
 
 #endif

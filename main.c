@@ -3,28 +3,36 @@
 static void print_shortest_route(t_routes *shortest_route)
 {
     t_route *route;
+    int i;
 
+    i = 1;
     printf("shortest route (%d rooms)\n", shortest_route->rooms);
     route = shortest_route->route;
     while (route)
     {
         printf("%s\n", route->room->name);
+        route->index = i;
         route = route->next;
+        i++;
     }
 }
 
 static void print_routes(t_routes *routes)
 {
     t_route *route;
+    int i;
 
     while (routes)
     {
         printf("route (%d rooms)\n", routes->rooms);
         route = routes->route;
+        i = 1;
         while (route)
         {
             printf("%s\n", route->room->name);
+            route->index = i;
             route = route->next;
+            i++;
         }
         routes = routes->next;
     }
@@ -65,58 +73,24 @@ static void find_edges(t_room *room, t_room **start, t_room **end)
         handle_error();
 }
 
-int         count_current_room_routes(t_room *current, t_routes *route_list)
+void        set_index_to_routes(t_routes **route_list)
 {
-    int count;
+    int i;
     t_routes *route;
 
-    route = route_list;
-    count = 0;
+    route = *route_list;
     while (route)
     {
-        if (current->id == route->route->room->id)
-            count++;
+        i = 1;
+        while (route->route)
+        {
+            route->route->index = i;
+            i++;
+            route->route = route->route->next;
+        }
         route = route->next;
     }
-    return (count);
-}
-
-void        move_ants(int amount, t_route **ant)
-{
-    int i;
-    int moved;
-
-    i = 0;
-    moved = 0;
-    while (i < amount)
-    {
-        if (ant[i]->room->type != END && (ant[i]->next->room->ant_count == 0 || ant[i]->next->room->type == END))
-        {
-            ant[i]->room->ant_count--;
-            ant[i] = ant[i]->next;
-            ant[i]->room->ant_count++;
-            moved == 1 ? printf(" L%d-%s", i, ant[i]->room->name) : printf("L%d-%s", i, ant[i]->room->name);
-            moved = 1;
-        }
-        i++;
-    }
-    printf("\n");
-}
-
-void        solve(t_route **ants, int amount, t_routes *shortest_start, t_routes *route_list, t_room *end)
-{
-    int i;
-    t_routes *shortest;
-    t_routes *route;
-    int route_count;
-
-    i = 0;
-    shortest = shortest_start;
-    route = route_list;
-    while (end->ant_count != amount)
-    {
-        move_ants(amount, ants);
-    }
+    route = *route_list;
 }
 
 int         main(void)
@@ -133,11 +107,12 @@ int         main(void)
     print_input(farm.amount, farm.rooms, farm.links);
     set_link(farm.rooms, farm.links);
     farm.routes = get_routes_to_end(farm.start);
+    //set_index_to_routes(&farm.routes);
     print_routes(farm.routes);
     farm.shortest_route = get_shortest_route(farm.routes);
     ants_to_start(farm.ants, farm.amount, farm.shortest_route);
     print_shortest_route(farm.shortest_route);
     farm.start->ant_count = farm.amount;
-    solve(farm.ants, farm.amount, farm.shortest_route, farm.routes, farm.end);
+    solve(farm.ants, farm.amount, farm.routes, farm.end);
     return (0);
 }
