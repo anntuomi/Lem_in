@@ -1,5 +1,45 @@
 #include "lemin.h"
 
+static t_route *check_for_shorter(t_route *ant, t_routes *route, int len)
+{
+    while (route)
+    {
+        while(route->route->room->id != ant->room->id)
+            route->route = route->route->next;
+        if (route->rooms - route->route->index < len && \
+            route->route->next->room->ant_count == 0)
+        {
+            len = route->rooms - route->route->index;
+            ant = route->route;
+        }
+        route = route->next;
+    }
+    return (ant);
+}
+
+static t_route *change_route(t_route *ant, t_routes *route_list)
+{
+    t_routes *route;
+    int      len;
+
+    route = route_list;
+    while (route)
+    {
+        while(route->route->room->id != ant->room->id)
+            route->route = route->route->next;
+        if (route->route->next->room->ant_count == 0)
+        {
+            ant = route->route;
+            len = route->rooms - route->route->index;
+            route = route->next;
+            ant = check_for_shorter(ant, route, len);               
+            break ;
+        }        
+        route = route->next;
+    }
+    return (ant);
+}
+
 static void move_ants(int amount, t_route **ant, t_routes *route_list)
 {
     int i;
@@ -11,45 +51,16 @@ static void move_ants(int amount, t_route **ant, t_routes *route_list)
     moved = 0;
     while (i < amount)
     {
-        if (ant[i]->room->type != END && (ant[i]->next->room->ant_count != 0 && ant[i]->next->room->type != END))
-        {
-            route = route_list;
-            while (route)
-            {
-                while(route->route->room->id != ant[i]->room->id)
-                {
-                    route->route = route->route->next;
-                }
-                if (route->route->next->room->ant_count == 0)
-                {
-                    ant[i] = route->route;
-                    len = route->rooms - route->route->index;
-                    route = route->next;
-                    while (route)
-                    {
-                        if (route->rooms - route->route->index < len)
-                        {
-                            len = route->rooms - route->route->index;
-                            ant[i] = route->route;
-                        }
-                        route = route->next;
-                    }                    
-                    break ;
-                }        
-                route = route->next;
-            }
-            if (route == NULL)
-            {
-                i++;
-                continue ;
-            }
-        }
+        if (ant[i]->room->type != END && (ant[i]->next->room->ant_count != 0 \
+            && ant[i]->next->room->type != END))
+            ant[i] = change_route(ant[i], route_list);
         if (ant[i]->room->type != END)
         {
             ant[i]->room->ant_count--;
             ant[i] = ant[i]->next;
             ant[i]->room->ant_count++;
-            moved == 1 ? printf(" L%d-%s  %d", i + 1, ant[i]->room->name, ant[i]->index) : printf("L%d-%s %d", i + 1, ant[i]->room->name, ant[i]->index);
+            moved == 1 ? printf(" L%d-%s", i + 1, ant[i]->room->name) : \
+            printf("L%d-%s", i + 1, ant[i]->room->name);
             moved = 1;
         }
         i++;
