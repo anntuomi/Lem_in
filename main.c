@@ -11,6 +11,7 @@ static void	print_shortest_route(t_routes *shortest_route)
 		printf("%d. %s\n", route->index, route->room->name);
 		route = route->next;
 	}
+	printf("\n");
 }
 
 static void	print_routes(t_routes *routes)
@@ -28,6 +29,7 @@ static void	print_routes(t_routes *routes)
 		}
 		routes = routes->next;
 	}
+	printf("\n");
 }
 
 static void	print_input(int amount, t_room *rooms, t_link *links)
@@ -47,6 +49,7 @@ static void	print_input(int amount, t_room *rooms, t_link *links)
 		printf("%s-%s\n", links->room1->name, links->room2->name);
 		links = links->next;
 	}
+	printf("\n");
 }
 
 static void	find_edges(t_room *room, t_room **start, t_room **end)
