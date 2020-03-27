@@ -16,13 +16,15 @@ t_routes    *del_dead_ends(t_routes *routes)
     t_routes    *head;
     t_routes    *previous;
 
-    while (routes->rooms == 0)
+    while (routes && routes->rooms == 0)
     {
         previous = routes;
         routes = routes->next;
         del_route(previous->route);
         free(previous);
     }
+    if (!routes)
+        handle_error();
     head = routes;
     previous = routes;
     routes = routes->next;
