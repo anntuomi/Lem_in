@@ -54,7 +54,8 @@ static void move_ants(int amount, t_route **ant, t_routes *route_list)
         if (ant[i]->room->type != END && (ant[i]->next->room->ant_count != 0 \
             && ant[i]->next->room->type != END))
             ant[i] = change_route(ant[i], route_list);
-        if (ant[i]->room->type != END)
+        if (ant[i]->room->type != END && (ant[i]->next->room->ant_count == 0 \
+            || ant[i]->next->room->type == END))
         {
             ant[i]->room->ant_count--;
             ant[i] = ant[i]->next;
