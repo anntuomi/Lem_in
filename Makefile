@@ -12,9 +12,8 @@
 
 NAME = lem-in
 INC = libft/includes
-SRC = del_dead_ends.c find_end.c get_ants.c get_links.c get_routes.c \
-get_routes_to_end.c handle_error.c handle_room.c main.c set_link.c \
-solve.c
+SRC = del_dead_ends.c get_ants.c get_links.c get_routes.c get_routes_to_end.c \
+handle_error.c handle_room.c main.c set_links.c solve.c
 OBJECT = *.o
 LIBRARY = libft.a
 
