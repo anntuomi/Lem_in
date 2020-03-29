@@ -1,0 +1,39 @@
+# map8.txt
+#
+# A map with no route to end
+#
+# y
+# 6         end
+#           |  \
+# 5         |   \___.
+#           |       |
+# 4 d-------b       f
+#    \      |       |
+# 3   \     |       |
+#      \    |       |
+# 2     c   a-------e
+#       |   |
+# 1     |   |
+#        \  |
+# 0       start
+#   0 1 2 3 4 5 6 7 8 x
+4
+c 2 2
+##start
+start 4 0
+##end
+end 4 6
+d 0 4
+a 4 2
+b 4 4
+e 8 2
+f 8 4
+start-a
+c-d
+d-b
+a-e
+e-f
+f-end
+a-b
+b-end
+start-c

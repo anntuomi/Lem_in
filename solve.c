@@ -42,41 +42,78 @@ static t_route *change_route(t_route *ant, t_routes *route_list)
 
 static void move_ants(int amount, t_route **ant, t_routes *route_list)
 {
-    int i;
-    int moved;
+	int i;
+	int moved;
     t_routes *route;
-    int len;
+    int ant_nbr;
 
-    i = 0;
+    i = amount - 1;
+    ant_nbr = 1;
     moved = 0;
-    while (i < amount)
+    while (i >= 0)
     {
-        if (ant[i]->room->type != END && (ant[i]->next->room->ant_count != 0 \
-            && ant[i]->next->room->type != END))
-            ant[i] = change_route(ant[i], route_list);
+  /*  	if (ant[i]->room->type != END && (ant[i]->next->room->ant_count != 0 \
+        	&& ant[i]->next->room->type != END))
+            ant[i] = change_route(ant[i], route_list);*/
         if (ant[i]->room->type != END && (ant[i]->next->room->ant_count == 0 \
-            || ant[i]->next->room->type == END))
+        	|| ant[i]->next->room->type == END))
         {
             ant[i]->room->ant_count--;
             ant[i] = ant[i]->next;
             ant[i]->room->ant_count++;
-            moved == 1 ? printf(" L%d-%s", i + 1, ant[i]->room->name) : \
-            printf("L%d-%s", i + 1, ant[i]->room->name);
+            moved == 1 ? printf(" L%d-%s", ant_nbr, ant[i]->room->name) : \
+            printf("L%d-%s", ant_nbr, ant[i]->room->name);
             moved = 1;
         }
-        i++;
+        i--;
+        ant_nbr++;
     }
     printf("\n");
 }
 
-void        solve(t_route **ants, int amount, t_routes *route_list, t_room *end)
+int        count_paths(t_room *start, t_room *end)
+{
+    t_path *path;
+    int     path_count;
+
+    path = end->paths;
+    path_count = 0;
+    while (path)
+    {
+        path_count++;
+        path = path->next;
+    }
+    return (path_count);
+}
+
+t_route        **assign_paths(t_route **ant, t_routes **ordered, int path_count, int amount)
 {
     int i;
-    int route_count;
 
     i = 0;
-    while (end->ant_count != amount)
+    while (i < amount)
     {
-        move_ants(amount, ants, route_list);
+        printf("Ant number %d (Path_count: %d) Mod: %d\n", i, path_count, (i) % path_count);
+        ant[i] = ordered[(i) % path_count]->route;
+        i++;
     }
+    return (ant);
+}
+
+void        solve(t_farm farm, t_routes **ordered)
+{
+	int	move_count;
+	int least_moves;
+    int path_count;
+
+    path_count = count_paths(farm.start, farm.end);
+    move_count = 0;
+	least_moves = 0;
+    farm.ants = assign_paths(farm.ants, ordered, path_count, farm.amount);
+    while (farm.end->ant_count != farm.amount)
+    {
+        move_ants(farm.amount, farm.ants, farm.routes);
+		least_moves++;
+    }
+	printf("Move count: %d\n", least_moves);
 }
