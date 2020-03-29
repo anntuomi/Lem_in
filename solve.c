@@ -100,20 +100,19 @@ t_route        **assign_paths(t_route **ant, t_routes **ordered, int path_count,
     return (ant);
 }
 
-void        solve(t_farm farm, t_routes **ordered)
+void        solve(t_farm farm, t_routes **ordered, int total_paths)
 {
 	int	move_count;
-	int least_moves;
     int path_count;
 
     path_count = count_paths(farm.start, farm.end);
+    path_count = (path_count > total_paths ? total_paths : path_count);
     move_count = 0;
-	least_moves = 0;
     farm.ants = assign_paths(farm.ants, ordered, path_count, farm.amount);
     while (farm.end->ant_count != farm.amount)
     {
         move_ants(farm.amount, farm.ants, farm.routes);
-		least_moves++;
+		move_count++;
     }
-	printf("Move count: %d\n", least_moves);
+	printf("Move count: %d\n", move_count);
 }

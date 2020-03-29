@@ -120,6 +120,6 @@ int			main(void)
 	print_shortest_route(farm.shortest_route);
 	//ants_to_start(farm.ants, farm.amount, farm.shortest_route);
 	farm.start->ant_count = farm.amount;
-	solve(farm, ordered_routes);
+	solve(farm, ordered_routes, count);
 	return (0);
 }

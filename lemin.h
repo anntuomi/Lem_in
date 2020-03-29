@@ -82,7 +82,7 @@ int				count_unvisited(t_path *path, t_route *route);
 int				is_unvisited(t_room *room, t_route *route);
 t_routes		*del_dead_ends(t_routes *routes);
 t_routes		*get_shortest_route(t_routes *routes);
-void			solve(t_farm farm, t_routes **ordered);
+void			solve(t_farm farm, t_routes **ordered, int total_paths);
 void			handle_error(void);
 
 #endif

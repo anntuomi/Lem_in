@@ -1,4 +1,4 @@
-# map8.txt
+# map9.txt
 #
 # A map with no route to end
 #
