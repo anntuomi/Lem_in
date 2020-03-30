@@ -1,6 +1,6 @@
 # map9.txt
 #
-# A map with no route to end
+# A map with three two-way crossroads
 #
 # y
 # 6         end

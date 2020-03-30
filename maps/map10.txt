@@ -1,6 +1,6 @@
 # map10.txt
 #
-# A map with a two-way crossroad with one of the routes being a dead end
+# A map with a two-way crossroad
 #
 # y
 #
