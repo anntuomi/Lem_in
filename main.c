@@ -2,7 +2,7 @@
 
 static void	print_shortest_route(t_routes *shortest_route)
 {
-	t_route	*route;
+	t_route		*route;
 
 	printf("shortest route (%d rooms)\n", shortest_route->rooms);
 	route = shortest_route->route;
@@ -16,8 +16,8 @@ static void	print_shortest_route(t_routes *shortest_route)
 
 static int	count_routes(t_routes *routes)
 {
-	t_route	*route;
-	int count;
+	t_route		*route;
+	int			count;
 
 	count = 0;
 	while (routes)
@@ -72,11 +72,11 @@ static void	find_edges(t_room *room, t_room **start, t_room **end)
 		handle_error();
 }
 
-t_routes **order_routes(int route_count, t_routes *routes)
+t_routes	**order_routes(int route_count, t_routes *routes)
 {
-	t_routes **ordered_routes;
-	t_routes *current;
-	int i;
+	t_routes	**ordered_routes;
+	t_routes	*current;
+	int			i;
 
 	i = 1;
 	ordered_routes = (t_routes **)malloc(sizeof(t_routes *) * route_count);
@@ -100,10 +100,10 @@ t_routes **order_routes(int route_count, t_routes *routes)
 
 int			main(void)
 {
-	t_farm	farm;
-	char	*line;
-	int count;
-	t_routes **ordered_routes;
+	t_farm		farm;
+	char		*line;
+	int			count;
+	t_routes	**ordered_routes;
 
 	farm.ants = get_ants(&farm.amount);
 	create_room_list(&farm.rooms, &line);
