@@ -1,10 +1,12 @@
 #include "lemin.h"
 
-static void	del_route(t_routes *routes)
+static t_routes	*del_route(t_routes *routes)
 {
-	t_route	*route;
-	t_route	*tmp;
+	t_routes	*next;
+	t_route		*route;
+	t_route		*tmp;
 
+	next = routes->next;
 	route = routes->route;
 	while (route)
 	{
@@ -13,33 +15,31 @@ static void	del_route(t_routes *routes)
 		free(tmp);
 	}
 	free(routes);
+	return (next);
 }
 
-t_routes	*del_dead_ends(t_routes *routes)
+t_routes		*del_dead_ends(t_routes *route)
 {
 	t_routes	*head;
 	t_routes	*previous;
 
-	while (routes && routes->rooms == 0)
+	while (route && route->rooms == 0)
 	{
-		previous = routes;
-		routes = routes->next;
-		del_route(previous);
+		previous = route;
+		route = del_route(previous);
 	}
-	if (!routes)
+	if (!route)
 		handle_error();
-	head = routes;
-	previous = routes;
-	routes = routes->next;
-	while (routes)
+	head = route;
+	previous = route;
+	route = route->next;
+	while (route)
 	{
-		if (routes->rooms == 0)
-		{
-			previous->next = routes->next;
-			del_route(routes);
-		}
-		previous = routes;
-		routes = previous->next;
+		if (route->rooms == 0)
+			previous->next = del_route(route);
+		else
+			previous = previous->next;
+		route = previous->next;
 	}
 	return (head);
 }
