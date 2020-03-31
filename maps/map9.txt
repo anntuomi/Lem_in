@@ -3,6 +3,7 @@
 # A map with three two-way crossroads
 #
 # y
+#
 # 6         end
 #           |  \
 # 5         |   \___.
