@@ -8,7 +8,7 @@ static void	print_routes(t_routes **routes)
 	i = 0;
 	while (routes[i])
 	{
-		printf("route (%d rooms)\n", routes[i]->rooms);
+		printf("%d. route (%d rooms)\n", i + 1, routes[i]->rooms);
 		route = routes[i]->route;
 		while (route)
 		{
