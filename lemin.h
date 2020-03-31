@@ -82,5 +82,6 @@ t_routes		*del_dead_ends(t_routes *routes);
 int				count_routes(t_routes *routes);
 void			solve(t_farm farm, t_routes **ordered, int total_paths);
 void			handle_error(void);
+t_routes		**order_routes(int route_count, t_routes *routes);
 
 #endif

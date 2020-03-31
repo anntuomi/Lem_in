@@ -1,6 +1,6 @@
 # map10.txt
 #
-# A map with a two-way crossroad
+# A map with a long path you shouldn't take with a small number of ants
 #
 # y
 #

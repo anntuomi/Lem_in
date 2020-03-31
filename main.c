@@ -1,12 +1,12 @@
 #include "lemin.h"
 
-static void	print_routes(t_routes **routes)
+static void	print_routes(t_routes **routes, int route_count)
 {
 	t_route		*route;
 	int			i;
 
 	i = 0;
-	while (routes[i])
+	while (i < route_count)
 	{
 		printf("route (%d rooms)\n", routes[i]->rooms);
 		route = routes[i]->route;
@@ -18,35 +18,6 @@ static void	print_routes(t_routes **routes)
 		i++;
 	}
 	printf("\n");
-}
-
-t_routes	**order_routes(int route_count, t_routes *routes)
-{
-	t_routes	**ordered_routes;
-	t_routes	*current;
-	int			i;
-
-	i = 1;
-	if (!(ordered_routes =
-	(t_routes **)malloc(sizeof(t_routes *) * (route_count + 1))))
-		handle_error();
-	ordered_routes[route_count] = NULL;
-	current = routes;
-	ordered_routes[0] = current;
-	current = current->next;
-	while (current)
-	{
-		if (current->rooms < ordered_routes[i - 1]->rooms)
-		{
-			ordered_routes[i] = ordered_routes[i - 1];
-			ordered_routes[i - 1] = current;
-		}
-		else
-			ordered_routes[i] = current;
-		i++;
-		current = current->next;
-	}
-	return (ordered_routes);
 }
 
 static void	print_input(t_input *input)
@@ -110,7 +81,7 @@ int			main(void)
 	print_input(head);
 	farm.count = count_routes(farm.routes);
 	farm.ordered_routes = order_routes(farm.count, farm.routes);
-	print_routes(farm.ordered_routes);
+	print_routes(farm.ordered_routes, farm.count);
 	farm.start->ant_count = farm.amount;
 	solve(farm, farm.ordered_routes, farm.count);
 	return (0);

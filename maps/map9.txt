@@ -1,6 +1,6 @@
 # map9.txt
 #
-# A map with three two-way crossroads
+# A map where you shouldn't take the shortest route with more than 2 ants
 #
 # y
 #
