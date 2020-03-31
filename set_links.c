@@ -1,16 +1,5 @@
 #include "lemin.h"
 
-static t_path	*get_path(t_room *room)
-{
-	t_path	*path;
-
-	if (!(path = (t_path *)malloc(sizeof(t_path))))
-		handle_error();
-	path->content = room;
-	path->next = NULL;
-	return (path);
-}
-
 static int		is_dup(int id, t_path *path)
 {
 	t_room	*room;
@@ -25,48 +14,75 @@ static int		is_dup(int id, t_path *path)
 	return (0);
 }
 
-static void		set_path(t_link *link, int room1, t_path **head, t_path **path)
+static void		set_link(t_room *room1, t_room *room2)
 {
-	t_room	*room2;
+	t_path	*new;
+	t_path	*path;
 
-	if (link->room1->id == room1 && link->room2->id != room1)
-		room2 = link->room2;
-	else if (link->room2->id == room1 && link->room1->id != room1)
-		room2 = link->room1;
-	else
-		room2 = NULL;
-	if (room2)
+	if (!is_dup(room2->id, room1->paths))
 	{
-		if (!*head)
+		if (!(new = (t_path *)malloc(sizeof(t_path))))
+			handle_error();
+		new->content = room2;
+		new->next = NULL;
+		if (!room1->paths)
+			room1->paths = new;
+		else
 		{
-			*head = get_path(room2);
-			*path = *head;
-		}
-		else if (!is_dup(room2->id, *head))
-		{
-			(*path)->next = get_path(room2);
-			*path = (*path)->next;
+			path = room1->paths;
+			while (path->next)
+				path = path->next;
+			path->next = new;
 		}
 	}
 }
 
-void			set_links(t_room *room, t_link *links_head)
+static t_room	*get_room(char *input, t_room *room)
 {
-	t_link	*link;
-	t_path	*head;
-	t_path	*path;
-
 	while (room)
 	{
-		head = NULL;
-		path = NULL;
-		link = links_head;
-		while (link)
-		{
-			set_path(link, room->id, &head, &path);
-			link = link->next;
-		}
-		room->paths = head;
+		if (ft_strequ(room->name, input))
+			return (room);
 		room = room->next;
+	}
+	handle_error();
+}
+
+static int		count_words(char **array)
+{
+	int		words;
+
+	words = 0;
+	while (array[words])
+		words++;
+	return (words);
+}
+
+void			set_links(char *line, t_room *room, t_input **input)
+{
+	char	**rooms;
+	t_room	*room1;
+	t_room	*room2;
+	int		first;
+
+	first = 1;
+	while (first || get_next_line(0, &line) == 1)
+	{
+		if (line[0] != '#')
+		{
+			if (!(rooms = ft_strsplit(line, '-')) || count_words(rooms) != 2)
+				handle_error();
+			if (!ft_strequ(rooms[0], rooms[1]))
+			{
+				room1 = get_room(rooms[0], room);
+				room2 = get_room(rooms[1], room);
+				set_link(room1, room2);
+				set_link(room2, room1);
+				ft_2ddel(rooms);
+			}
+		}
+		set_input(input, line, 0);
+		if (first == 1)
+			first = 0;
 	}
 }

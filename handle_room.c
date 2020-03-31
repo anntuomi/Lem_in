@@ -36,7 +36,6 @@ static t_room	*new_room(int room_type, char **input)
 	new->name = ft_strdup(input[0]);
 	new->x = ft_atoi(input[1]);
 	new->y = ft_atoi(input[2]);
-	new->visited = 0;
 	new->type = room_type;
 	new->id = id++;
 	new->ant_count = 0;
@@ -46,7 +45,7 @@ static t_room	*new_room(int room_type, char **input)
 	return (new);
 }
 
-static int		determine_room_type(char *line)
+int				determine_room_type(char *line)
 {
 	if (ft_strcmp(line, "##start") == 0)
 		return (START);
@@ -73,7 +72,7 @@ int *room_type)
 	return (room);
 }
 
-void			create_room_list(t_room **head, char **line)
+void			create_room_list(t_room **head, char **line, t_input **lines)
 {
 	int		room_type;
 	char	**input;
@@ -81,22 +80,19 @@ void			create_room_list(t_room **head, char **line)
 
 	room_type = NORMAL;
 	room = NULL;
-	while (get_next_line(0, line))
+	while (get_next_line(0, line) == 1)
 	{
-		if (*line)
+		if (*line[0] == 'L')
+			handle_error();
+		if (*line[0] == '#')
+			room_type = determine_room_type(*line);
+		else
 		{
-			if (*line[0] == 'L')
-				handle_error();
-			if (*line[0] == '#')
-				room_type = determine_room_type(*line);
-			else
-			{
-				input = ft_strsplit(*line, ' ');
-				if (validate_room_input(input, head) == NOTROOM)
-					break ;
-				room = save_room(room, head, input, &room_type);
-			}
+			input = ft_strsplit(*line, ' ');
+			if (validate_room_input(input, head) == NOTROOM)
+				break ;
+			room = save_room(room, head, input, &room_type);
 		}
-		free(*line);
+		set_input(lines, *line, 1);
 	}
 }

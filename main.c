@@ -1,57 +1,60 @@
 #include "lemin.h"
 
-static void	print_shortest_route(t_routes *shortest_route)
+static void	print_routes(t_routes **routes)
 {
 	t_route		*route;
+	int			i;
 
-	printf("shortest route (%d rooms)\n", shortest_route->rooms);
-	route = shortest_route->route;
-	while (route)
+	i = 0;
+	while (routes[i])
 	{
-		printf("%d. %s\n", route->index, route->room->name);
-		route = route->next;
-	}
-	printf("\n");
-}
-
-static int	count_routes(t_routes *routes)
-{
-	t_route		*route;
-	int			count;
-
-	count = 0;
-	while (routes)
-	{
-		printf("route (%d rooms)\n", routes->rooms);
-		route = routes->route;
+		printf("route (%d rooms)\n", routes[i]->rooms);
+		route = routes[i]->route;
 		while (route)
 		{
 			printf("%d. %s\n", route->index, route->room->name);
 			route = route->next;
 		}
-		routes = routes->next;
-		count++;
+		i++;
 	}
 	printf("\n");
-	return (count);
 }
 
-static void	print_input(int amount, t_room *rooms, t_link *links)
+t_routes	**order_routes(int route_count, t_routes *routes)
 {
-	printf("%d\n", amount);
-	while (rooms)
+	t_routes	**ordered_routes;
+	t_routes	*current;
+	int			i;
+
+	i = 1;
+	if (!(ordered_routes =
+	(t_routes **)malloc(sizeof(t_routes *) * (route_count + 1))))
+		handle_error();
+	ordered_routes[route_count] = NULL;
+	current = routes;
+	ordered_routes[0] = current;
+	current = current->next;
+	while (current)
 	{
-		if (rooms->type == START)
-			printf("##start\n");
-		else if (rooms->type == END)
-			printf("##end\n");
-		printf("%s %d %d\n", rooms->name, rooms->x, rooms->y);
-		rooms = rooms->next;
+		if (current->rooms < ordered_routes[i - 1]->rooms)
+		{
+			ordered_routes[i] = ordered_routes[i - 1];
+			ordered_routes[i - 1] = current;
+		}
+		else
+			ordered_routes[i] = current;
+		i++;
+		current = current->next;
 	}
-	while (links)
+	return (ordered_routes);
+}
+
+static void	print_input(t_input *input)
+{
+	while (input)
 	{
-		printf("%s-%s\n", links->room1->name, links->room2->name);
-		links = links->next;
+		printf("%s\n", input->line);
+		input = input->next;
 	}
 	printf("\n");
 }
@@ -72,54 +75,43 @@ static void	find_edges(t_room *room, t_room **start, t_room **end)
 		handle_error();
 }
 
-t_routes	**order_routes(int route_count, t_routes *routes)
+void		set_input(t_input **input, char *line, int rooms)
 {
-	t_routes	**ordered_routes;
-	t_routes	*current;
-	int			i;
-
-	i = 1;
-	ordered_routes = (t_routes **)malloc(sizeof(t_routes *) * route_count);
-	current = routes;
-	ordered_routes[0] = current;
-	current = current->next;
-	while (current)
+	if (line[0] == '#' && line[1] == '#' &&
+	((rooms && determine_room_type(line) == NORMAL) || !rooms))
+		free(line);
+	else
 	{
-		if (current->rooms < ordered_routes[i - 1]->rooms)
-		{
-			ordered_routes[i] = ordered_routes[i - 1];
-			ordered_routes[i - 1] = current;
-		}
-		else
-			ordered_routes[i] = current;
-		i++;
-		current = current->next;
+		if (!((*input)->next = (t_input *)malloc(sizeof(t_input))))
+			handle_error();
+		*input = (*input)->next;
+		(*input)->line = line;
+		(*input)->next = NULL;
 	}
-	return (ordered_routes);
 }
 
 int			main(void)
 {
+	t_input		*head;
+	t_input		*input;
 	t_farm		farm;
 	char		*line;
-	int			count;
-	t_routes	**ordered_routes;
 
-	farm.ants = get_ants(&farm.amount);
-	create_room_list(&farm.rooms, &line);
+	if (!(head = (t_input *)malloc(sizeof(t_input))))
+		handle_error();
+	input = head;
+	farm.ants = get_ants(&farm.amount, &input);
+	create_room_list(&farm.rooms, &line, &input);
 	if (!(line))
 		handle_error();
 	find_edges(farm.rooms, &farm.start, &farm.end);
-	farm.links = get_links(line, farm.rooms);
-	set_links(farm.rooms, farm.links);
+	set_links(line, farm.rooms, &input);
 	farm.routes = get_routes_to_end(farm.start);
-	print_input(farm.amount, farm.rooms, farm.links);
-	count = count_routes(farm.routes);
-	ordered_routes = order_routes(count, farm.routes);
-	farm.shortest_route = get_shortest_route(farm.routes);
-	print_shortest_route(farm.shortest_route);
-	//ants_to_start(farm.ants, farm.amount, farm.shortest_route);
+	print_input(head);
+	farm.count = count_routes(farm.routes);
+	farm.ordered_routes = order_routes(farm.count, farm.routes);
+	print_routes(farm.ordered_routes);
 	farm.start->ant_count = farm.amount;
-	solve(farm, ordered_routes, count);
+	solve(farm, farm.ordered_routes, farm.count);
 	return (0);
 }

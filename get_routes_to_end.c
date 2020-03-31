@@ -1,18 +1,16 @@
 #include "lemin.h"
 
-t_routes		*get_shortest_route(t_routes *routes)
+int				count_routes(t_routes *routes)
 {
-	t_routes	*shortest_route;
+	int			count;
 
-	shortest_route = routes;
-	routes = routes->next;
+	count = 0;
 	while (routes)
 	{
-		if (routes->rooms < shortest_route->rooms)
-			shortest_route = routes;
 		routes = routes->next;
+		count++;
 	}
-	return (shortest_route);
+	return (count);
 }
 
 static void		set_fork_routes(t_path *path, t_routes *routes)

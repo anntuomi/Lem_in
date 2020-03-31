@@ -16,6 +16,12 @@
 # define NOTROOM 0
 # define ISROOM 1
 
+typedef struct	s_input
+{
+	char			*line;
+	struct s_input	*next;
+}				t_input;
+
 typedef struct	s_path
 {
 	void			*content;
@@ -29,18 +35,10 @@ typedef struct	s_room
 	int				y;
 	int				type;
 	int				id;
-	int				visited;
 	int				ant_count;
 	t_path			*paths;
 	struct s_room	*next;
 }				t_room;
-
-typedef struct	s_link
-{
-	t_room			*room1;
-	t_room			*room2;
-	struct s_link	*next;
-}				t_link;
 
 typedef struct	s_route
 {
@@ -61,18 +59,18 @@ typedef struct	s_farm
 	int			amount;
 	t_route		**ants;
 	t_room		*rooms;
-	t_link		*links;
 	t_room		*start;
 	t_room		*end;
 	t_routes	*routes;
-	t_routes	*shortest_route;
+	int			count;
+	t_routes	**ordered_routes;
 }				t_farm;
 
-t_route			**get_ants(int *amount);
-void			create_room_list(t_room **head, char **line);
-void			ants_to_start(t_route **ants, int amount, t_routes *shortest);
-t_link			*get_links(char *line, t_room *room);
-void			set_links(t_room *rooms_head, t_link *links_head);
+t_route			**get_ants(int *amount, t_input **input);
+void			create_room_list(t_room **head, char **line, t_input **input);
+int				determine_room_type(char *line);
+void			set_input(t_input **input, char *line, int room);
+void			set_links(char *line, t_room *room, t_input **input);
 t_routes		*get_routes_to_end(t_room *start);
 void			set_routes(t_routes *routes, t_room *room);
 t_routes		*get_routes(t_room *start);
@@ -81,7 +79,7 @@ t_route			*get_route(t_room *room, int index);
 int				count_unvisited(t_path *path, t_route *route);
 int				is_unvisited(t_room *room, t_route *route);
 t_routes		*del_dead_ends(t_routes *routes);
-t_routes		*get_shortest_route(t_routes *routes);
+int				count_routes(t_routes *routes);
 void			solve(t_farm farm, t_routes **ordered, int total_paths);
 void			handle_error(void);
 
