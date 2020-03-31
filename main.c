@@ -1,12 +1,12 @@
 #include "lemin.h"
 
-static void	print_routes(t_routes **routes, int route_count)
+static void	print_routes(t_routes **routes)
 {
 	t_route		*route;
 	int			i;
 
 	i = 0;
-	while (i < route_count)
+	while (routes[i])
 	{
 		printf("route (%d rooms)\n", routes[i]->rooms);
 		route = routes[i]->route;
@@ -81,7 +81,7 @@ int			main(void)
 	print_input(head);
 	farm.count = count_routes(farm.routes);
 	farm.ordered_routes = order_routes(farm.count, farm.routes);
-	print_routes(farm.ordered_routes, farm.count);
+	print_routes(farm.ordered_routes);
 	farm.start->ant_count = farm.amount;
 	solve(farm, farm.ordered_routes, farm.count);
 	return (0);

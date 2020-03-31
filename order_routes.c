@@ -7,7 +7,9 @@ static t_routes	**routes_to_array(int route_count, t_routes *routes)
 	int			i;
 
 	i = 0;
-	array_routes = (t_routes **)malloc(sizeof(t_routes *) * route_count);
+	if (!(array_routes = (t_routes **)malloc(sizeof(t_routes *) *
+	(route_count + 1))))
+		handle_error();
 	current = routes;
 	while (current)
 	{
@@ -15,6 +17,7 @@ static t_routes	**routes_to_array(int route_count, t_routes *routes)
 		i++;
 		current = current->next;
 	}
+	array_routes[route_count] = NULL;
 	return (array_routes);
 }
 
