@@ -116,6 +116,8 @@ int			main(void)
 	farm.ordered_rating = order_routes_rating(farm.count, farm.routes);
 	print_routes(farm.ordered_rating);
 	farm.start->ant_count = farm.amount;
+	printf("rooms to end %d\n",
+	farm.rooms_to_end = count_rooms_to_end(farm.routes));
 	solve(farm, farm.ordered_short, farm.ordered_rating, farm.count);
 	return (0);
 }
