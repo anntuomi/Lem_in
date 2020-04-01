@@ -1,5 +1,21 @@
 #include "lemin.h"
 
+static double	determine_length_rating(t_routes *routes)
+{
+	t_route	*current;
+	double	room_rating;
+
+	current = routes->route;
+	room_rating = 0.0;
+	while (current->room->type != END)
+	{
+		room_rating = room_rating + current->room->route_count;
+		current = current->next;
+	}
+	room_rating = room_rating / (routes->rooms);
+	return (room_rating);
+}
+
 static t_routes	**routes_to_array(int route_count, t_routes *routes)
 {
 	t_routes	**array_routes;
@@ -14,6 +30,7 @@ static t_routes	**routes_to_array(int route_count, t_routes *routes)
 	while (current)
 	{
 		array_routes[i] = current;
+		array_routes[i]->length_rating = determine_length_rating(current);
 		i++;
 		current = current->next;
 	}
@@ -21,7 +38,7 @@ static t_routes	**routes_to_array(int route_count, t_routes *routes)
 	return (array_routes);
 }
 
-t_routes		**order_routes(int route_count, t_routes *routes)
+t_routes		**order_routes_shortest(int route_count, t_routes *routes)
 {
 	t_routes	**array_routes;
 	t_routes	*tmp;
@@ -36,6 +53,50 @@ t_routes		**order_routes(int route_count, t_routes *routes)
 		while (j < route_count)
 		{
 			if (array_routes[j]->rooms < array_routes[i]->rooms)
+			{
+				tmp = array_routes[i];
+				array_routes[i] = array_routes[j];
+				array_routes[j] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
+	return (array_routes);
+}
+
+t_routes		**order_routes_rating(int route_count, t_routes *routes)
+{
+	t_routes	**array_routes;
+	t_routes	*tmp;
+	int			i;
+	int			j;
+
+	array_routes = routes_to_array(route_count, routes);
+	i = 0;
+	while (i < route_count)
+	{
+		j = i + 1;
+		while (j < route_count)
+		{
+			if (array_routes[j]->length_rating < array_routes[i]->length_rating)
+			{
+				tmp = array_routes[i];
+				array_routes[i] = array_routes[j];
+				array_routes[j] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
+	i = 0;
+	while (i < route_count)
+	{
+		j = i + 1;
+		while (j < route_count)
+		{
+			if (array_routes[j]->length_rating == array_routes[i]->length_rating && \
+			array_routes[j]->rooms < array_routes[i]->rooms)
 			{
 				tmp = array_routes[i];
 				array_routes[i] = array_routes[j];

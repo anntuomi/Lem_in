@@ -9,10 +9,12 @@ static void	print_routes(t_routes **routes)
 	while (routes[i])
 	{
 		printf("%d. route (%d rooms)\n", i + 1, routes[i]->rooms);
+		printf("Length rating: %f\n", routes[i]->length_rating);
 		route = routes[i]->route;
 		while (route)
 		{
-			printf("%d. %s\n", route->index, route->room->name);
+			printf("%d. %s %d\n", route->index, route->room->name,
+			route->room->route_count);
 			route = route->next;
 		}
 		i++;
@@ -61,6 +63,35 @@ void		set_input(t_input **input, char *line, int rooms)
 	}
 }
 
+void		count_room_routes(t_routes *routes_head, t_room *room_list)
+{
+	t_room		*room;
+	t_route		*current;
+	t_routes	*route;
+
+	room = room_list;
+	while (room)
+	{
+		if (room->type != START && room->type != END)
+		{
+			route = routes_head;
+			while (route)
+			{
+				current = route->route;
+				while (current)
+				{
+					if (current->room->id == room->id)
+						room->route_count++;
+					current = current->next;
+				}
+				current = route->route;
+				route = route->next;
+			}
+		}
+		room = room->next;
+	}
+}
+
 int			main(void)
 {
 	t_input		*head;
@@ -80,9 +111,11 @@ int			main(void)
 	farm.routes = get_routes_to_end(farm.start);
 	print_input(head);
 	farm.count = count_routes(farm.routes);
-	farm.ordered_routes = order_routes(farm.count, farm.routes);
-	print_routes(farm.ordered_routes);
+	count_room_routes(farm.routes, farm.rooms);
+	farm.ordered_short = order_routes_shortest(farm.count, farm.routes);
+	farm.ordered_rating = order_routes_rating(farm.count, farm.routes);
+	print_routes(farm.ordered_rating);
 	farm.start->ant_count = farm.amount;
-	solve(farm, farm.ordered_routes, farm.count);
+	solve(farm, farm.ordered_short, farm.ordered_rating, farm.count);
 	return (0);
 }

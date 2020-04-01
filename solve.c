@@ -102,19 +102,32 @@ int path_count, int amount)
 	return (ant);
 }
 
-void			solve(t_farm farm, t_routes **ordered, int total_paths)
+void			solve(t_farm farm, t_routes **ordered_short, \
+t_routes **ordered_rating, int total_paths)
 {
-	int			move_count;
+	int			moves_shortest;
+	int			moves_rating;
 	int			path_count;
 
 	path_count = count_paths(farm.start, farm.end);
 	path_count = (path_count > total_paths ? total_paths : path_count);
-	move_count = 0;
-	farm.ants = assign_paths(farm.ants, ordered, path_count, farm.amount);
+	moves_shortest = 0;
+	moves_rating = 0;
+	farm.ants = assign_paths(farm.ants, ordered_short, path_count, farm.amount);
 	while (farm.end->ant_count != farm.amount)
 	{
 		move_ants(farm.amount, farm.ants, farm.routes);
-		move_count++;
+		moves_shortest++;
 	}
-	printf("Move count: %d\n", move_count);
+		printf("Moves with shortest: %d\n", moves_shortest);
+	farm.end->ant_count = 0;
+	farm.start->ant_count = 1;
+	farm.ants = assign_paths(farm.ants, ordered_rating,
+	path_count, farm.amount);
+	while (farm.end->ant_count != farm.amount)
+	{
+		move_ants(farm.amount, farm.ants, farm.routes);
+		moves_rating++;
+	}
+	printf("Moves with rating: %d\n", moves_rating);
 }
