@@ -9,7 +9,6 @@ static void	print_routes(t_routes **routes)
 	while (routes[i])
 	{
 		printf("%d. route (%d rooms)\n", i + 1, routes[i]->rooms);
-		printf("Length rating: %f\n", routes[i]->length_rating);
 		route = routes[i]->route;
 		while (route)
 		{
@@ -113,11 +112,10 @@ int			main(void)
 	farm.count = count_routes(farm.routes);
 	count_room_routes(farm.routes, farm.rooms);
 	farm.ordered_short = order_routes_shortest(farm.count, farm.routes);
-	farm.ordered_rating = order_routes_rating(farm.count, farm.routes);
-	print_routes(farm.ordered_rating);
+	print_routes(farm.ordered_short);
 	farm.start->ant_count = farm.amount;
-	printf("rooms to end %d\n",
-	farm.rooms_to_end = count_rooms_to_end(farm.routes));
-	solve(farm, farm.ordered_short, farm.ordered_rating, farm.count);
+	printf("path count %d\n",
+	farm.needed_routes = count_needed_routes(farm.routes));
+	solve(farm, farm.ordered_short, farm.needed_routes);
 	return (0);
 }

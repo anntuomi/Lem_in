@@ -52,7 +52,6 @@ typedef struct	s_routes
 {
 	t_route			*route;
 	int				rooms;
-	double			length_rating;
 	struct s_routes	*next;
 }				t_routes;
 
@@ -66,8 +65,8 @@ typedef struct	s_farm
 	t_routes	*routes;
 	int			count;
 	t_routes	**ordered_short;
-	t_routes	**ordered_rating;
-	int			rooms_to_end;
+	int			path_count;
+	int			needed_routes;
 }				t_farm;
 
 t_route			**get_ants(int *amount, t_input **input);
@@ -86,9 +85,8 @@ t_routes		*del_dead_ends(t_routes *routes);
 int				count_routes(t_routes *routes);
 t_routes		**order_routes_shortest(int route_count, t_routes *routes);
 t_routes		**order_routes_rating(int route_count, t_routes *routes);
-int				count_rooms_to_end(t_routes *routes);
-void			solve(t_farm farm, t_routes **ordered_short, \
-				t_routes **ordered_rating, int total_paths);
+int				count_needed_routes(t_routes *routes);
+void			solve(t_farm farm, t_routes **ordered, int path_count);
 void			handle_error(void);
 
 #endif

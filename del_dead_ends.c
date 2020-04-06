@@ -1,36 +1,53 @@
 #include "lemin.h"
 
-static int		count_rooms(t_route *head)
+static int		count_rooms(t_route *start, t_route *end)
 {
-	int			rooms;
-	t_route		*room;
+	int			start_rooms;
+	int			end_rooms;
+	t_route		*room_start;
+	t_route		*room_end;
 
-	rooms = 0;
-	while (head)
+	start_rooms = 0;
+	end_rooms = 0;
+	while (start || end)
 	{
-		room = head->next;
-		free(head);
-		head = room;
-		rooms++;
+		if (start != NULL)
+		{
+			room_start = start->next;
+			free(start);
+			start = room_start;
+			start_rooms++;
+		}
+		if (end != NULL)
+		{
+			room_end = end->next;
+			free(end);
+			end = room_end;
+			end_rooms++;
+		}
 	}
-	return (rooms - 1);
+	return (start_rooms < end_rooms ? start_rooms - 1 : end_rooms - 1);
 }
 
-int				count_rooms_to_end(t_routes *routes)
+int				count_needed_routes(t_routes *routes)
 {
-	t_route		*head;
+	t_route		*start;
+	t_route		*end;
 	t_route		*room;
 	t_route		*route;
 
-	if (!(head = (t_route *)malloc(sizeof(t_route))))
+	if (!(end = (t_route *)malloc(sizeof(t_route))) || \
+		!(start = (t_route *)malloc(sizeof(t_route))))
 		handle_error();
-	head->next = NULL;
+	end->next = NULL;
+	start->next = NULL;
 	while (routes)
 	{
 		route = routes->route;
-		while (route->index != routes->rooms - 1)
+
+		while (route->index != 2)
 			route = route->next;
-		room = head;
+		room = start;
 		while (room->next && room->next->room->id != route->room->id)
 			room = room->next;
 		if (!room->next)
@@ -38,11 +55,28 @@ int				count_rooms_to_end(t_routes *routes)
 			if (!(room->next = (t_route *)malloc(sizeof(t_route))))
 				handle_error();
 			room->next->room = route->room;
+			printf("s: %s\n", room->next->room->name);
 			room->next->next = NULL;
 		}
+
+		while (route->index != routes->rooms - 1)
+			route = route->next;
+		room = end;
+		while (room->next && room->next->room->id != route->room->id)
+			room = room->next;
+		if (!room->next)
+		{
+			if (!(room->next = (t_route *)malloc(sizeof(t_route))))
+				handle_error();
+			room->next->room = route->room;
+			printf("e: %s\n", room->next->room->name);
+			room->next->next = NULL;
+		}
+
 		routes = routes->next;
 	}
-	return (count_rooms(head));
+	printf("End of count_needed_routes\n");
+	return (count_rooms(start, end));
 }
 
 static t_routes	*del_route(t_routes *routes)

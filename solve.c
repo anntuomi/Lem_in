@@ -1,41 +1,118 @@
 #include "lemin.h"
 
-static t_route	*check_for_shorter(t_route *ant, t_routes *route, int len)
+static int		compare_routes(t_routes **used_list, t_route *tested_head)
 {
-	while (route)
+	t_route	*tested_route;
+	t_route	*used_route;
+	int		i;
+	int		tested_room;
+
+	tested_route = tested_head->next;
+	while (tested_route->room->type != END)
 	{
-		while (route->route->room->id != ant->room->id)
-			route->route = route->route->next;
-		if (route->rooms - route->route->index < len && \
-			route->route->next->room->ant_count == 0)
+		i = 0;
+		tested_room = tested_route->room->id;
+		while (used_list[i])
 		{
-			len = route->rooms - route->route->index;
-			ant = route->route;
+			used_route = used_list[i]->route->next;
+			while (used_route->room->type != END)
+			{
+				if (used_route->room->id == tested_room)
+					return (0);
+				used_route = used_route->next;
+			}
+			i++;
 		}
-		route = route->next;
+		tested_route = tested_route->next;
 	}
-	return (ant);
+	return (1);
 }
 
-static t_route	*change_route(t_route *ant, t_routes *route_list)
+static t_routes	**save_most_uniques(t_routes **used, t_routes **most_uniques,
+int j, int *most_paths)
 {
-	t_routes	*route;
-	int			len;
+	int i;
 
-	route = route_list;
-	while (route)
+	if (*most_paths < j)
 	{
-		while (route->route->room->id != ant->room->id)
-			route->route = route->route->next;
-		if (route->route->next->room->ant_count == 0)
+		i = 0;
+		while (used[i])
 		{
-			ant = route->route;
-			len = route->rooms - route->route->index;
-			route = route->next;
-			ant = check_for_shorter(ant, route, len);
-			break ;
+			most_uniques[i] = used[i];
+			i++;
 		}
-		route = route->next;
+		*most_paths = j;
+	}
+	return (most_uniques);
+}
+
+static t_routes	**determine_used_routes(t_routes **ordered, int *path_count)
+{
+	t_routes	**used_routes;
+	t_routes	**most_uniques;
+	int			most_paths;
+	int			i;
+	int			j;
+	int			k;
+
+	most_paths = -1;
+	used_routes = (t_routes **)malloc(sizeof(t_routes *) * *path_count + 1);
+	most_uniques = (t_routes **)malloc(sizeof(t_routes *) * *path_count + 1);
+	i = 0;
+	while (i <= *path_count)
+	{
+		used_routes[i] = NULL;
+		most_uniques[i] = NULL;
+		i++;
+	}
+	i = 0;
+	while (ordered[i])
+	{
+		used_routes[0] = ordered[i];
+		j = 1;
+		while (j < *path_count)
+		{
+			k = 0;
+			while (ordered[k])
+			{
+				if (compare_routes(used_routes, ordered[k]->route) == 1)
+				{
+					used_routes[j] = ordered[k];
+					break ;
+				}
+				k++;
+			}
+			if (used_routes[j] == NULL)
+			{
+				save_most_uniques(used_routes, most_uniques, j, &most_paths);
+				break ;
+			}
+			j++;
+		}
+		if (j == *path_count)
+		{
+			free(most_uniques);
+			return (used_routes);
+		}
+		i++;
+	}
+	*path_count = most_paths;
+	free(used_routes);
+	return (most_uniques);
+}
+
+static t_route	**assign_paths(t_route **ant, t_routes **ordered,
+int path_count, int amount)
+{
+	int			i;
+
+	i = 0;
+	while (i < amount)
+	{
+		printf("Ant number %d (Path_count: %d) Mod: %d\n", i, path_count,
+		(i) % path_count);
+		ant[i] = ordered[(i) % path_count]->route;
+		i++;
 	}
 	return (ant);
 }
@@ -52,9 +129,6 @@ static void		move_ants(int amount, t_route **ant, t_routes *route_list)
 	moved = 0;
 	while (i >= 0)
 	{
-		/*if (ant[i]->room->type != END && (ant[i]->next->room->ant_count != 0 \
-		&& ant[i]->next->room->type != END))
-		ant[i] = change_route(ant[i], route_list);*/
 		if (ant[i]->room->type != END && (ant[i]->next->room->ant_count == 0 \
 		|| ant[i]->next->room->type == END))
 		{
@@ -71,63 +145,18 @@ static void		move_ants(int amount, t_route **ant, t_routes *route_list)
 	printf("\n");
 }
 
-int				count_paths(t_room *start, t_room *end)
+void			solve(t_farm farm, t_routes **ordered, int path_count)
 {
-	t_path		*path;
-	int			path_count;
+	t_routes	**used_routes;
+	int			moves;
 
-	path = end->paths;
-	path_count = 0;
-	while (path)
-	{
-		path_count++;
-		path = path->next;
-	}
-	return (path_count);
-}
-
-t_route			**assign_paths(t_route **ant, t_routes **ordered,
-int path_count, int amount)
-{
-	int			i;
-
-	i = 0;
-	while (i < amount)
-	{
-		printf("Ant number %d (Path_count: %d) Mod: %d\n", i, path_count,
-		(i) % path_count);
-		ant[i] = ordered[(i) % path_count]->route;
-		i++;
-	}
-	return (ant);
-}
-
-void			solve(t_farm farm, t_routes **ordered_short, \
-t_routes **ordered_rating, int total_paths)
-{
-	int			moves_shortest;
-	int			moves_rating;
-	int			path_count;
-
-	path_count = count_paths(farm.start, farm.end);
-	path_count = (path_count > total_paths ? total_paths : path_count);
-	moves_shortest = 0;
-	moves_rating = 0;
-	farm.ants = assign_paths(farm.ants, ordered_short, path_count, farm.amount);
+	used_routes = determine_used_routes(ordered, &path_count);
+	assign_paths(farm.ants, used_routes, path_count, farm.amount);
+	moves = 0;
 	while (farm.end->ant_count != farm.amount)
 	{
 		move_ants(farm.amount, farm.ants, farm.routes);
-		moves_shortest++;
+		moves++;
 	}
-		printf("Moves with shortest: %d\n", moves_shortest);
-	farm.end->ant_count = 0;
-	farm.start->ant_count = 1;
-	farm.ants = assign_paths(farm.ants, ordered_rating,
-	path_count, farm.amount);
-	while (farm.end->ant_count != farm.amount)
-	{
-		move_ants(farm.amount, farm.ants, farm.routes);
-		moves_rating++;
-	}
-	printf("Moves with rating: %d\n", moves_rating);
+	printf("Moves: %d\n", moves);
 }
