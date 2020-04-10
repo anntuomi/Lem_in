@@ -64,7 +64,7 @@ typedef struct	s_farm
 	t_room		*end;
 	t_routes	*routes;
 	int			count;
-	t_routes	**ordered_short;
+	t_routes	**ordered;
 	int			path_count;
 	int			needed_routes;
 }				t_farm;
@@ -85,8 +85,12 @@ t_routes		*del_dead_ends(t_routes *routes);
 int				count_routes(t_routes *routes);
 t_routes		**order_routes_shortest(int route_count, t_routes *routes);
 t_routes		**order_routes_rating(int route_count, t_routes *routes);
-int				count_needed_routes(t_routes *routes);
+int				count_needed_routes(t_routes *routes, t_routes *shortest);
 void			solve(t_farm farm, t_routes **ordered, int path_count);
+t_routes		**determine_used_routes(t_routes **ordered, int *path_count,
+				int i, int j);
+void			initialize_arrays(int path_count, t_routes ***used_routes,
+				t_routes ***most_uniques);
 void			handle_error(void);
 
 #endif

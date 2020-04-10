@@ -1,0 +1,53 @@
+# map14.txt
+#
+# A map where you should leave the longest unique route out with a lot of ants
+#
+# y
+#
+# 6         end ------.
+#           |  \      |
+# 5         |   \___. v
+#           |       | |
+# 4 d-------b       f u
+#    \      |       | |
+# 3   \     |       | t
+#      \    |       | |
+# 2     c   a-------e s
+#       |   |         |
+# 1     |   |		  r
+#        \  |         |
+# 0       start-------q
+#   0 1 2 3 4 5 6 7 8 9x
+5
+c 2 2
+##start
+start 4 0
+##end
+end 4 6
+d 0 4
+a 4 2
+b 4 4
+e 8 2
+f 8 4
+q 9 0
+r 9 1
+s 9 2
+t 9 3
+u 9 4
+v 9 5
+start-a
+c-d
+d-b
+a-e
+e-f
+f-end
+a-b
+b-end
+start-c
+start-q
+q-r
+r-s
+s-t
+t-u
+u-v
+v-end
