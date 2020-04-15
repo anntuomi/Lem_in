@@ -117,5 +117,6 @@ int			main(void)
 	printf("path count %d\n",
 	farm.needed_routes = count_needed_routes(farm.routes, farm.ordered[0]));
 	solve(farm, farm.ordered, farm.needed_routes);
+	ants_to_end(farm);
 	return (0);
 }
