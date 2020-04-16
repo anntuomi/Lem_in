@@ -423,7 +423,8 @@ static void		mv_ants(t_farm farm, t_routes **unique_routes)
 
 	needed_routes = 0;
 	i1 = 0;
-	while (unique_routes[i1] && needed_routes < farm.amount)
+	while (unique_routes[i1] && (needed_routes < farm.amount ||
+	unique_routes[i1]->rooms == unique_routes[i1 - 1]->rooms))
 		needed_routes += unique_routes[i1++]->rooms;
 	needed_routes = i1;
 	i1 = 0;
@@ -436,6 +437,7 @@ static void		mv_ants(t_farm farm, t_routes **unique_routes)
 		farm.ants[i1++]->room->ant_count++;
 	}
 	farm.ants[i1] = NULL;
+	needed_routes = 0;
 	while (farm.end->ant_count != farm.amount)
 	{
 		i1 = 0;
@@ -458,7 +460,9 @@ static void		mv_ants(t_farm farm, t_routes **unique_routes)
 			i1++;
 		}
 		printf("\n");
+		needed_routes++;
 	}
+	printf("Moves: %d\n", needed_routes);
 }
 
 void			ants_to_end(t_farm farm)
@@ -469,15 +473,23 @@ void			ants_to_end(t_farm farm)
 	t_routes	**unique_routes;
 	t_room		*room;
 
-	start_rooms = get_start_end_rooms(farm.routes);
-	end_rooms = start_rooms->next;
-	print_start_end_rooms(start_rooms);
-	if (start_rooms->rooms <= end_rooms->rooms)
-		rooms_routes = get_rooms_routes(start_rooms, 1, farm.ordered);
+	if (farm.amount == 1)
+	{
+		unique_routes = get_array_routes(1);
+		unique_routes[0] = farm.ordered[0];
+	}
 	else
-		rooms_routes = get_rooms_routes(end_rooms, 0, farm.ordered);
-	print_rooms_routes(rooms_routes);
-	unique_routes = get_unique_routes(rooms_routes);
+	{
+		start_rooms = get_start_end_rooms(farm.routes);
+		end_rooms = start_rooms->next;
+		print_start_end_rooms(start_rooms);
+		if (start_rooms->rooms <= end_rooms->rooms)
+			rooms_routes = get_rooms_routes(start_rooms, 1, farm.ordered);
+		else
+			rooms_routes = get_rooms_routes(end_rooms, 0, farm.ordered);
+		print_rooms_routes(rooms_routes);
+		unique_routes = get_unique_routes(rooms_routes);
+	}
 	print_unique_routes(unique_routes);
 	room = farm.rooms;
 	while (room)
