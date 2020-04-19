@@ -90,7 +90,7 @@ void			solve(t_farm farm, t_routes **ordered, int path_count);
 t_routes		**determine_used_routes(t_routes **ordered, int *path_count,
 				int i, int j);
 void			initialize_arrays(int path_count, t_routes ***used_routes,
-				t_routes ***most_uniques);
+				t_routes ***most_uniques, int *most_paths);
 void			ants_to_end(t_farm farm);
 void			handle_error(void);
 

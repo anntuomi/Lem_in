@@ -1,7 +1,7 @@
 #include "lemin.h"
 
 void	initialize_arrays(int path_count, t_routes ***used_routes,
-t_routes ***most_uniques)
+t_routes ***most_uniques, int *most_paths)
 {
 	int			i;
 	t_routes	**new1;
@@ -20,4 +20,5 @@ t_routes ***most_uniques)
 	}
 	*used_routes = new1;
 	*most_uniques = new2;
+	*most_paths = -1;
 }

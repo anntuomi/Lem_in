@@ -59,10 +59,10 @@ t_routes **ordered)
 }
 
 static t_routes	**return_most_paths(t_routes **used_routes,
-t_routes **most_uniques, int *path_count, int j)
+t_routes **most_uniques, int path_count, int j)
 {
 	printf("End of determine used\n");
-	if (j == *path_count)
+	if (j == path_count)
 	{
 		free(most_uniques);
 		return (used_routes);
@@ -80,9 +80,9 @@ int i, int j)
 	t_routes	**most_uniques;
 	t_routes	**used_routes;
 	int			most_paths;
+	int			orig_path_count;
 
-	most_paths = -1;
-	initialize_arrays(*path_count, &used_routes, &most_uniques);
+	initialize_arrays(*path_count, &used_routes, &most_uniques, &most_paths);
 	while (ordered[i] && j < *path_count)
 	{
 		used_routes[0] = ordered[i];
@@ -99,6 +99,7 @@ int i, int j)
 		}
 		i++;
 	}
+	orig_path_count = *path_count;
 	*path_count = (j != *path_count ? most_paths : *path_count);
-	return (return_most_paths(used_routes, most_uniques, path_count, j));
+	return (return_most_paths(used_routes, most_uniques, orig_path_count, j));
 }

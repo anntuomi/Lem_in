@@ -44,33 +44,48 @@ static void		move_ants(int amount, t_route **ant, t_routes *route_list)
 	printf("\n");
 }
 
+static double	calculate_moves(t_routes **used, int path_count, int ant_amount)
+{
+	double	float_result;
+	int		test;
+	double	test_result;
+
+	if (path_count > ant_amount)
+		path_count = ant_amount;
+	printf("Most rooms: %d extra ants: %d\n", used[path_count - 1]->rooms - 2, ant_amount % path_count);
+	float_result = ((double)used[path_count - 1]->rooms - 2) + \
+	((double)ant_amount / (double)path_count);
+	if (ant_amount % path_count != 0 && \
+	used[0]->rooms == used[path_count - 1]->rooms)
+		float_result = float_result + 1.0;
+	return (float_result);
+}
+
 int				adjust_to_ant_amount(int path_count, int ant_amount,
 t_routes **ordered, t_routes **used)
 {
-	int i;
-	int capacity;
-	int temp;
+	double	moves;
+	int		new_path_count;
+	double	tested_moves;
 
-	if (ant_amount <= ordered[0]->rooms - 2 && \
-	ordered[1]->rooms > ordered[0]->rooms)
+	if (ordered[0]->rooms == 2)
 		return (-1);
-	i = 0;
-	capacity = 0;
-	while (i < path_count)
+	new_path_count = path_count;
+	moves = calculate_moves(used, path_count, ant_amount);
+	while (path_count > 0)
 	{
-		capacity = capacity + (used[i]->rooms - 2);
-		printf("Capacity: %d\n", capacity);
-		if (capacity >= ant_amount)
-			break ;
-		i++;
+		if ((tested_moves = calculate_moves(used, path_count, \
+		ant_amount)) < moves)
+		{
+			moves = tested_moves;
+			new_path_count = path_count;
+		}
+		printf("Path count: %d Moves: %f ", path_count, tested_moves);
+		path_count--;
 	}
-	if (i < path_count)
-	{
-		temp = used[i]->rooms;
-		while (i < path_count && used[i]->rooms == temp)
-			i++;
-	}
-	return (i < path_count ? i : path_count);
+	if (calculate_moves(ordered, 1, ant_amount) < moves)
+		return (-1);
+	return (new_path_count);
 }
 
 void			solve(t_farm farm, t_routes **ordered, int path_count)

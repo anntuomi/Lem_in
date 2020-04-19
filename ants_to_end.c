@@ -15,7 +15,7 @@ static void		print_null_routes(t_routes **routes, int size)
 	t_route		*route;
 	int			i;
 
-	printf("\nROUTES\n");
+	//printf("\nROUTES\n");
 	i = 0;
 	while (i < size)
 	{
@@ -23,11 +23,11 @@ static void		print_null_routes(t_routes **routes, int size)
 			printf("%d. route NULL\n", i + 1);
 		else
 		{
-			printf("%d. route (%d rooms)\n", i + 1, routes[i]->rooms);
+			//printf("%d. route (%d rooms)\n", i + 1, routes[i]->rooms);
 			route = routes[i]->route;
 			while (route)
 			{
-				printf("%d. %s\n", route->index, route->room->name);
+				//printf("%d. %s\n", route->index, route->room->name);
 				route = route->next;
 			}
 		}
@@ -40,15 +40,15 @@ static void		print_unique_routes(t_routes **routes)
 	t_route		*route;
 	int			i;
 
-	printf("\nUNIQUE ROUTES\n");
+	//printf("\nUNIQUE ROUTES\n");
 	i = 0;
 	while (routes[i])
 	{
-		printf("%d. route (%d rooms)\n", i + 1, routes[i]->rooms);
+		//printf("%d. route (%d rooms)\n", i + 1, routes[i]->rooms);
 		route = routes[i]->route;
 		while (route)
 		{
-			printf("%d. %s\n", route->index, route->room->name);
+			//printf("%d. %s\n", route->index, route->room->name);
 			route = route->next;
 		}
 		i++;
@@ -124,19 +124,19 @@ static void		print_rooms_routes(t_routes **rooms_routes)
 	t_route		*route;
 	int			i;
 
-	printf("\nrooms routes\n");
+	//printf("\nrooms routes\n");
 	i = 0;
 	while (rooms_routes[i])
 	{
-		printf("%d. start/end rooms routes\n", i + 1);
+		//printf("%d. start/end rooms routes\n", i + 1);
 		routes = rooms_routes[i];
 		while (routes)
 		{
-			printf("route (%d rooms)\n", routes->rooms);
+			//printf("route (%d rooms)\n", routes->rooms);
 			route = routes->route;
 			while (route)
 			{
-				printf("%d. %s\n", route->index, route->room->name);
+				//printf("%d. %s\n", route->index, route->room->name);
 				route = route->next;
 			}
 			routes = routes->next;
@@ -342,21 +342,21 @@ static void		print_start_end_rooms(t_routes *start_end_rooms)
 	t_route		*route;
 
 	routes = start_end_rooms;
-	printf("\nstart rooms %d\n", routes->rooms);
+	//printf("\nstart rooms %d\n", routes->rooms);
 	route = routes->route;
 	while (route)
 	{
 		if (route->room)
-			printf("%d. room %s\n", route->index, route->room->name);
+			//printf("%d. room %s\n", route->index, route->room->name);
 		route = route->next;
 	}
 	routes = routes->next;
-	printf("end rooms %d\n", routes->rooms);
+	//printf("end rooms %d\n", routes->rooms);
 	route = routes->route;
 	while (route)
 	{
 		if (route->room)
-			printf("%d. room %s\n", route->index, route->room->name);
+			//printf("%d. room %s\n", route->index, route->room->name);
 		route = route->next;
 	}
 }
