@@ -48,7 +48,7 @@ static t_room	*get_room(char *input, t_room *room)
 	handle_error();
 }
 
-static int		count_words(char **array)
+int				count_words(void **array)
 {
 	int		words;
 
@@ -70,7 +70,8 @@ void			set_links(char *line, t_room *room, t_input **input)
 	{
 		if (line[0] != '#')
 		{
-			if (!(rooms = ft_strsplit(line, '-')) || count_words(rooms) != 2)
+			if (!(rooms = ft_strsplit(line, '-')) ||
+			count_words((void **)rooms) != 2)
 				handle_error();
 			if (!ft_strequ(rooms[0], rooms[1]))
 			{
@@ -82,7 +83,6 @@ void			set_links(char *line, t_room *room, t_input **input)
 			}
 		}
 		set_input(input, line, 0);
-		if (first == 1)
-			first = 0;
+		first = 0;
 	}
 }

@@ -1,21 +1,11 @@
 #include "lemin.h"
 
-static int		count_words(t_routes **array)
-{
-	int		words;
-
-	words = 0;
-	while (array[words])
-		words++;
-	return (words);
-}
-
 static void		print_null_routes(t_routes **routes, int size)
 {
 	t_route		*route;
 	int			i;
 
-	//printf("\nROUTES\n");
+	printf("\nROUTES\n");
 	i = 0;
 	while (i < size)
 	{
@@ -23,11 +13,11 @@ static void		print_null_routes(t_routes **routes, int size)
 			printf("%d. route NULL\n", i + 1);
 		else
 		{
-			//printf("%d. route (%d rooms)\n", i + 1, routes[i]->rooms);
+			printf("%d. route (%d rooms)\n", i + 1, routes[i]->rooms);
 			route = routes[i]->route;
 			while (route)
 			{
-				//printf("%d. %s\n", route->index, route->room->name);
+				printf("%d. %s\n", route->index, route->room->name);
 				route = route->next;
 			}
 		}
@@ -40,15 +30,15 @@ static void		print_unique_routes(t_routes **routes)
 	t_route		*route;
 	int			i;
 
-	//printf("\nUNIQUE ROUTES\n");
+	printf("\nUNIQUE ROUTES\n");
 	i = 0;
 	while (routes[i])
 	{
-		//printf("%d. route (%d rooms)\n", i + 1, routes[i]->rooms);
+		printf("%d. route (%d rooms)\n", i + 1, routes[i]->rooms);
 		route = routes[i]->route;
 		while (route)
 		{
-			//printf("%d. %s\n", route->index, route->room->name);
+			printf("%d. %s\n", route->index, route->room->name);
 			route = route->next;
 		}
 		i++;
@@ -81,14 +71,13 @@ static int		is_unique_route(t_route *route1, t_route *head)
 {
 	t_route		*route2;
 
-	route1 = route1;
-	while (route1)
+	route1 = route1->next;
+	while (route1->room->type == NORMAL)
 	{
-		route2 = head;
-		while (route1->room->type == NORMAL && route2)
+		route2 = head->next;
+		while (route2->room->type == NORMAL)
 		{
-			if (route2->room->type == NORMAL &&
-			route2->room->id == route1->room->id)
+			if (route2->room->id == route1->room->id)
 				return (0);
 			route2 = route2->next;
 		}
@@ -124,19 +113,19 @@ static void		print_rooms_routes(t_routes **rooms_routes)
 	t_route		*route;
 	int			i;
 
-	//printf("\nrooms routes\n");
+	printf("\nrooms routes\n");
 	i = 0;
 	while (rooms_routes[i])
 	{
-		//printf("%d. start/end rooms routes\n", i + 1);
+		printf("%d. start/end rooms routes\n", i + 1);
 		routes = rooms_routes[i];
 		while (routes)
 		{
-			//printf("route (%d rooms)\n", routes->rooms);
+			printf("route (%d rooms)\n", routes->rooms);
 			route = routes->route;
 			while (route)
 			{
-				//printf("%d. %s\n", route->index, route->room->name);
+				printf("%d. %s\n", route->index, route->room->name);
 				route = route->next;
 			}
 			routes = routes->next;
@@ -224,31 +213,6 @@ t_routes **unique)
 			break ;
 		route = route->next;
 	}
-	tmp[room] = routes[room];
-}
-
-static void		order_routes(t_routes **routes)
-{
-	t_routes	*tmp;
-	int			i;
-	int			j;
-
-	i = 0;
-	while (routes[i])
-	{
-		j = i + 1;
-		while (routes[j])
-		{
-			if (routes[j]->rooms < routes[i]->rooms)
-			{
-				tmp = routes[i];
-				routes[i] = routes[j];
-				routes[j] = tmp;
-			}
-			j++;
-		}
-		i++;
-	}
 }
 
 static t_routes	**del_null_elems(t_routes **routes, int size)
@@ -261,6 +225,7 @@ static t_routes	**del_null_elems(t_routes **routes, int size)
 	new_size = count_route_len(routes, size);
 	if (!(new = (t_routes **)malloc(sizeof(t_routes *) * (new_size[0] + 1))))
 		handle_error();
+	free(new_size);
 	i1 = 0;
 	i2 = 0;
 	while (i1 < size)
@@ -283,7 +248,7 @@ static t_routes	**get_unique_routes(t_routes **routes)
 	int			size;
 	int			i;
 
-	size = count_words(routes);
+	size = count_words((void **)routes);
 	unique = get_array_routes(size);
 	tmp = get_array_routes(size);
 	set_unique_routes(routes, 0, tmp, unique);
@@ -294,14 +259,14 @@ static t_routes	**get_unique_routes(t_routes **routes)
 }
 
 static void		set_index(int *index, t_route *route, t_routes *rooms,
-int start)
+int place)
 {
 	t_route		*room;
 
 	room = rooms->route;
 	while (room && room->room->id != route->room->id)
 		room = room->next;
-	if (route->index == start)
+	if (route->index == place)
 		*index = room->index;
 	else if (room)
 		*index = 0;
@@ -342,21 +307,21 @@ static void		print_start_end_rooms(t_routes *start_end_rooms)
 	t_route		*route;
 
 	routes = start_end_rooms;
-	//printf("\nstart rooms %d\n", routes->rooms);
+	printf("\nstart rooms %d\n", routes->rooms);
 	route = routes->route;
 	while (route)
 	{
 		if (route->room)
-			//printf("%d. room %s\n", route->index, route->room->name);
+			printf("%d. room %s\n", route->index, route->room->name);
 		route = route->next;
 	}
 	routes = routes->next;
-	//printf("end rooms %d\n", routes->rooms);
+	printf("end rooms %d\n", routes->rooms);
 	route = routes->route;
 	while (route)
 	{
 		if (route->room)
-			//printf("%d. room %s\n", route->index, route->room->name);
+			printf("%d. room %s\n", route->index, route->room->name);
 		route = route->next;
 	}
 }
@@ -388,29 +353,31 @@ static int		is_dup(int id, t_route *route)
 	return (0);
 }
 
-static t_routes	*get_start_end_rooms(t_routes *routes)
+static t_routes	*get_start_end_rooms(t_routes **routes)
 {
 	t_routes	*start_rooms;
 	t_routes	*end_rooms;
 	t_route		*route;
+	int			i;
 
 	start_rooms = get_routes(NULL);
 	end_rooms = get_routes(NULL);
 	start_rooms->next = end_rooms;
-	while (routes)
+	i = 0;
+	while (routes[i])
 	{
-		route = routes->route;
+		route = routes[i]->route;
 		while (route)
 		{
 			if (route->index == 2 &&
 			!is_dup(route->room->id, start_rooms->route))
 				add_room(route->room, start_rooms);
-			if (route->index == routes->rooms - 1 &&
+			if (route->index == routes[i]->rooms - 1 &&
 			!is_dup(route->room->id, end_rooms->route))
 				add_room(route->room, end_rooms);
 			route = route->next;
 		}
-		routes = routes->next;
+		i++;
 	}
 	return (start_rooms);
 }
@@ -480,17 +447,17 @@ void			ants_to_end(t_farm farm)
 	}
 	else
 	{
-		start_rooms = get_start_end_rooms(farm.routes);
+		start_rooms = get_start_end_rooms(farm.ordered);
 		end_rooms = start_rooms->next;
-		print_start_end_rooms(start_rooms);
+		//print_start_end_rooms(start_rooms);
 		if (start_rooms->rooms <= end_rooms->rooms)
 			rooms_routes = get_rooms_routes(start_rooms, 1, farm.ordered);
 		else
 			rooms_routes = get_rooms_routes(end_rooms, 0, farm.ordered);
-		print_rooms_routes(rooms_routes);
+		//print_rooms_routes(rooms_routes);
 		unique_routes = get_unique_routes(rooms_routes);
 	}
-	print_unique_routes(unique_routes);
+	//print_unique_routes(unique_routes);
 	room = farm.rooms;
 	while (room)
 	{

@@ -111,11 +111,12 @@ int			main(void)
 	print_input(head);
 	farm.count = count_routes(farm.routes);
 	count_room_routes(farm.routes, farm.rooms);
-	farm.ordered = order_routes_shortest(farm.count, farm.routes);
-	print_routes(farm.ordered);
+	farm.ordered = routes_to_array(farm.count, farm.routes);
+	order_routes(farm.ordered);
+	//print_routes(farm.ordered);
 	farm.start->ant_count = farm.amount;
-	printf("path count %d\n",
-	farm.needed_routes = count_needed_routes(farm.routes, farm.ordered[0]));
+	//printf("path count %d\n",
+	farm.needed_routes = count_needed_routes(farm.routes, farm.ordered[0]);
 	solve(farm, farm.ordered, farm.needed_routes);
 	ants_to_end(farm);
 	return (0);

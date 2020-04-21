@@ -74,6 +74,7 @@ void			create_room_list(t_room **head, char **line, t_input **input);
 int				determine_room_type(char *line);
 void			set_input(t_input **input, char *line, int room);
 void			set_links(char *line, t_room *room, t_input **input);
+int				count_words(void **array);
 t_routes		*get_routes_to_end(t_room *start);
 void			set_routes(t_routes *routes, t_room *room);
 t_routes		*get_routes(t_room *start);
@@ -83,8 +84,8 @@ int				count_unvisited(t_path *path, t_route *route);
 int				is_unvisited(t_room *room, t_route *route);
 t_routes		*del_dead_ends(t_routes *routes);
 int				count_routes(t_routes *routes);
-t_routes		**order_routes_shortest(int route_count, t_routes *routes);
-t_routes		**order_routes_rating(int route_count, t_routes *routes);
+t_routes		**routes_to_array(int route_count, t_routes *routes);
+void			order_routes(t_routes **routes);
 int				count_needed_routes(t_routes *routes, t_routes *shortest);
 void			solve(t_farm farm, t_routes **ordered, int path_count);
 t_routes		**determine_used_routes(t_routes **ordered, int *path_count,

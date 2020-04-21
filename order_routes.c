@@ -1,6 +1,6 @@
 #include "lemin.h"
 
-static t_routes	**routes_to_array(int route_count, t_routes *routes)
+t_routes	**routes_to_array(int route_count, t_routes *routes)
 {
 	t_routes	**array_routes;
 	t_routes	*current;
@@ -21,29 +21,26 @@ static t_routes	**routes_to_array(int route_count, t_routes *routes)
 	return (array_routes);
 }
 
-t_routes		**order_routes_shortest(int route_count, t_routes *routes)
+void		order_routes(t_routes **routes)
 {
-	t_routes	**array_routes;
 	t_routes	*tmp;
 	int			i;
 	int			j;
 
-	array_routes = routes_to_array(route_count, routes);
 	i = 0;
-	while (i < route_count)
+	while (routes[i])
 	{
 		j = i + 1;
-		while (j < route_count)
+		while (routes[j])
 		{
-			if (array_routes[j]->rooms < array_routes[i]->rooms)
+			if (routes[j]->rooms < routes[i]->rooms)
 			{
-				tmp = array_routes[i];
-				array_routes[i] = array_routes[j];
-				array_routes[j] = tmp;
+				tmp = routes[i];
+				routes[i] = routes[j];
+				routes[j] = tmp;
 			}
 			j++;
 		}
 		i++;
 	}
-	return (array_routes);
 }
