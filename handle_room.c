@@ -2,8 +2,8 @@
 
 static int		validate_room_input(char **input, t_room **head)
 {
-	int		size;
-	t_room	*room;
+	int			size;
+	t_room		*room;
 
 	size = 0;
 	while (input[size] != NULL)
@@ -75,9 +75,9 @@ int *room_type)
 
 void			create_room_list(t_room **head, char **line, t_input **lines)
 {
-	int		room_type;
-	char	**input;
-	t_room	*room;
+	int			room_type;
+	char		**input;
+	t_room		*room;
 
 	room_type = NORMAL;
 	room = NULL;

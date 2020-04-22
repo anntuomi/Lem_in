@@ -1,6 +1,6 @@
 #include "lemin.h"
 
-int			is_unvisited(t_room *room, t_route *route)
+int				is_unvisited(t_room *room, t_route *route)
 {
 	while (route)
 	{
@@ -11,7 +11,7 @@ int			is_unvisited(t_room *room, t_route *route)
 	return (1);
 }
 
-int			count_unvisited(t_path *path, t_route *route)
+int				count_unvisited(t_path *path, t_route *route)
 {
 	int			unvisited;
 
@@ -25,7 +25,7 @@ int			count_unvisited(t_path *path, t_route *route)
 	return (unvisited);
 }
 
-t_route		*get_route(t_room *room, int index)
+t_route			*get_route(t_room *room, int index)
 {
 	t_route		*route;
 
@@ -37,7 +37,7 @@ t_route		*get_route(t_room *room, int index)
 	return (route);
 }
 
-void		*set_route_before_fork(t_routes *routes, t_routes *before_fork)
+void			*set_route_before_fork(t_routes *routes, t_routes *before_fork)
 {
 	t_route		*route;
 	t_route		*bf;
@@ -53,7 +53,7 @@ void		*set_route_before_fork(t_routes *routes, t_routes *before_fork)
 	routes->rooms = before_fork->rooms;
 }
 
-t_routes	*get_routes(t_room *start)
+t_routes		*get_routes(t_room *start)
 {
 	t_routes	*routes;
 

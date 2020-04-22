@@ -1,6 +1,6 @@
 #include "lemin.h"
 
-t_routes	**routes_to_array(int route_count, t_routes *routes)
+t_routes		**routes_to_array(int route_count, t_routes *routes)
 {
 	t_routes	**array_routes;
 	t_routes	*current;
@@ -21,7 +21,7 @@ t_routes	**routes_to_array(int route_count, t_routes *routes)
 	return (array_routes);
 }
 
-void		order_routes(t_routes **routes)
+void			order_routes(t_routes **routes)
 {
 	t_routes	*tmp;
 	int			i;

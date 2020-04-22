@@ -1,6 +1,6 @@
 #include "lemin.h"
 
-static int	count_rooms(t_route *start, t_route *end)
+static int		count_rooms(t_route *start, t_route *end)
 {
 	int			start_rooms;
 	int			end_rooms;
@@ -29,9 +29,9 @@ static int	count_rooms(t_route *start, t_route *end)
 	return (start_rooms < end_rooms ? start_rooms - 1 : end_rooms - 1);
 }
 
-static void	save_start_room(t_route *start, t_route *route)
+static void		save_start_room(t_route *start, t_route *route)
 {
-	t_route *room;
+	t_route		*room;
 
 	room = start;
 	while (room->next && room->next->room->id != route->room->id)
@@ -41,14 +41,14 @@ static void	save_start_room(t_route *start, t_route *route)
 		if (!(room->next = (t_route *)malloc(sizeof(t_route))))
 			handle_error();
 		room->next->room = route->room;
-		printf("s: %s\n", room->next->room->name);
+		//printf("s: %s\n", room->next->room->name);
 		room->next->next = NULL;
 	}
 }
 
-static void	save_end_room(t_route *end, t_route *route)
+static void		save_end_room(t_route *end, t_route *route)
 {
-	t_route *room;
+	t_route		*room;
 
 	room = end;
 	while (room->next && room->next->room->id != route->room->id)
@@ -58,12 +58,12 @@ static void	save_end_room(t_route *end, t_route *route)
 		if (!(room->next = (t_route *)malloc(sizeof(t_route))))
 			handle_error();
 		room->next->room = route->room;
-		printf("e: %s\n", room->next->room->name);
+		//printf("e: %s\n", room->next->room->name);
 		room->next->next = NULL;
 	}
 }
 
-int			count_needed_routes(t_routes *routes, t_routes *shortest)
+int				count_needed_routes(t_routes *routes, t_routes *shortest)
 {
 	t_route		*start;
 	t_route		*end;

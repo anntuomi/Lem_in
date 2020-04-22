@@ -57,16 +57,16 @@ typedef struct	s_routes
 
 typedef struct	s_farm
 {
-	int			amount;
-	t_route		**ants;
-	t_room		*rooms;
-	t_room		*start;
-	t_room		*end;
-	t_routes	*routes;
-	int			count;
-	t_routes	**ordered;
-	int			path_count;
-	int			needed_routes;
+	int				amount;
+	t_route			**ants;
+	t_room			*rooms;
+	t_room			*start;
+	t_room			*end;
+	t_routes		*routes;
+	int				count;
+	t_routes		**ordered;
+	int				path_count;
+	int				needed_routes;
 }				t_farm;
 
 t_route			**get_ants(int *amount, t_input **input);
@@ -92,7 +92,18 @@ t_routes		**determine_used_routes(t_routes **ordered, int *path_count,
 				int i, int j);
 void			initialize_arrays(int path_count, t_routes ***used_routes,
 				t_routes ***most_uniques, int *most_paths);
-void			ants_to_end(t_farm farm);
+t_routes		**get_routes_to_use(t_farm farm);
+t_routes		**get_array_routes(int size);
+t_routes		**get_rooms_routes(t_routes *rooms, int start,
+				t_routes **routes);
+t_routes		**del_null_elems(t_routes **routes, int size);
+int				*count_routes_len(t_routes **routes, int size);
+t_routes		**get_unique_routes(t_routes **routes);
+void			ants_to_end(t_farm farm, t_routes **unique_routes);
+void			print_start_end_rooms(t_routes *start_end_rooms);
+void			print_rooms_routes(t_routes **rooms_routes);
+void			print_unique_routes(t_routes **routes);
+void			print_null_routes(t_routes **routes, int size);
 void			handle_error(void);
 
 #endif

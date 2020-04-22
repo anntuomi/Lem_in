@@ -1,9 +1,9 @@
 #include "lemin.h"
 
-t_route	**get_ants(int *amount, t_input **input)
+t_route			**get_ants(int *amount, t_input **input)
 {
-	t_route	**ants;
-	char	*line;
+	t_route		**ants;
+	char		*line;
 
 	while (get_next_line(0, &line) == 1 && line[0] == '#')
 	{

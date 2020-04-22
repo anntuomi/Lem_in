@@ -1,6 +1,6 @@
 #include "lemin.h"
 
-void	initialize_arrays(int path_count, t_routes ***used_routes,
+void			initialize_arrays(int path_count, t_routes ***used_routes,
 t_routes ***most_uniques, int *most_paths)
 {
 	int			i;

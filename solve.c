@@ -8,8 +8,8 @@ int path_count, int amount)
 	i = 0;
 	while (i < amount)
 	{
-		printf("Ant number %d (Path_count: %d) Mod: %d\n", i, path_count,
-		(i) % path_count);
+		//printf("Ant number %d (Path_count: %d) Mod: %d\n", i, path_count,
+		//(i) % path_count);
 		ant[i] = ordered[(i) % path_count]->route;
 		i++;
 	}
@@ -46,13 +46,14 @@ static void		move_ants(int amount, t_route **ant, t_routes *route_list)
 
 static double	calculate_moves(t_routes **used, int path_count, int ant_amount)
 {
-	double	float_result;
-	int		test;
-	double	test_result;
+	double		float_result;
+	int			test;
+	double		test_result;
 
 	if (path_count > ant_amount)
 		path_count = ant_amount;
-	printf("Most rooms: %d extra ants: %d\n", used[path_count - 1]->rooms - 2, ant_amount % path_count);
+	//printf("Most rooms: %d extra ants: %d\n", used[path_count - 1]->rooms - 2,
+	//ant_amount % path_count);
 	float_result = ((double)used[path_count - 1]->rooms - 2) + \
 	((double)ant_amount / (double)path_count);
 	if (ant_amount % path_count != 0 && \
@@ -64,9 +65,9 @@ static double	calculate_moves(t_routes **used, int path_count, int ant_amount)
 int				adjust_to_ant_amount(int path_count, int ant_amount,
 t_routes **ordered, t_routes **used)
 {
-	double	moves;
-	int		new_path_count;
-	double	tested_moves;
+	double		moves;
+	int			new_path_count;
+	double		tested_moves;
 
 	if (ordered[0]->rooms == 2)
 		return (-1);
@@ -80,7 +81,7 @@ t_routes **ordered, t_routes **used)
 			moves = tested_moves;
 			new_path_count = path_count;
 		}
-		printf("Path count: %d Moves: %f ", path_count, tested_moves);
+		//printf("Path count: %d Moves: %f ", path_count, tested_moves);
 		path_count--;
 	}
 	if (calculate_moves(ordered, 1, ant_amount) < moves)

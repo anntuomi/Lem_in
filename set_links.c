@@ -2,7 +2,7 @@
 
 static int		is_dup(int id, t_path *path)
 {
-	t_room	*room;
+	t_room		*room;
 
 	while (path)
 	{
@@ -16,8 +16,8 @@ static int		is_dup(int id, t_path *path)
 
 static void		set_link(t_room *room1, t_room *room2)
 {
-	t_path	*new;
-	t_path	*path;
+	t_path		*new;
+	t_path		*path;
 
 	if (!is_dup(room2->id, room1->paths))
 	{
@@ -50,7 +50,7 @@ static t_room	*get_room(char *input, t_room *room)
 
 int				count_words(void **array)
 {
-	int		words;
+	int			words;
 
 	words = 0;
 	while (array[words])
@@ -60,10 +60,10 @@ int				count_words(void **array)
 
 void			set_links(char *line, t_room *room, t_input **input)
 {
-	char	**rooms;
-	t_room	*room1;
-	t_room	*room2;
-	int		first;
+	char		**rooms;
+	t_room		*room1;
+	t_room		*room2;
+	int			first;
 
 	first = 1;
 	while (first || get_next_line(0, &line) == 1)

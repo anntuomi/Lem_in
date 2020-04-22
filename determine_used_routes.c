@@ -2,10 +2,10 @@
 
 static int		is_unique(t_routes **used_list, t_route *tested_head)
 {
-	t_route	*tested_route;
-	t_route	*used_route;
-	int		i;
-	int		tested_room;
+	t_route		*tested_route;
+	t_route		*used_route;
+	int			i;
+	int			tested_room;
 
 	tested_route = tested_head->next;
 	while (tested_route->room->type != END)
@@ -31,7 +31,7 @@ static int		is_unique(t_routes **used_list, t_route *tested_head)
 static t_routes	**save_most_uniques(t_routes **used, t_routes **most_uniques,
 int j, int *most_paths)
 {
-	int i;
+	int			i;
 
 	if (*most_paths < j)
 	{
@@ -61,7 +61,7 @@ t_routes **ordered)
 static t_routes	**return_most_paths(t_routes **used_routes,
 t_routes **most_uniques, int path_count, int j)
 {
-	printf("End of determine used\n");
+	//printf("End of determine used\n");
 	if (j == path_count)
 	{
 		free(most_uniques);

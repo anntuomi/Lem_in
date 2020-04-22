@@ -1,6 +1,6 @@
 #include "lemin.h"
 
-static void	print_routes(t_routes **routes)
+static void		print_routes(t_routes **routes)
 {
 	t_route		*route;
 	int			i;
@@ -12,8 +12,7 @@ static void	print_routes(t_routes **routes)
 		route = routes[i]->route;
 		while (route)
 		{
-			printf("%d. %s %d\n", route->index, route->room->name,
-			route->room->route_count);
+			printf("%d. %s\n", route->index, route->room->name);
 			route = route->next;
 		}
 		i++;
@@ -21,7 +20,7 @@ static void	print_routes(t_routes **routes)
 	printf("\n");
 }
 
-static void	print_input(t_input *input)
+static void		print_input(t_input *input)
 {
 	while (input)
 	{
@@ -31,7 +30,7 @@ static void	print_input(t_input *input)
 	printf("\n");
 }
 
-static void	find_edges(t_room *room, t_room **start, t_room **end)
+static void		find_edges(t_room *room, t_room **start, t_room **end)
 {
 	*start = NULL;
 	*end = NULL;
@@ -47,7 +46,7 @@ static void	find_edges(t_room *room, t_room **start, t_room **end)
 		handle_error();
 }
 
-void		set_input(t_input **input, char *line, int rooms)
+void			set_input(t_input **input, char *line, int rooms)
 {
 	if (line[0] == '#' && line[1] == '#' &&
 	((rooms && determine_room_type(line) == NORMAL) || !rooms))
@@ -62,7 +61,7 @@ void		set_input(t_input **input, char *line, int rooms)
 	}
 }
 
-void		count_room_routes(t_routes *routes_head, t_room *room_list)
+void			count_room_routes(t_routes *routes_head, t_room *room_list)
 {
 	t_room		*room;
 	t_route		*current;
@@ -91,12 +90,13 @@ void		count_room_routes(t_routes *routes_head, t_room *room_list)
 	}
 }
 
-int			main(void)
+int				main(void)
 {
 	t_input		*head;
 	t_input		*input;
 	t_farm		farm;
 	char		*line;
+	t_routes	**routes_to_use;
 
 	if (!(head = (t_input *)malloc(sizeof(t_input))))
 		handle_error();
@@ -117,7 +117,8 @@ int			main(void)
 	farm.start->ant_count = farm.amount;
 	//printf("path count %d\n",
 	farm.needed_routes = count_needed_routes(farm.routes, farm.ordered[0]);
+	routes_to_use = get_routes_to_use(farm);
 	solve(farm, farm.ordered, farm.needed_routes);
-	ants_to_end(farm);
+	ants_to_end(farm, routes_to_use);
 	return (0);
 }
