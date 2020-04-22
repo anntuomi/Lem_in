@@ -56,7 +56,7 @@ static t_routes	*get_start_end_rooms(t_routes **routes)
 	return (start_rooms);
 }
 
-t_routes		**get_array_routes(int size)
+t_routes		**get_routes_array(int size)
 {
 	t_routes	**array_routes;
 	int			i;
@@ -78,7 +78,7 @@ t_routes		**get_routes_to_use(t_farm farm)
 
 	if (farm.amount == 1)
 	{
-		unique_routes = get_array_routes(1);
+		unique_routes = get_routes_array(1);
 		unique_routes[0] = farm.ordered[0];
 	}
 	else
@@ -90,8 +90,11 @@ t_routes		**get_routes_to_use(t_farm farm)
 			rooms_routes = get_rooms_routes(start_rooms, 1, farm.ordered);
 		else
 			rooms_routes = get_rooms_routes(end_rooms, 0, farm.ordered);
+		del_route(start_rooms);
+		del_route(end_rooms);
 		//print_rooms_routes(rooms_routes);
 		unique_routes = get_unique_routes(rooms_routes);
+		del_routes_linked_list_array(rooms_routes);
 	}
 	//print_unique_routes(unique_routes);
 	return (unique_routes);

@@ -83,6 +83,7 @@ t_route			*get_route(t_room *room, int index);
 int				count_unvisited(t_path *path, t_route *route);
 int				is_unvisited(t_room *room, t_route *route);
 t_routes		*del_dead_ends(t_routes *routes);
+t_routes		*del_route(t_routes *routes);
 int				count_routes(t_routes *routes);
 t_routes		**routes_to_array(int route_count, t_routes *routes);
 void			order_routes(t_routes **routes);
@@ -93,12 +94,14 @@ t_routes		**determine_used_routes(t_routes **ordered, int *path_count,
 void			initialize_arrays(int path_count, t_routes ***used_routes,
 				t_routes ***most_uniques, int *most_paths);
 t_routes		**get_routes_to_use(t_farm farm);
-t_routes		**get_array_routes(int size);
+t_routes		**get_routes_array(int size);
 t_routes		**get_rooms_routes(t_routes *rooms, int start,
 				t_routes **routes);
+t_routes		*get_routes_to_route(t_route *route, int rooms);
 t_routes		**del_null_elems(t_routes **routes, int size);
 int				*count_routes_len(t_routes **routes, int size);
 t_routes		**get_unique_routes(t_routes **routes);
+void			del_routes_linked_list_array(t_routes **routes);
 void			ants_to_end(t_farm farm, t_routes **unique_routes);
 void			print_start_end_rooms(t_routes *start_end_rooms);
 void			print_rooms_routes(t_routes **rooms_routes);

@@ -26,7 +26,7 @@ t_routes		**del_null_elems(t_routes **routes, int size)
 	return (new);
 }
 
-static t_routes	*get_routes_to_route(t_route *route, int rooms)
+t_routes		*get_routes_to_route(t_route *route, int rooms)
 {
 	t_routes	*routes;
 
@@ -75,7 +75,7 @@ t_routes **routes)
 	int			index;
 	int			i;
 
-	rooms_routes = get_array_routes(rooms->rooms);
+	rooms_routes = get_routes_array(rooms->rooms);
 	i = 0;
 	while (routes[i])
 	{

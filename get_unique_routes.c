@@ -89,11 +89,17 @@ t_routes		**get_unique_routes(t_routes **routes)
 	int			i;
 
 	size = count_words((void **)routes);
-	unique = get_array_routes(size);
-	tmp = get_array_routes(size);
+	unique = get_routes_array(size);
+	tmp = get_routes_array(size);
 	set_unique_routes(routes, 0, tmp, unique);
 	free(tmp);
 	unique = del_null_elems(unique, size);
+	i = 0;
+	while (unique[i])
+	{
+		unique[i] = get_routes_to_route(unique[i]->route, unique[i]->rooms);
+		i++;
+	}
 	order_routes(unique);
 	return (unique);
 }

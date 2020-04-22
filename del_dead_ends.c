@@ -1,6 +1,6 @@
 #include "lemin.h"
 
-static t_routes	*del_route(t_routes *routes)
+t_routes		*del_route(t_routes *routes)
 {
 	t_routes	*next;
 	t_route		*route;
