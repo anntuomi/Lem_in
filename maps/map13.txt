@@ -22,20 +22,20 @@
 a 4 4
 b 3 5
 c 4 5
+##end
 d 5 5
 e 5 4
 f 5 3
 g 4 3
+##start
 h 3 3
 i 3 4
 j 2 6
 k 4 6
-##end
 l 6 6
 m 6 4
 n 6 2
 o 4 2
-##start
 p 2 2
 q 2 4
 r 1 7

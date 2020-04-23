@@ -69,6 +69,14 @@ typedef struct	s_farm
 	int				needed_routes;
 }				t_farm;
 
+typedef struct	s_variables
+{
+	double		least_moves;
+	double		moves;
+	int			current_path_count;
+	int			new_path_count;
+}				t_variables;
+
 t_route			**get_ants(int *amount, t_input **input);
 void			create_room_list(t_room **head, char **line, t_input **input);
 int				determine_room_type(char *line);
@@ -89,10 +97,12 @@ t_routes		**routes_to_array(int route_count, t_routes *routes);
 void			order_routes(t_routes **routes);
 int				count_needed_routes(t_routes *routes, t_routes *shortest);
 void			solve(t_farm farm, t_routes **ordered, int path_count);
-t_routes		**determine_used_routes(t_routes **ordered, int *path_count,
+t_routes		**determine_used_routes(t_farm farm, int *path_count,
 				int i, int j);
+double			calculate_moves(t_routes **used, int path_count, \
+				int ant_amount);
 void			initialize_arrays(int path_count, t_routes ***used_routes,
-				t_routes ***most_uniques, int *most_paths);
+				t_routes ***most_uniques, t_variables *var);
 t_routes		**get_routes_to_use(t_farm farm);
 t_routes		**get_routes_array(int size);
 t_routes		**get_rooms_routes(t_routes *rooms, int start,

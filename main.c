@@ -117,8 +117,11 @@ int				main(void)
 	farm.start->ant_count = farm.amount;
 	//printf("path count %d\n",
 	farm.needed_routes = count_needed_routes(farm.routes, farm.ordered[0]);
+	printf("End of count needed routes\n");
 	routes_to_use = get_routes_to_use(farm);
+	printf("End of routes to use\n");
 	solve(farm, farm.ordered, farm.needed_routes);
+	printf("End of solve\n");
 	ants_to_end(farm, routes_to_use);
 	return (0);
 }

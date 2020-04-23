@@ -1,11 +1,11 @@
 #include "lemin.h"
 
-static int		is_unique(t_routes **used_list, t_route *tested_head)
+static int			is_unique(t_routes **used_list, t_route *tested_head)
 {
-	t_route		*tested_route;
-	t_route		*used_route;
-	int			i;
-	int			tested_room;
+	t_route	*tested_route;
+	t_route	*used_route;
+	int		i;
+	int		tested_room;
 
 	tested_route = tested_head->next;
 	while (tested_route->room->type != END)
@@ -28,25 +28,7 @@ static int		is_unique(t_routes **used_list, t_route *tested_head)
 	return (1);
 }
 
-static t_routes	**save_most_uniques(t_routes **used, t_routes **most_uniques,
-int j, int *most_paths)
-{
-	int			i;
-
-	if (*most_paths < j)
-	{
-		i = 0;
-		while (used[i])
-		{
-			most_uniques[i] = used[i];
-			i++;
-		}
-		*most_paths = j;
-	}
-	return (most_uniques);
-}
-
-static t_routes	*find_next_unique(int i, t_routes **used_routes,
+static t_routes		*find_next_unique(int i, t_routes **used_routes,
 t_routes **ordered)
 {
 	while (ordered[i])
@@ -58,48 +40,70 @@ t_routes **ordered)
 	return (NULL);
 }
 
-static t_routes	**return_most_paths(t_routes **used_routes,
-t_routes **most_uniques, int path_count, int j)
+static t_routes		**save_routes(t_routes **temp, t_routes **used, \
+t_variables *var)
 {
-	//printf("End of determine used\n");
-	if (j == path_count)
+	int i;
+
+	i = 0;
+	if (var->moves < var->least_moves)
 	{
-		free(most_uniques);
-		return (used_routes);
+		while (temp[i] && i < var->current_path_count)
+		{
+			used[i] = temp[i];
+			i++;
+		}
+		var->new_path_count = var->current_path_count;
+		var->least_moves = var->moves;
 	}
-	else
-	{
-		free(used_routes);
-		return (most_uniques);
-	}
+	var->moves = -1;
+	return (used);
 }
 
-t_routes		**determine_used_routes(t_routes **ordered, int *path_count,
+static t_variables	update_lowest_moves(t_routes **temp_routes, \
+t_variables var, int j, int amount)
+{
+	double tested_moves;
+
+	if (temp_routes[j] != NULL)
+		tested_moves = calculate_moves(temp_routes, j + 1, amount);
+	if (temp_routes[j] != NULL && (var.moves == -1 || tested_moves < var.moves))
+	{
+		var.moves = tested_moves;
+		var.current_path_count = j + 1;
+	}
+	return (var);
+}
+
+t_routes			**determine_used_routes(t_farm farm, int *path_count,
 int i, int j)
 {
-	t_routes	**most_uniques;
+	t_routes	**tmp_routes;
 	t_routes	**used_routes;
-	int			most_paths;
-	int			orig_path_count;
+	t_variables var;
 
-	initialize_arrays(*path_count, &used_routes, &most_uniques, &most_paths);
-	while (ordered[i] && j < *path_count)
+	initialize_arrays(*path_count, &used_routes, &tmp_routes, &var);
+	while ((farm.ordered[i]))
 	{
-		used_routes[0] = ordered[i];
+		tmp_routes[0] = farm.ordered[i];
+		var = update_lowest_moves(tmp_routes, var, 0, farm.amount);
 		j = 1;
 		while (j < *path_count)
 		{
-			used_routes[j] = find_next_unique(i + 1, used_routes, ordered);
-			if (used_routes[j] == NULL)
+			tmp_routes[j] = find_next_unique(i + 1, tmp_routes, farm.ordered);
+			var = update_lowest_moves(tmp_routes, var, j, farm.amount);
+			if (tmp_routes[j] == NULL)
 			{
-				save_most_uniques(used_routes, most_uniques, j, &most_paths);
+				save_routes(tmp_routes, used_routes, &var);
 				break ;
 			}
 			j++;
 		}
+		if (j == *path_count)
+			save_routes(tmp_routes, used_routes, &var);
 		i++;
 	}
-	orig_path_count = *path_count;
-	*path_count = (j != *path_count ? most_paths : *path_count);
-	return (return_most_paths(used_routes, most_uniques, orig_path_count, j));
+	*path_count = var.new_path_count;
+	free(tmp_routes);
+	return (used_routes);
 }

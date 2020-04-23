@@ -44,16 +44,15 @@ static void		move_ants(int amount, t_route **ant, t_routes *route_list)
 	printf("\n");
 }
 
-static double	calculate_moves(t_routes **used, int path_count, int ant_amount)
+double			calculate_moves(t_routes **used, int path_count, int ant_amount)
 {
-	double		float_result;
-	int			test;
-	double		test_result;
+	double	float_result;
+	int		test;
+	double	test_result;
 
 	if (path_count > ant_amount)
 		path_count = ant_amount;
-	//printf("Most rooms: %d extra ants: %d\n", used[path_count - 1]->rooms - 2,
-	//ant_amount % path_count);
+	//printf("Most rooms: %d extra ants: %d\n", used[path_count - 1]->rooms - 2, ant_amount % path_count);
 	float_result = ((double)used[path_count - 1]->rooms - 2) + \
 	((double)ant_amount / (double)path_count);
 	if (ant_amount % path_count != 0 && \
@@ -65,9 +64,9 @@ static double	calculate_moves(t_routes **used, int path_count, int ant_amount)
 int				adjust_to_ant_amount(int path_count, int ant_amount,
 t_routes **ordered, t_routes **used)
 {
-	double		moves;
-	int			new_path_count;
-	double		tested_moves;
+	double	moves;
+	int		new_path_count;
+	double	tested_moves;
 
 	if (ordered[0]->rooms == 2)
 		return (-1);
@@ -94,14 +93,8 @@ void			solve(t_farm farm, t_routes **ordered, int path_count)
 	t_routes	**used_routes;
 	int			moves;
 
-	used_routes = determine_used_routes(ordered, &path_count, 0, 0);
-	if (path_count > 1)
-		path_count = adjust_to_ant_amount(path_count, farm.amount,
-	ordered, used_routes);
-	if (path_count == -1)
-		assign_paths(farm.ants, ordered, 1, farm.amount);
-	else
-		assign_paths(farm.ants, used_routes, path_count, farm.amount);
+	used_routes = determine_used_routes(farm, &path_count, 0, 0);
+	assign_paths(farm.ants, used_routes, path_count, farm.amount);
 	moves = 0;
 	while (farm.end->ant_count != farm.amount)
 	{
