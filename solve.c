@@ -47,17 +47,22 @@ static void		move_ants(int amount, t_route **ant, t_routes *route_list)
 double			calculate_moves(t_routes **used, int path_count, int ant_amount)
 {
 	double	float_result;
-	int		test;
-	double	test_result;
+	double	last_result;
+	double	remaining_moves;
 
 	if (path_count > ant_amount)
 		path_count = ant_amount;
 	//printf("Most rooms: %d extra ants: %d\n", used[path_count - 1]->rooms - 2, ant_amount % path_count);
 	float_result = ((double)used[path_count - 1]->rooms - 2) + \
 	((double)ant_amount / (double)path_count);
-	if (ant_amount % path_count != 0 && \
-	used[0]->rooms == used[path_count - 1]->rooms)
-		float_result = float_result + 1.0;
+	if (ant_amount % path_count != 0)
+	{
+		remaining_moves = (double)used[path_count - 1]->rooms - 2;
+		path_count = ant_amount % path_count;
+		last_result = ((double)used[path_count - 1]->rooms - 2.0) + 1;
+		if (remaining_moves < last_result)
+			float_result = float_result + 1.0;
+	}
 	return (float_result);
 }
 
