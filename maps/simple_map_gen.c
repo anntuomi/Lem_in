@@ -4,9 +4,9 @@
 
 int	main(int argc, char **argv)
 {
-	if (argc != 4)
+	if (argc < 4)
 	{
-		printf("Usage: ./gen [ant amount] [room count] [path count] > new_file_name.\n");
+		printf("Usage: ./gen [ant amount] [room count] [path count] (optional number of added links) > new_file_name.\n");
 		exit(0);
 	}
 	int	room_name = 2;
@@ -44,5 +44,20 @@ int	main(int argc, char **argv)
 		block_limit = block_limit + block_size;
 		link1++;
 		link2++;
+	}
+	if (argc > 4)
+	{
+		int extra_links = atoi(argv[4]);
+		while (extra_links > 0)
+		{
+			link1 = 1;
+			link2 = 1;
+			while (link1 == 1 || link1 == room_count)
+				link1 = rand() % (room_count - 1) + 1;
+			while (link2 == 1 || link2 == room_count || link2 == link1)
+				link2 = rand() % (room_count - 1) + 1;
+			printf("%d-%d\n", link1, link2);
+			extra_links--;
+		}
 	}
 }
