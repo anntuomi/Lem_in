@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 
 int	main(int argc, char **argv)
 {
@@ -47,6 +48,7 @@ int	main(int argc, char **argv)
 	}
 	if (argc > 4)
 	{
+		srand(time(0));
 		int extra_links = atoi(argv[4]);
 		while (extra_links > 0)
 		{
