@@ -21,7 +21,7 @@ t_routes ***most_uniques, t_variables *var)
 	*used_routes = new1;
 	*most_uniques = new2;
 	var->least_moves = 2147483647.0;
-	var->moves = -1;
+	var->moves = -1.0;
 	var->new_path_count = path_count;
 	var->current_path_count = -1;
 }

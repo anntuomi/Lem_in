@@ -75,6 +75,7 @@ typedef struct	s_variables
 	double		moves;
 	int			current_path_count;
 	int			new_path_count;
+	int			orig_path_count;
 }				t_variables;
 
 t_route			**get_ants(int *amount, t_input **input);

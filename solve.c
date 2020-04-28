@@ -44,25 +44,47 @@ static void		move_ants(int amount, t_route **ant, t_routes *route_list)
 	printf("\n");
 }
 
+int				find_longest_route(t_routes **used, int path_count)
+{
+	int i;
+	int longest_route;
+
+	i = 0;
+	longest_route = used[0]->rooms - 2;
+	while (i < path_count)
+	{
+		if (used[i]->rooms - 2 > longest_route)
+			longest_route = used[i]->rooms - 2;
+		i++;
+	}
+	return (longest_route);
+}
+
 double			calculate_moves(t_routes **used, int path_count, int ant_amount)
 {
 	double	float_result;
 	double	last_result;
 	double	remaining_moves;
+	int		longest_route;
 
 	if (path_count > ant_amount)
 		path_count = ant_amount;
+	longest_route = find_longest_route(used, path_count);
 	//printf("Most rooms: %d extra ants: %d\n", used[path_count - 1]->rooms - 2, ant_amount % path_count);
-	float_result = ((double)used[path_count - 1]->rooms - 2) + \
+	float_result = (double)longest_route + \
 	((double)ant_amount / (double)path_count);
+	printf("Calc: %d + (%d / %d) : ", used[path_count - 1]->rooms - 2, ant_amount, path_count);
 	if (ant_amount % path_count != 0)
 	{
 		remaining_moves = (double)used[path_count - 1]->rooms - 2;
 		path_count = ant_amount % path_count;
-		last_result = ((double)used[path_count - 1]->rooms - 2.0) + 1;
+		longest_route = find_longest_route(used, path_count);
+		last_result = ((double)longest_route) + 1;
+		printf("Remainder: %f ", last_result - remaining_moves);
 		if (remaining_moves < last_result)
 			float_result = float_result + 1.0;
 	}
+	printf("Moves: %f path_count %d\n", float_result, path_count);
 	return (float_result);
 }
 
@@ -99,6 +121,7 @@ void			solve(t_farm farm, t_routes **ordered, int path_count)
 	int			moves;
 
 	used_routes = determine_used_routes(farm, &path_count, 0, 0);
+	order_routes(used_routes);
 	assign_paths(farm.ants, used_routes, path_count, farm.amount);
 	moves = 0;
 	while (farm.end->ant_count != farm.amount)

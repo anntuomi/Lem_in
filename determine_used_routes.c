@@ -48,12 +48,19 @@ t_variables *var)
 	i = 0;
 	if (var->moves < var->least_moves)
 	{
+		printf("Current path count: %d\n", var->current_path_count);
 		while (temp[i] && i < var->current_path_count)
 		{
 			used[i] = temp[i];
 			i++;
 		}
+		while (i < var->orig_path_count)
+		{
+			used[i] = NULL;
+			i++;
+		}
 		var->new_path_count = var->current_path_count;
+		if (var->moves != -1)
 		var->least_moves = var->moves;
 	}
 	var->moves = -1;
@@ -65,9 +72,13 @@ t_variables var, int j, int amount)
 {
 	double tested_moves;
 
-	if (temp_routes[j] != NULL)
+	printf("J: %d ", j);
+	if (j == var.orig_path_count)
 		tested_moves = calculate_moves(temp_routes, j + 1, amount);
-	if (temp_routes[j] != NULL && (var.moves == -1 || tested_moves < var.moves))
+	else if (temp_routes[j] != NULL)
+		tested_moves = calculate_moves(temp_routes, j + 1, amount);
+	if ((temp_routes[j] != NULL || j == var.orig_path_count) && \
+		(var.moves == -1 || tested_moves < var.moves))
 	{
 		var.moves = tested_moves;
 		var.current_path_count = j + 1;
@@ -83,14 +94,21 @@ int i, int j)
 	t_variables var;
 
 	initialize_arrays(*path_count, &used_routes, &tmp_routes, &var);
+	if (farm.ordered[0]->rooms == 2)
+	{
+		free(tmp_routes);
+		*path_count = 1;
+		used_routes[0] = farm.ordered[0];
+		return (used_routes);
+	}
 	while ((farm.ordered[i]))
 	{
 		tmp_routes[0] = farm.ordered[i];
 		var = update_lowest_moves(tmp_routes, var, 0, farm.amount);
 		j = 1;
-		while (j < *path_count)
+		while (j <= *path_count)
 		{
-			tmp_routes[j] = find_next_unique(i + 1, tmp_routes, farm.ordered);
+			tmp_routes[j] = find_next_unique(0, tmp_routes, farm.ordered);
 			var = update_lowest_moves(tmp_routes, var, j, farm.amount);
 			if (tmp_routes[j] == NULL)
 			{
@@ -99,11 +117,12 @@ int i, int j)
 			}
 			j++;
 		}
-		if (j == *path_count)
-			save_routes(tmp_routes, used_routes, &var);
+		//if (j == *path_count)
+			//save_routes(tmp_routes, used_routes, &var);
 		i++;
 	}
 	*path_count = var.new_path_count;
 	free(tmp_routes);
+	printf("Least moves: %f\n", var.least_moves);
 	return (used_routes);
 }
