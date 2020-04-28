@@ -48,7 +48,7 @@ t_variables *var)
 	i = 0;
 	if (var->moves < var->least_moves)
 	{
-		printf("Current path count: %d\n", var->current_path_count);
+		//printf("Current path count: %d\n", var->current_path_count);
 		while (temp[i] && i < var->current_path_count)
 		{
 			used[i] = temp[i];
@@ -72,9 +72,9 @@ t_variables var, int j, int amount)
 {
 	double tested_moves;
 
-	printf("J: %d ", j);
+	//printf("J: %d ", j);
 	if (j == var.orig_path_count)
-		tested_moves = calculate_moves(temp_routes, j + 1, amount);
+		tested_moves = calculate_moves(temp_routes, j, amount);
 	else if (temp_routes[j] != NULL)
 		tested_moves = calculate_moves(temp_routes, j + 1, amount);
 	if ((temp_routes[j] != NULL || j == var.orig_path_count) && \
@@ -123,6 +123,6 @@ int i, int j)
 	}
 	*path_count = var.new_path_count;
 	free(tmp_routes);
-	printf("Least moves: %f\n", var.least_moves);
+	//printf("Least moves: %f\n", var.least_moves);
 	return (used_routes);
 }

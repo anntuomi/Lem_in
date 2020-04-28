@@ -73,18 +73,18 @@ double			calculate_moves(t_routes **used, int path_count, int ant_amount)
 	//printf("Most rooms: %d extra ants: %d\n", used[path_count - 1]->rooms - 2, ant_amount % path_count);
 	float_result = (double)longest_route + \
 	((double)ant_amount / (double)path_count);
-	printf("Calc: %d + (%d / %d) : ", used[path_count - 1]->rooms - 2, ant_amount, path_count);
+	//printf("Calc: %d + (%d / %d) : ", used[path_count - 1]->rooms - 2, ant_amount, path_count);
 	if (ant_amount % path_count != 0)
 	{
 		remaining_moves = (double)used[path_count - 1]->rooms - 2;
 		path_count = ant_amount % path_count;
 		longest_route = find_longest_route(used, path_count);
 		last_result = ((double)longest_route) + 1;
-		printf("Remainder: %f ", last_result - remaining_moves);
+		//printf("Remainder: %f ", last_result - remaining_moves);
 		if (remaining_moves < last_result)
 			float_result = float_result + 1.0;
 	}
-	printf("Moves: %f path_count %d\n", float_result, path_count);
+	//printf("Moves: %f path_count %d\n", float_result, path_count);
 	return (float_result);
 }
 
