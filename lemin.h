@@ -71,8 +71,8 @@ typedef struct	s_farm
 
 typedef struct	s_variables
 {
-	double		least_moves;
-	double		moves;
+	int			least_moves;
+	int			moves;
 	int			current_path_count;
 	int			new_path_count;
 	int			orig_path_count;
@@ -100,7 +100,7 @@ int				count_needed_routes(t_routes *routes, t_routes *shortest);
 void			solve(t_farm farm, t_routes **ordered, int path_count);
 t_routes		**determine_used_routes(t_farm farm, int *path_count,
 				int i, int j);
-double			calculate_moves(t_routes **used, int path_count, \
+int				calculate_moves(t_routes **used, int path_count, \
 				int ant_amount);
 void			initialize_arrays(int path_count, t_routes ***used_routes,
 				t_routes ***most_uniques, t_variables *var);

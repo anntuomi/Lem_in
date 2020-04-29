@@ -71,7 +71,7 @@ int				find_longest_route(t_routes **used, int path_count)
 	return (longest_route);
 }
 
-double			calculate_moves(t_routes **used, int path_count, int ant_amount)
+int			calculate_moves(t_routes **used, int path_count, int ant_amount)
 {
 	int			moves;
 	int			rooms;
@@ -86,7 +86,7 @@ double			calculate_moves(t_routes **used, int path_count, int ant_amount)
 	return (moves);
 }
 
-int				adjust_to_ant_amount(int path_count, int ant_amount,
+/*int				adjust_to_ant_amount(int path_count, int ant_amount,
 t_routes **ordered, t_routes **used)
 {
 	int			moves;
@@ -111,7 +111,7 @@ t_routes **ordered, t_routes **used)
 	if (calculate_moves(ordered, 1, ant_amount) < moves)
 		return (-1);
 	return (new_path_count);
-}
+}*/
 
 void			solve(t_farm farm, t_routes **ordered, int path_count)
 {

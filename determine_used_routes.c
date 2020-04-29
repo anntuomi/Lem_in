@@ -70,7 +70,7 @@ t_variables *var)
 static t_variables	update_lowest_moves(t_routes **temp_routes, \
 t_variables var, int j, int amount)
 {
-	double tested_moves;
+	int tested_moves;
 
 	//printf("J: %d ", j);
 	if (j == var.orig_path_count)
