@@ -98,8 +98,7 @@ t_routes		**routes_to_array(int route_count, t_routes *routes);
 void			order_routes(t_routes **routes);
 int				count_needed_routes(t_routes *routes, t_routes *shortest);
 void			solve(t_farm farm, t_routes **ordered, int path_count);
-t_routes		**determine_used_routes(t_farm farm, int *path_count,
-				int i, int j);
+t_routes		**determine_used_routes(t_farm farm, int *path_count);
 int				calculate_moves(t_routes **used, int path_count, \
 				int ant_amount);
 void			initialize_arrays(int path_count, t_routes ***used_routes,
@@ -118,6 +117,8 @@ void			print_start_end_rooms(t_routes *start_end_rooms);
 void			print_rooms_routes(t_routes **rooms_routes);
 void			print_unique_routes(t_routes **routes);
 void			print_null_routes(t_routes **routes, int size);
+t_routes		*find_next_unique(int i, t_routes **used_routes,
+				t_routes **ordered);
 void			handle_error(void);
 
 #endif

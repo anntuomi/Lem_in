@@ -1,6 +1,6 @@
 #include "lemin.h"
 
-static void		assign_paths(t_route **ant, t_routes **ordered,
+static void	assign_paths(t_route **ant, t_routes **ordered,
 int path_count, int amount)
 {
 	int			rooms;
@@ -28,7 +28,7 @@ int path_count, int amount)
 	ant[i1] = NULL;
 }
 
-static void		move_ants(t_farm farm)
+static void	move_ants(t_farm farm)
 {
 	int			first;
 	int			i;
@@ -55,7 +55,7 @@ static void		move_ants(t_farm farm)
 	printf("\n");
 }
 
-int				find_longest_route(t_routes **used, int path_count)
+int			find_longest_route(t_routes **used, int path_count)
 {
 	int i;
 	int longest_route;
@@ -113,12 +113,12 @@ t_routes **ordered, t_routes **used)
 	return (new_path_count);
 }*/
 
-void			solve(t_farm farm, t_routes **ordered, int path_count)
+void		solve(t_farm farm, t_routes **ordered, int path_count)
 {
 	t_routes	**used_routes;
 	int			moves;
 
-	used_routes = determine_used_routes(farm, &path_count, 0, 0);
+	used_routes = determine_used_routes(farm, &path_count);
 	order_routes(used_routes);
 	print_unique_routes(used_routes);
 	printf("\n");
