@@ -30,17 +30,15 @@ static void		print_input(t_input *input)
 	output = NULL;
 	while (input)
 	{
-		//printf("%s\n", input->line);
 		tmp = ft_strjoin_new(output, input->line, &len, '\n');
 		if (output != NULL)
 			free(output);
 		output = tmp;
 		input = input->next;
+		if (len > 1000 || input == NULL)
+		print_output(&output, &len);
 	}
-	write(1, output, len);
-	free(output);
 	write(1, "\n", 1);
-	//printf("\n");
 }
 
 static void		find_edges(t_room *room, t_room **start, t_room **end)

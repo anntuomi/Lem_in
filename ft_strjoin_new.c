@@ -16,6 +16,17 @@ static int	ft_joins1(char const *s1, char *new)
 	return (i);
 }
 
+static char *add_end(char *new, int i, char c)
+{
+	if (c != 0)
+	{
+		new[i] = c;
+		i++;
+	}
+	new[i] = '\0';
+	return (new);
+}
+
 char		*ft_strjoin_new(char const *s1, char const *s2, int *len, char c)
 {
 	char				*new;
@@ -39,12 +50,7 @@ char		*ft_strjoin_new(char const *s1, char const *s2, int *len, char c)
 			start++;
 		}
 	}
-	if (c != 0)
-	{
-		new[i] = c;
-		i++;
-	}
-	new[i] = '\0';
+	new = add_end(new, i, c);
 	*len = length;
 	return (new);
 }

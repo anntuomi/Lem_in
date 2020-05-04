@@ -115,10 +115,12 @@ void			ants_to_end(t_farm farm, t_routes **unique_routes);
 void			print_start_end_rooms(t_routes *start_end_rooms);
 void			print_rooms_routes(t_routes **rooms_routes);
 void			print_unique_routes(t_routes **routes);
+char			*move_ants(t_route **ants);
 void			print_null_routes(t_routes **routes, int size);
 t_routes		*find_next_unique(int i, t_routes **used_routes,
 				t_routes **ordered);
 void			handle_error(void);
+void			print_output(char **output, int *len);
 char			*ft_strjoin_new(char const *s1, char const *s2, int *len, char c);
 
 #endif
