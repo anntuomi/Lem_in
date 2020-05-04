@@ -1,38 +1,32 @@
 #include "lemin.h"
 
-static void	assign_paths(t_route **ant, t_routes **ordered,
-int path_count, int amount)
+static void		assign_paths(t_route **ants, t_routes **routes, int path_count,
+int amount)
 {
-	int			rooms;
 	int			moves;
 	int			i1;
 	int			i2;
 
-	i1 = 0;
-	rooms = 0;
-	while (i1 < path_count)
-		rooms += ordered[i1++]->rooms - 2;
-	moves = amount + rooms;
-	moves = !(moves % path_count) ? moves / path_count : moves / path_count + 1;
+	moves = calculate_moves(routes, path_count, amount);
 	i1 = 0;
 	i2 = 0;
 	while (i1 < amount)
 	{
-		if (i2 == path_count || ordered[i2]->rooms - 1 > moves)
+		if (i2 == path_count || routes[i2]->rooms - 1 > moves)
 		{
 			i2 = 0;
 			moves--;
 		}
-		ant[i1++] = ordered[i2++]->route;
+		ants[i1++] = routes[i2++]->route;
 	}
-	ant[i1] = NULL;
+	ants[i1] = NULL;
 }
 
-static char *prefix_char(char *str, char *prefix, int prefix_len)
+static char		*prefix_char(char *str, char *prefix, int prefix_len)
 {
-	char *result;
-	int i;
-	int j;
+	char		*result;
+	int			i;
+	int			j;
 
 	result = (char *)malloc(sizeof(char) * ft_strlen(str) + prefix_len + 1);
 	i = 0;
@@ -52,12 +46,13 @@ static char *prefix_char(char *str, char *prefix, int prefix_len)
 	return (result);
 }
 
-char *add_to_command_line(char *line, char *nbr, char *name, int *first)
+char			*add_to_command_line(char *line, char *nbr, char *name,
+int *first)
 {
-	char *block;
-	char *number_prefix;
-	char *name_prefix;
-	char *result;
+	char		*block;
+	char		*number_prefix;
+	char		*name_prefix;
+	char		*result;
 
 	if (*first == 0)
 		number_prefix = prefix_char(nbr, " L", 2);
@@ -78,7 +73,7 @@ char *add_to_command_line(char *line, char *nbr, char *name, int *first)
 	return (result);
 }
 
-static char *move_ants(t_farm farm)
+static char		*move_ants(t_route **ants)
 {
 	int			first;
 	int			i;
@@ -89,16 +84,17 @@ static char *move_ants(t_farm farm)
 	first = 1;
 	i = 0;
 	line = NULL;
-	while (farm.ants[i])
+	while (ants[i])
 	{
-		if (farm.ants[i]->room->type != END &&
-		(!farm.ants[i]->next->room->ant_count
-		|| farm.ants[i]->next->room->type == END))
+		if (ants[i]->room->type != END &&
+		(!ants[i]->next->room->ant_count
+		|| ants[i]->next->room->type == END))
 		{
-			farm.ants[i]->room->ant_count--;
-			farm.ants[i] = farm.ants[i]->next;
-			farm.ants[i]->room->ant_count++;
-			line = add_to_command_line(line, ft_itoa(i + 1), farm.ants[i]->room->name, &first);
+			ants[i]->room->ant_count--;
+			ants[i] = ants[i]->next;
+			ants[i]->room->ant_count++;
+			line = add_to_command_line(line, ft_itoa(i + 1),
+			ants[i]->room->name, &first);
 			//if (!first)
 			//	printf(" ");
 			//else
@@ -107,7 +103,7 @@ static char *move_ants(t_farm farm)
 		}
 		i++;
 	}
-	return(line);
+	return (line);
 }
 
 /*int			find_longest_route(t_routes **used, int path_count)
@@ -126,7 +122,8 @@ static char *move_ants(t_farm farm)
 	return (longest_route);
 }*/
 
-int			calculate_moves(t_routes **used, int path_count, int ant_amount)
+int				calculate_moves(t_routes **routes, int path_count,
+int ant_amount)
 {
 	int			moves;
 	int			rooms;
@@ -135,7 +132,7 @@ int			calculate_moves(t_routes **used, int path_count, int ant_amount)
 	i = 0;
 	rooms = 0;
 	while (i < path_count)
-		rooms += used[i++]->rooms - 2;
+		rooms += routes[i++]->rooms - 2;
 	moves = ant_amount + rooms;
 	moves = !(moves % path_count) ? moves / path_count : moves / path_count + 1;
 	return (moves);
@@ -168,10 +165,10 @@ t_routes **ordered, t_routes **used)
 	return (new_path_count);
 }*/
 
-void		solve(t_farm farm, t_routes **ordered, int path_count)
+void			solve(t_farm farm, t_routes **ordered, int path_count)
 {
 	t_routes	**used_routes;
-	int			moves;
+	//int			moves;
 	char		*output;
 	char		*line;
 	char		*tmp;
@@ -182,20 +179,20 @@ void		solve(t_farm farm, t_routes **ordered, int path_count)
 	used_routes = determine_used_routes(farm, &path_count);
 	order_routes(used_routes);
 	//print_unique_routes(used_routes);
-	printf("\n");
+	//printf("\n");
 	assign_paths(farm.ants, used_routes, path_count, farm.amount);
-	moves = 0;
+	//moves = 0;
 	len = 0;
 	while (farm.end->ant_count != farm.amount)
 	{
-		line = move_ants(farm);
+		line = move_ants(farm.ants);
 		tmp = ft_strjoin_new(output, line, &len, '\n');
 		free(output);
 		output = tmp;
-		moves++;
+		//moves++;
 		free(line);
 	}
 	write(1, output, len);
 	free(output);
-	printf("Moves: %d\n", moves);
+	//printf("Moves: %d\n", moves);
 }
