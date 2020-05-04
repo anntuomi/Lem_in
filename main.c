@@ -36,7 +36,7 @@ static void		print_input(t_input *input)
 		output = tmp;
 		input = input->next;
 		if (len > 1000 || input == NULL)
-		print_output(&output, &len);
+			print_output(&output, &len);
 	}
 	write(1, "\n", 1);
 }

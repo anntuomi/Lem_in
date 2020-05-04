@@ -16,7 +16,7 @@ static int	ft_joins1(char const *s1, char *new)
 	return (i);
 }
 
-static char *add_end(char *new, int i, char c)
+static char	*add_end(char *new, int i, char c)
 {
 	if (c != 0)
 	{
