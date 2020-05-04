@@ -36,7 +36,6 @@ typedef struct	s_room
 	int				type;
 	int				id;
 	int				ant_count;
-	int				route_count;
 	t_path			*paths;
 	struct s_room	*next;
 }				t_room;
@@ -120,5 +119,6 @@ void			print_null_routes(t_routes **routes, int size);
 t_routes		*find_next_unique(int i, t_routes **used_routes,
 				t_routes **ordered);
 void			handle_error(void);
+char			*ft_strjoin_new(char const *s1, char const *s2, int *len, char c);
 
 #endif

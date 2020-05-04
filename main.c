@@ -22,12 +22,25 @@ static void		print_routes(t_routes **routes)
 
 static void		print_input(t_input *input)
 {
+	char	*output;
+	char	*tmp;
+	int		len;
+
+	len = 0;
+	output = NULL;
 	while (input)
 	{
-		printf("%s\n", input->line);
+		//printf("%s\n", input->line);
+		tmp = ft_strjoin_new(output, input->line, &len, '\n');
+		if (output != NULL)
+			free(output);
+		output = tmp;
 		input = input->next;
 	}
-	printf("\n");
+	write(1, output, len);
+	free(output);
+	write(1, "\n", 1);
+	//printf("\n");
 }
 
 static void		find_edges(t_room *room, t_room **start, t_room **end)
@@ -61,7 +74,7 @@ void			set_input(t_input **input, char *line, int rooms)
 	}
 }
 
-void			count_room_routes(t_routes *routes_head, t_room *room_list)
+/*void			count_room_routes(t_routes *routes_head, t_room *room_list)
 {
 	t_room		*room;
 	t_route		*current;
@@ -88,7 +101,7 @@ void			count_room_routes(t_routes *routes_head, t_room *room_list)
 		}
 		room = room->next;
 	}
-}
+}*/
 
 int				main(void)
 {
@@ -110,7 +123,7 @@ int				main(void)
 	farm.routes = get_routes_to_end(farm.start);
 	print_input(head);
 	farm.count = count_routes(farm.routes);
-	count_room_routes(farm.routes, farm.rooms);
+	//count_room_routes(farm.routes, farm.rooms);
 	farm.ordered = routes_to_array(farm.count, farm.routes);
 	order_routes(farm.ordered);
 	//print_routes(farm.ordered);
@@ -118,10 +131,10 @@ int				main(void)
 	//printf("path count %d\n",
 	farm.needed_routes = count_needed_routes(farm.routes, farm.ordered[0]);
 	//printf("End of count needed routes\n");
-	routes_to_use = get_routes_to_use(farm);
+	//routes_to_use = get_routes_to_use(farm);
 	//printf("End of routes to use\n");
 	solve(farm, farm.ordered, farm.needed_routes);
 	//printf("End of solve\n");
-	ants_to_end(farm, routes_to_use);
+	//ants_to_end(farm, routes_to_use);
 	return (0);
 }
