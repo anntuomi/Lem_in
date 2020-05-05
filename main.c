@@ -1,6 +1,6 @@
 #include "lemin.h"
 
-static void		print_routes(t_routes **routes)
+/*static void		print_routes(t_routes **routes)
 {
 	t_route		*route;
 	int			i;
@@ -18,7 +18,7 @@ static void		print_routes(t_routes **routes)
 		i++;
 	}
 	printf("\n");
-}
+}*/
 
 static void		print_input(t_input *input)
 {
@@ -101,6 +101,35 @@ void			set_input(t_input **input, char *line, int rooms)
 	}
 }*/
 
+static t_route	**get_ants(int *amount, t_input **input)
+{
+	t_route		**ants;
+	char		*line;
+	long long	tmp;
+
+	while (get_next_line(0, &line) == 1 && line[0] == '#')
+	{
+		if (line[1] != '#')
+		{
+			(*input)->line = line;
+			if (!((*input)->next = (t_input *)malloc(sizeof(t_input))))
+				handle_error();
+			*input = (*input)->next;
+		}
+		else
+			free(line);
+	}
+	if (!line || !ft_isnum(line) || (tmp = ft_atoll(line)) < 1 || tmp > INT_MAX)
+		handle_error();
+	*amount = (int)tmp;
+	(*input)->line = line;
+	(*input)->next = NULL;
+	if (!(ants = (t_route **)malloc(sizeof(t_route *) * (*amount + 1))))
+		handle_error();
+	ants[*amount] = NULL;
+	return (ants);
+}
+
 int				main(void)
 {
 	t_input		*head;
@@ -121,18 +150,10 @@ int				main(void)
 	farm.routes = get_routes_to_end(farm.start);
 	print_input(head);
 	farm.count = count_routes(farm.routes);
-	//count_room_routes(farm.routes, farm.rooms);
 	farm.ordered = routes_to_array(farm.count, farm.routes);
 	order_routes(farm.ordered);
-	//print_routes(farm.ordered);
 	farm.start->ant_count = farm.amount;
-	//printf("path count %d\n",
 	farm.needed_routes = count_needed_routes(farm.routes, farm.ordered[0]);
-	//printf("End of count needed routes\n");
-	//routes_to_use = get_routes_to_use(farm);
-	//printf("End of routes to use\n");
 	solve(farm, farm.ordered, farm.needed_routes);
-	//printf("End of solve\n");
-	//ants_to_end(farm, routes_to_use);
 	return (0);
 }

@@ -8,7 +8,7 @@ int	ft_isnum(char *str)
 	while (str[i])
 	{
 		if (ft_isdigit(str[i]) != 1)
-			return (-1);
+			return (0);
 		i++;
 	}
 	return (1);

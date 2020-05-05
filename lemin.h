@@ -10,6 +10,7 @@
 # include "get_next_line.h"
 # include "ft_printf.h"
 
+# define INT_MAX 2147483647
 # define START 0
 # define NORMAL 1
 # define END 2
@@ -70,14 +71,13 @@ typedef struct	s_farm
 
 typedef struct	s_variables
 {
-	int			least_moves;
-	int			moves;
-	int			current_path_count;
-	int			new_path_count;
-	int			orig_path_count;
+	int				least_moves;
+	int				moves;
+	int				current_path_count;
+	int				new_path_count;
+	int				orig_path_count;
 }				t_variables;
 
-t_route			**get_ants(int *amount, t_input **input);
 void			create_room_list(t_room **head, char **line, t_input **input);
 int				determine_room_type(char *line);
 void			set_input(t_input **input, char *line, int room);
