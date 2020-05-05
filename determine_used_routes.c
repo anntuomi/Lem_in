@@ -48,7 +48,8 @@ static t_routes		**one_move_route(t_routes **ordered, int **path_count)
 {
 	t_routes **used_routes;
 
-	used_routes = (t_routes **)malloc(sizeof(t_routes *) * 2);
+	if (!(used_routes = (t_routes **)malloc(sizeof(t_routes *) * 2)))
+		handle_error();
 	used_routes[0] = ordered[0];
 	used_routes[1] = NULL;
 	**path_count = 1;

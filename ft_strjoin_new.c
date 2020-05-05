@@ -38,7 +38,7 @@ char		*ft_strjoin_new(char const *s1, char const *s2, int *len, char c)
 	if (c != 0)
 		length = length + 1;
 	if ((new = ft_strnew(length)) == NULL)
-		return (NULL);
+		handle_error();
 	start = 0;
 	i = ft_joins1(s1, new);
 	if (s2 != NULL)

@@ -7,6 +7,8 @@ static char	*prefix_char(char *str, char *prefix, int prefix_len)
 	int			j;
 
 	result = (char *)malloc(sizeof(char) * ft_strlen(str) + prefix_len + 1);
+	if (result == NULL)
+		handle_error();
 	i = 0;
 	while (i < prefix_len)
 	{
