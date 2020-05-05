@@ -47,13 +47,15 @@ static void		find_edges(t_room *room, t_room **start, t_room **end)
 	*end = NULL;
 	while (room)
 	{
-		if (room->type == START)
+		if (room->type == START && !*start)
 			*start = room;
-		if (room->type == END)
+		else if (room->type == END && !*end)
 			*end = room;
+		else if (room->type == START || room->type == END)
+			handle_error();
 		room = room->next;
 	}
-	if (*start == NULL || *end == NULL)
+	if (!*start || !*end)
 		handle_error();
 }
 

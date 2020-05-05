@@ -29,13 +29,18 @@ static t_room	*new_room(int room_type, char **input)
 {
 	t_room		*new;
 	static int	id = 0;
+	long long	tmp;
 
 	new = (t_room *)malloc(sizeof(t_room));
 	if (new == NULL)
 		handle_error();
 	new->name = ft_strdup(input[0]);
-	new->x = ft_atoi(input[1]);
-	new->y = ft_atoi(input[2]);
+	if ((tmp = ft_atoll(input[1])) < INT_MIN || tmp > INT_MAX)
+		handle_error();
+	new->x = (int)tmp;
+	if ((tmp = ft_atoll(input[2])) < INT_MIN || tmp > INT_MAX)
+		handle_error();
+	new->y = (int)tmp;
 	new->type = room_type;
 	new->id = id++;
 	new->ant_count = 0;
