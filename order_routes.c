@@ -1,26 +1,5 @@
 #include "lemin.h"
 
-t_routes		**routes_to_array(int route_count, t_routes *routes)
-{
-	t_routes	**array_routes;
-	t_routes	*current;
-	int			i;
-
-	i = 0;
-	if (!(array_routes = (t_routes **)malloc(sizeof(t_routes *) *
-	(route_count + 1))))
-		handle_error();
-	current = routes;
-	while (current)
-	{
-		array_routes[i] = current;
-		i++;
-		current = current->next;
-	}
-	array_routes[route_count] = NULL;
-	return (array_routes);
-}
-
 void			order_routes(t_routes **routes)
 {
 	t_routes	*tmp;
@@ -43,4 +22,38 @@ void			order_routes(t_routes **routes)
 		}
 		i++;
 	}
+}
+
+t_routes		**routes_to_array(int route_count, t_routes *routes)
+{
+	t_routes	**array_routes;
+	t_routes	*current;
+	int			i;
+
+	i = 0;
+	if (!(array_routes = (t_routes **)malloc(sizeof(t_routes *) *
+	(route_count + 1))))
+		handle_error();
+	current = routes;
+	while (current)
+	{
+		array_routes[i] = current;
+		i++;
+		current = current->next;
+	}
+	array_routes[route_count] = NULL;
+	return (array_routes);
+}
+
+int				count_routes(t_routes *routes)
+{
+	int			count;
+
+	count = 0;
+	while (routes)
+	{
+		routes = routes->next;
+		count++;
+	}
+	return (count);
 }

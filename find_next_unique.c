@@ -1,11 +1,11 @@
 #include "lemin.h"
 
-static int	is_unique(t_routes **used_list, t_route *tested_head)
+static int		is_unique(t_routes **used_list, t_route *tested_head)
 {
-	t_route	*tested_route;
-	t_route	*used_route;
-	int		i;
-	int		tested_room;
+	t_route		*tested_route;
+	t_route		*used_route;
+	int			tested_room;
+	int			i;
 
 	tested_route = tested_head->next;
 	while (tested_route->room->type != END)
@@ -28,12 +28,12 @@ static int	is_unique(t_routes **used_list, t_route *tested_head)
 	return (1);
 }
 
-t_routes	*find_next_unique(int i, t_routes **used_routes,
+t_routes		*find_next_unique(int i, t_routes **used_routes,
 t_routes **ordered)
 {
 	while (ordered[i])
 	{
-		if (is_unique(used_routes, ordered[i]->route) == 1)
+		if (is_unique(used_routes, ordered[i]->route))
 			return (ordered[i]);
 		i++;
 	}

@@ -1,13 +1,13 @@
 #include "lemin.h"
 
-static char	*prefix_char(char *str, char *prefix, int prefix_len)
+static char		*prefix_char(char *str, char *prefix, int prefix_len)
 {
 	char		*result;
 	int			i;
 	int			j;
 
-	result = (char *)malloc(sizeof(char) * ft_strlen(str) + prefix_len + 1);
-	if (result == NULL)
+	if (!(result = (char *)malloc(sizeof(char) * ft_strlen(str) +
+	prefix_len + 1)))
 		handle_error();
 	i = 0;
 	while (i < prefix_len)
@@ -26,7 +26,7 @@ static char	*prefix_char(char *str, char *prefix, int prefix_len)
 	return (result);
 }
 
-static char	*add_to_command_line(char *line, char *nbr, char *name,
+static char		*add_to_command_line(char *line, char *nbr, char *name,
 int *first)
 {
 	char		*block;
@@ -34,7 +34,7 @@ int *first)
 	char		*name_prefix;
 	char		*result;
 
-	if (*first == 0)
+	if (!*first)
 		number_prefix = prefix_char(nbr, " L", 2);
 	else
 	{
@@ -43,43 +43,41 @@ int *first)
 	}
 	free(nbr);
 	name_prefix = prefix_char(name, "-", 1);
-	block = ft_strjoin(number_prefix, name_prefix);
+	if (!(block = ft_strjoin(number_prefix, name_prefix)))
+		handle_error();
 	free(number_prefix);
 	free(name_prefix);
-	result = ft_strjoin(line, block);
-	if (line != NULL)
+	if (!(result = ft_strjoin(line, block)))
+		handle_error();
+	if (line)
 		free(line);
 	free(block);
 	return (result);
 }
 
-char		*move_ants(t_route **ants)
+char			*move_ants(t_route **ants)
 {
 	int			first;
 	int			i;
-	int			len;
 	char		*line;
+	int			len;
+	char		*nbr;
 
-	len = 0;
 	first = 1;
 	i = 0;
 	line = NULL;
+	len = 0;
 	while (ants[i])
 	{
 		if (ants[i]->room->type != END &&
-		(!ants[i]->next->room->ant_count
-		|| ants[i]->next->room->type == END))
+		(!ants[i]->next->room->ant_count || ants[i]->next->room->type == END))
 		{
 			ants[i]->room->ant_count--;
 			ants[i] = ants[i]->next;
 			ants[i]->room->ant_count++;
-			line = add_to_command_line(line, ft_itoa(i + 1),
-			ants[i]->room->name, &first);
-			//if (!first)
-			//	printf(" ");
-			//else
-			//	first = 0;
-			//printf("L%d-%s", i + 1, farm.ants[i]->room->name);
+			if (!(nbr = ft_itoa(i + 1)))
+				handle_error();
+			line = add_to_command_line(line, nbr, ants[i]->room->name, &first);
 		}
 		i++;
 	}

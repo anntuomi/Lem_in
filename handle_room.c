@@ -1,41 +1,14 @@
 #include "lemin.h"
 
-static int		validate_room_input(char **input, t_room **head)
-{
-	int			size;
-	t_room		*room;
-
-	size = 0;
-	while (input[size] != NULL)
-		size++;
-	if (size == 1 && ft_strchr(input[0], '-'))
-	{
-		ft_2ddel(input);
-		return (NOTROOM);
-	}
-	if (size != 3 || (ft_isnum(input[1]) != 1 || ft_isnum(input[2]) != 1))
-		handle_error();
-	room = *head;
-	while (room)
-	{
-		if (ft_strequ(input[0], room->name) == 1)
-			handle_error();
-		room = room->next;
-	}
-	return (ISROOM);
-}
-
 static t_room	*new_room(int room_type, char **input)
 {
 	t_room		*new;
 	static int	id = 0;
 	long long	tmp;
 
-	new = (t_room *)malloc(sizeof(t_room));
-	if (new == NULL)
-		handle_error();
-	new->name = ft_strdup(input[0]);
-	if ((tmp = ft_atoll(input[1])) < INT_MIN || tmp > INT_MAX)
+	if (!(new = (t_room *)malloc(sizeof(t_room))) ||
+	!(new->name = ft_strdup(input[0])) ||
+	(tmp = ft_atoll(input[1])) < INT_MIN || tmp > INT_MAX)
 		handle_error();
 	new->x = (int)tmp;
 	if ((tmp = ft_atoll(input[2])) < INT_MIN || tmp > INT_MAX)
@@ -45,19 +18,9 @@ static t_room	*new_room(int room_type, char **input)
 	new->id = id++;
 	new->ant_count = 0;
 	new->paths = NULL;
-	ft_2ddel(input);
 	new->next = NULL;
+	ft_2ddel(input);
 	return (new);
-}
-
-int				determine_room_type(char *line)
-{
-	if (ft_strcmp(line, "##start") == 0)
-		return (START);
-	else if (ft_strcmp(line, "##end") == 0)
-		return (END);
-	else
-		return (NORMAL);
 }
 
 static t_room	*save_room(t_room *room, t_room **head, char **input,
@@ -77,6 +40,41 @@ int *room_type)
 	return (room);
 }
 
+static int		validate_room_input(char **input, t_room **head)
+{
+	int			size;
+	t_room		*room;
+
+	size = 0;
+	while (input[size])
+		size++;
+	if (size == 1 && ft_strchr(input[0], '-'))
+	{
+		ft_2ddel(input);
+		return (NOTROOM);
+	}
+	if (size != 3 || !ft_isnum(input[1]) || !ft_isnum(input[2]))
+		handle_error();
+	room = *head;
+	while (room)
+	{
+		if (ft_strequ(input[0], room->name))
+			handle_error();
+		room = room->next;
+	}
+	return (ISROOM);
+}
+
+int				determine_room_type(char *line)
+{
+	if (ft_strequ(line, "##start"))
+		return (START);
+	else if (ft_strequ(line, "##end"))
+		return (END);
+	else
+		return (NORMAL);
+}
+
 void			create_room_list(t_room **head, char **line, t_input **lines)
 {
 	int			room_type;
@@ -93,7 +91,8 @@ void			create_room_list(t_room **head, char **line, t_input **lines)
 			room_type = determine_room_type(*line);
 		else
 		{
-			input = ft_strsplit(*line, ' ');
+			if (!(input = ft_strsplit(*line, ' ')))
+				handle_error();
 			if (validate_room_input(input, head) == NOTROOM)
 				break ;
 			room = save_room(room, head, input, &room_type);
