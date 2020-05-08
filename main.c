@@ -85,9 +85,9 @@ static t_route	**get_ants(int *ant_count, t_input **input)
 
 int				main(void)
 {
+	t_farm		farm;
 	t_input		*head;
 	t_input		*input;
-	t_farm		farm;
 	char		*line;
 
 	if (!(head = (t_input *)malloc(sizeof(t_input))))

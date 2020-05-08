@@ -43,7 +43,6 @@ int ant_count)
 		}
 		ants[i++] = routes[j++]->route;
 	}
-	ants[i] = NULL;
 }
 
 void			solve(t_farm farm)
