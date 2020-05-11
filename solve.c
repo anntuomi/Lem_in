@@ -17,7 +17,8 @@ int ant_count)
 
 	i = 0;
 	rooms = 0;
-	while (i < path_count)
+	//ADDED "&& routes[i]"
+	while (i < path_count && routes[i])
 		rooms += routes[i++]->rooms - 2;
 	moves = ant_count + rooms;
 	moves = !(moves % path_count) ? moves / path_count : moves / path_count + 1;
@@ -36,7 +37,8 @@ int ant_count)
 	j = 0;
 	while (i < ant_count)
 	{
-		if (j == path_count || routes[j]->rooms - 1 > moves)
+		//ADDED "!(routes[j])"
+		if (j == path_count || !(routes[j]) ||routes[j]->rooms - 1 > moves)
 		{
 			j = 0;
 			moves--;
