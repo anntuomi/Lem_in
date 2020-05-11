@@ -62,7 +62,6 @@ typedef struct	s_farm
 	t_routes		*routes;
 	int				route_count;
 	t_routes		**ordered;
-	int				path_count;
 	int				needed_routes;
 }				t_farm;
 
@@ -86,7 +85,7 @@ int				count_unvisited(t_path *path, t_route *route);
 int				determine_room_type(char *line);
 int				is_unvisited(t_room *room, t_route *route);
 t_route			*get_route(t_room *room, int index);
-t_routes		**determine_used_routes(t_farm farm);
+t_routes		**determine_used_routes(t_farm *farm);
 t_routes		**routes_to_array(int route_count, t_routes *routes);
 t_routes		*del_dead_ends(t_routes *route);
 t_routes		*find_next_unique(int i, t_routes **used_routes,

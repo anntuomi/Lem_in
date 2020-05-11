@@ -86,7 +86,7 @@ static t_routes	**one_move_route(t_routes **ordered, int *needed_routes)
 	return (used_routes);
 }
 
-t_routes		**determine_used_routes(t_farm farm)
+t_routes		**determine_used_routes(t_farm *farm)
 {
 	t_routes	**used_routes;
 	t_routes	**tmp_routes;
@@ -94,17 +94,17 @@ t_routes		**determine_used_routes(t_farm farm)
 	int			i;
 
 	i = 0;
-	if (farm.ordered[0]->rooms == 2)
-		return (one_move_route(farm.ordered, &farm.needed_routes));
-	initialize_arrays(farm.needed_routes, &used_routes, &tmp_routes, &var);
-	while (farm.ordered[i])
+	if ((*farm).ordered[0]->rooms == 2)
+		return (one_move_route((*farm).ordered, &(*farm).needed_routes));
+	initialize_arrays((*farm).needed_routes, &used_routes, &tmp_routes, &var);
+	while ((*farm).ordered[i])
 	{
-		tmp_routes[0] = farm.ordered[i];
-		var = update_lowest_moves(tmp_routes, var, 0, farm.ant_count);
-		used_routes = update_used_routes(&var, tmp_routes, used_routes, farm);
+		tmp_routes[0] = (*farm).ordered[i];
+		var = update_lowest_moves(tmp_routes, var, 0, (*farm).ant_count);
+		used_routes = update_used_routes(&var, tmp_routes, used_routes, *farm);
 		i++;
 	}
-	farm.needed_routes = var.new_path_count;
+	(*farm).needed_routes = var.new_path_count;
 	free(tmp_routes);
 	return (used_routes);
 }

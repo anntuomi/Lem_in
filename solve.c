@@ -8,7 +8,7 @@ void			print_output(char **output, int *len)
 	*len = 0;
 }
 
-int				calculate_moves(t_routes **routes, int path_count,
+int				calculate_moves(t_routes **routes, int needed_routes,
 int ant_count)
 {
 	int			moves;
@@ -17,28 +17,26 @@ int ant_count)
 
 	i = 0;
 	rooms = 0;
-	//ADDED "&& routes[i]"
-	while (i < path_count && routes[i])
+	while (i < needed_routes)
 		rooms += routes[i++]->rooms - 2;
-	moves = ant_count + rooms;
-	moves = !(moves % path_count) ? moves / path_count : moves / path_count + 1;
+	moves = (ant_count + rooms) / needed_routes +
+	(moves % needed_routes ? 1 : 0);
 	return (moves);
 }
 
-static void		assign_paths(t_route **ants, t_routes **routes, int path_count,
-int ant_count)
+static void		assign_paths(t_route **ants, t_routes **routes,
+int needed_routes, int ant_count)
 {
 	int			moves;
 	int			i;
 	int			j;
 
-	moves = calculate_moves(routes, path_count, ant_count);
+	moves = calculate_moves(routes, needed_routes, ant_count);
 	i = 0;
 	j = 0;
 	while (i < ant_count)
 	{
-		//ADDED "!(routes[j])"
-		if (j == path_count || !(routes[j]) ||routes[j]->rooms - 1 > moves)
+		if (j == needed_routes || routes[j]->rooms - 1 > moves)
 		{
 			j = 0;
 			moves--;
@@ -57,7 +55,7 @@ void			solve(t_farm farm)
 
 	output = NULL;
 	line = NULL;
-	used_routes = determine_used_routes(farm);
+	used_routes = determine_used_routes(&farm);
 	order_routes(used_routes);
 	assign_paths(farm.ants, used_routes, farm.needed_routes, farm.ant_count);
 	len = 0;
