@@ -2,10 +2,7 @@
 # define LEMIN_H
 
 # include <unistd.h>
-# include <stdio.h>
 # include <stdlib.h>
-# include <sys/stat.h>
-# include <fcntl.h>
 # include "libft.h"
 # include "get_next_line.h"
 
@@ -63,10 +60,9 @@ typedef struct	s_farm
 	t_room			*start;
 	t_room			*end;
 	t_routes		*routes;
-	int				count;
+	int				route_count;
 	t_routes		**ordered;
 	int				path_count;
-	int				max_path_count;
 }				t_farm;
 
 typedef struct	s_var
@@ -75,18 +71,17 @@ typedef struct	s_var
 	int				moves;
 	int				current_path_count;
 	int				new_path_count;
-	int				orig_path_count;
+	int				max_path_count;
 }				t_var;
 
 char			*ft_append(char const *s1, char const *s2, int *len,
 				char c);
 char			*move_ants(t_route **ants);
-int				calculate_moves(t_routes **used, int path_count,
-				int ant_amount);
+int				calculate_moves(t_routes **routes, int path_count,
+				int ant_count);
 int				count_max_path_count(t_routes *routes, t_routes *shortest);
 int				count_routes(t_routes *routes);
 int				count_unvisited(t_path *path, t_route *route);
-int				count_words(void **array);
 int				determine_room_type(char *line);
 int				is_unvisited(t_room *room, t_route *route);
 t_route			*get_route(t_room *room, int index);
@@ -100,13 +95,13 @@ t_routes		*get_routes_to_end(t_room *start);
 void			*set_route_before_fork(t_routes *routes, t_routes *before_fork);
 void			create_room_list(t_room **head, char **line, t_input **input);
 void			handle_error(void);
-void			initialize_arrays(int path_count, t_routes ***used_routes,
+void			initialize_variables(int path_count, t_routes ***used_routes,
 				t_routes ***most_uniques, t_var *var);
 void			order_routes(t_routes **routes);
 void			print_output(char **output, int *len);
 void			set_input(t_input **input, char *line, int room);
 void			set_links(char *line, t_room *room, t_input **input);
 void			set_routes(t_routes *routes, t_room *room);
-void			solve(t_farm farm, t_routes **ordered, int path_count);
+void			solve(t_farm farm);
 
 #endif
