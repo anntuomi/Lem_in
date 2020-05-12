@@ -1,9 +1,9 @@
 #include "lemin.h"
 
-static t_routes		**save_routes(t_routes **tmp, t_routes **used, \
+static t_routes	**save_routes(t_routes **tmp, t_routes **used, \
 t_var *var)
 {
-	int i;
+	int			i;
 
 	i = 0;
 	while (tmp[i] && i < var->current_path_count)
@@ -25,7 +25,7 @@ t_var *var)
 static t_var	count_combination_moves(t_routes **tmp_routes, \
 t_var var, int j, int ant_count)
 {
-	int tested_moves;
+	int			tested_moves;
 
 	if (j == var.max_path_count)
 		tested_moves = calculate_moves(tmp_routes, j, ant_count);
@@ -48,7 +48,7 @@ t_var var, int j, int ant_count)
 ** new lowest move combination.
 */
 
-void		check_for_lowest_move_combination(t_var *var_pointer, 
+void			check_for_lowest_move_combination(t_var *var_pointer,
 t_routes **tmp, t_routes **used, t_farm farm)
 {
 	int			j;
@@ -72,9 +72,9 @@ t_routes **tmp, t_routes **used, t_farm farm)
 	*var_pointer = var;
 }
 
-static t_routes		**one_move_route(t_routes **ordered, int **path_count)
+static t_routes	**one_move_route(t_routes **ordered, int **path_count)
 {
-	t_routes **used_routes;
+	t_routes	**used_routes;
 
 	if (!(used_routes = (t_routes **)malloc(sizeof(t_routes *) * 2)))
 		handle_error();
@@ -84,7 +84,7 @@ static t_routes		**one_move_route(t_routes **ordered, int **path_count)
 	return (used_routes);
 }
 
-t_routes			**determine_used_routes(t_farm farm, int *path_count)
+t_routes		**determine_used_routes(t_farm farm, int *path_count)
 {
 	t_routes	**tmp_routes;
 	t_routes	**used_routes;

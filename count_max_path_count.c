@@ -45,7 +45,8 @@ static void		save_room(t_route *rooms, t_route *route)
 	}
 }
 
-/* Saving rooms connected to start to *start, and rooms connected to
+/*
+** Saving rooms connected to start to *start, and rooms connected to
 ** end to *end.
 */
 
