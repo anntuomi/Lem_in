@@ -24,10 +24,7 @@ t_routes		*del_dead_ends(t_routes *route)
 	t_routes	*previous;
 
 	while (route && !route->rooms)
-	{
-		previous = route;
-		route = del_route(previous);
-	}
+		route = del_route(route);
 	if (!route)
 		handle_error();
 	head = route;

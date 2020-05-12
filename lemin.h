@@ -11,8 +11,8 @@
 # define START 0
 # define NORMAL 1
 # define END 2
-# define NOTROOM 0
-# define ISROOM 1
+# define NOT_ROOM 0
+# define IS_ROOM 1
 
 typedef struct	s_input
 {

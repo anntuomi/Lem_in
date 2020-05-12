@@ -29,11 +29,8 @@ static int		count_rooms(t_route *start, t_route *end)
 	return (start_rooms < end_rooms ? start_rooms - 1 : end_rooms - 1);
 }
 
-static void		save_room(t_route *rooms, t_route *route)
+static void		save_room(t_route *room, t_route *route)
 {
-	t_route		*room;
-
-	room = rooms;
 	while (room->next && room->next->room->id != route->room->id)
 		room = room->next;
 	if (!room->next)
@@ -46,24 +43,23 @@ static void		save_room(t_route *rooms, t_route *route)
 }
 
 /*
-** Saving rooms connected to start to *start, and rooms connected to
-** end to *end.
+** Saving rooms connected to start to *start, and rooms connected to end to
+** *end.
 */
 
 int				count_max_path_count(t_routes *routes, t_routes *shortest)
 {
 	t_route		*start;
 	t_route		*end;
-	t_route		*room;
 	t_route		*route;
 
 	if (shortest->rooms == 2)
 		return (1);
-	if (!(end = (t_route *)malloc(sizeof(t_route))) || \
-		!(start = (t_route *)malloc(sizeof(t_route))))
+	if (!(start = (t_route *)malloc(sizeof(t_route))) ||
+	!(end = (t_route *)malloc(sizeof(t_route))))
 		handle_error();
-	end->next = NULL;
 	start->next = NULL;
+	end->next = NULL;
 	while (routes)
 	{
 		route = routes->route;

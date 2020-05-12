@@ -6,8 +6,8 @@ static void		print_input(t_input *input)
 	char	*tmp;
 	int		len;
 
-	len = 0;
 	output = NULL;
+	len = 0;
 	while (input)
 	{
 		tmp = ft_append(output, input->line, &len, '\n');
@@ -89,7 +89,6 @@ int				main(void)
 	t_input		*input;
 	t_farm		farm;
 	char		*line;
-	t_routes	**routes_to_use;
 
 	if (!(head = (t_input *)malloc(sizeof(t_input))))
 		handle_error();

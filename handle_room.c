@@ -23,10 +23,10 @@ static t_room	*new_room(int room_type, char **input)
 	return (new);
 }
 
-static t_room	*save_room(t_room *room, t_room **head, char **input,
-int *room_type)
+static t_room	*save_room(t_room *room, t_room **head, int *room_type,
+char **input)
 {
-	if (room == NULL)
+	if (!room)
 	{
 		room = new_room(*room_type, input);
 		*head = room;
@@ -51,25 +51,25 @@ static int		validate_room_input(char **input, t_room **head)
 	if (size == 1 && ft_strchr(input[0], '-'))
 	{
 		ft_2ddel(input);
-		return (NOTROOM);
+		return (NOT_ROOM);
 	}
-	if (size != 3 || (ft_isnum(input[1]) != 1 || ft_isnum(input[2]) != 1))
+	if (size != 3 || !ft_isnum(input[1]) || !ft_isnum(input[2]))
 		handle_error();
 	room = *head;
 	while (room)
 	{
-		if (ft_strequ(input[0], room->name) == 1)
+		if (ft_strequ(input[0], room->name))
 			handle_error();
 		room = room->next;
 	}
-	return (ISROOM);
+	return (IS_ROOM);
 }
 
 int				determine_room_type(char *line)
 {
-	if (ft_strcmp(line, "##start") == 0)
+	if (ft_strequ(line, "##start"))
 		return (START);
-	else if (ft_strcmp(line, "##end") == 0)
+	else if (ft_strequ(line, "##end"))
 		return (END);
 	else
 		return (NORMAL);
@@ -93,9 +93,9 @@ void			create_room_list(t_room **head, char **line, t_input **lines)
 		{
 			if (!(input = ft_strsplit(*line, ' ')))
 				handle_error();
-			if (validate_room_input(input, head) == NOTROOM)
+			if (validate_room_input(input, head) == NOT_ROOM)
 				break ;
-			room = save_room(room, head, input, &room_type);
+			room = save_room(room, head, &room_type, input);
 		}
 		set_input(lines, *line, 1);
 	}

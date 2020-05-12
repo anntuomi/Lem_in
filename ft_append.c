@@ -1,8 +1,19 @@
 #include "lemin.h"
 
-static int	ft_joins1(char const *s1, char *new)
+static char		*add_end(char *new, int i, char c)
 {
-	int i;
+	if (c)
+	{
+		new[i] = c;
+		i++;
+	}
+	new[i] = '\0';
+	return (new);
+}
+
+static int		ft_joins1(char const *s1, char *new)
+{
+	int			i;
 
 	i = 0;
 	if (s1)
@@ -16,39 +27,24 @@ static int	ft_joins1(char const *s1, char *new)
 	return (i);
 }
 
-static char	*add_end(char *new, int i, char c)
+char			*ft_append(char const *s1, char const *s2, int *len, char c)
 {
-	if (c != 0)
-	{
-		new[i] = c;
-		i++;
-	}
-	new[i] = '\0';
-	return (new);
-}
-
-char		*ft_append(char const *s1, char const *s2, int *len, char c)
-{
-	char	*new;
-	int		length;
-	int		i;
-	int		start;
+	char		*new;
+	int			length;
+	int			start;
+	int			i;
 
 	length = *len + ft_strlen(s2);
-	if (c != 0)
-		length = length + 1;
-	if ((new = ft_strnew(length)) == NULL)
+	if (c)
+		length += 1;
+	if (!(new = ft_strnew(length)))
 		handle_error();
 	start = 0;
 	i = ft_joins1(s1, new);
 	if (s2)
 	{
 		while (s2[start])
-		{
-			new[i] = s2[start];
-			i++;
-			start++;
-		}
+			new[i++] = s2[start++];
 	}
 	new = add_end(new, i, c);
 	*len = length;

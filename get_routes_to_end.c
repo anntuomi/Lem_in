@@ -23,7 +23,7 @@ static t_route	*get_current_route(t_routes **routes, t_room *room)
 	t_route		*route;
 	t_routes	*before_fork;
 
-	if (room->type)
+	if (room->type != START)
 	{
 		before_fork = *routes;
 		while ((*routes)->next)
@@ -50,7 +50,7 @@ void			set_routes(t_routes *routes, t_room *room)
 	int			unvisited;
 
 	route = get_current_route(&routes, room);
-	while (room && room->type != 2)
+	while (room && room->type != END)
 	{
 		path = room->paths;
 		if ((unvisited = count_unvisited(path, routes->route)) > 1)
