@@ -1,18 +1,5 @@
 #include "lemin.h"
 
-int				count_routes(t_routes *routes)
-{
-	int			count;
-
-	count = 0;
-	while (routes)
-	{
-		routes = routes->next;
-		count++;
-	}
-	return (count);
-}
-
 static void		set_fork_routes(t_path *path, t_routes *routes)
 {
 	int			first;
@@ -20,10 +7,10 @@ static void		set_fork_routes(t_path *path, t_routes *routes)
 	first = 1;
 	while (path)
 	{
-		if (is_unvisited(path->content, routes->route))
+		if (is_unvisited(path->room, routes->route))
 		{
 			if (!first)
-				set_routes(routes, path->content);
+				set_routes(routes, path->room);
 			else
 				first = 0;
 		}
@@ -70,9 +57,9 @@ void			set_routes(t_routes *routes, t_room *room)
 			set_fork_routes(path, routes);
 		if (unvisited)
 		{
-			while (!is_unvisited(path->content, routes->route))
+			while (!is_unvisited(path->room, routes->route))
 				path = path->next;
-			room = path->content;
+			room = path->room;
 			route->next = get_route(room, route->index + 1);
 			route = route->next;
 			routes->rooms++;

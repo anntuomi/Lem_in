@@ -6,7 +6,7 @@ static int		is_dup(int id, t_path *path)
 
 	while (path)
 	{
-		room = path->content;
+		room = path->room;
 		if (room->id == id)
 			return (1);
 		path = path->next;
@@ -23,7 +23,7 @@ static void		set_link(t_room *room1, t_room *room2)
 	{
 		if (!(new = (t_path *)malloc(sizeof(t_path))))
 			handle_error();
-		new->content = room2;
+		new->room = room2;
 		new->next = NULL;
 		if (!room1->paths)
 			room1->paths = new;

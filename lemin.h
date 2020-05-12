@@ -8,7 +8,6 @@
 # include <fcntl.h>
 # include "libft.h"
 # include "get_next_line.h"
-# include "ft_printf.h"
 
 # define INT_MIN -2147483648
 # define INT_MAX 2147483647
@@ -26,7 +25,7 @@ typedef struct	s_input
 
 typedef struct	s_path
 {
-	void			*content;
+	void			*room;
 	struct s_path	*next;
 }				t_path;
 
@@ -58,7 +57,7 @@ typedef struct	s_routes
 
 typedef struct	s_farm
 {
-	int				amount;
+	int				ant_count;
 	t_route			**ants;
 	t_room			*rooms;
 	t_room			*start;
@@ -67,24 +66,24 @@ typedef struct	s_farm
 	int				count;
 	t_routes		**ordered;
 	int				path_count;
-	int				needed_routes;
+	int				max_path_count;
 }				t_farm;
 
-typedef struct	s_variables
+typedef struct	s_var
 {
 	int				least_moves;
 	int				moves;
 	int				current_path_count;
 	int				new_path_count;
 	int				orig_path_count;
-}				t_variables;
+}				t_var;
 
-char			*ft_strjoin_new(char const *s1, char const *s2, int *len,
+char			*ft_append(char const *s1, char const *s2, int *len,
 				char c);
 char			*move_ants(t_route **ants);
 int				calculate_moves(t_routes **used, int path_count,
 				int ant_amount);
-int				count_needed_routes(t_routes *routes, t_routes *shortest);
+int				count_max_path_count(t_routes *routes, t_routes *shortest);
 int				count_routes(t_routes *routes);
 int				count_unvisited(t_path *path, t_route *route);
 int				count_words(void **array);
@@ -94,7 +93,6 @@ t_route			*get_route(t_room *room, int index);
 t_routes		**determine_used_routes(t_farm farm, int *path_count);
 t_routes		**routes_to_array(int route_count, t_routes *routes);
 t_routes		*del_dead_ends(t_routes *routes);
-t_routes		*del_route(t_routes *routes);
 t_routes		*find_next_unique(int i, t_routes **used_routes,
 				t_routes **ordered);
 t_routes		*get_routes(t_room *start);
@@ -103,7 +101,7 @@ void			*set_route_before_fork(t_routes *routes, t_routes *before_fork);
 void			create_room_list(t_room **head, char **line, t_input **input);
 void			handle_error(void);
 void			initialize_arrays(int path_count, t_routes ***used_routes,
-				t_routes ***most_uniques, t_variables *var);
+				t_routes ***most_uniques, t_var *var);
 void			order_routes(t_routes **routes);
 void			print_output(char **output, int *len);
 void			set_input(t_input **input, char *line, int room);

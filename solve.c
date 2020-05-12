@@ -104,18 +104,18 @@ void			solve(t_farm farm, t_routes **ordered, int path_count)
 	order_routes(used_routes);
 	//print_unique_routes(used_routes);
 	//printf("\n");
-	assign_paths(farm.ants, used_routes, path_count, farm.amount);
+	assign_paths(farm.ants, used_routes, path_count, farm.ant_count);
 	//moves = 0;
 	len = 0;
-	while (farm.end->ant_count != farm.amount)
+	while (farm.end->ant_count != farm.ant_count)
 	{
 		line = move_ants(farm.ants);
-		tmp = ft_strjoin_new(output, line, &len, '\n');
+		tmp = ft_append(output, line, &len, '\n');
 		free(output);
 		output = tmp;
 		//moves++;
 		free(line);
-		if (len > 1000 || farm.end->ant_count == farm.amount)
+		if (len > 1000 || farm.end->ant_count == farm.ant_count)
 			print_output(&output, &len);
 	}
 	//printf("Moves: %d\n", moves);

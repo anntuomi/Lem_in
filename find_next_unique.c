@@ -33,7 +33,7 @@ t_routes **ordered)
 {
 	while (ordered[i])
 	{
-		if (is_unique(used_routes, ordered[i]->route) == 1)
+		if (is_unique(used_routes, ordered[i]->route))
 			return (ordered[i]);
 		i++;
 	}

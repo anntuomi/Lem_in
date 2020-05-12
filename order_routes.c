@@ -44,3 +44,16 @@ void			order_routes(t_routes **routes)
 		i++;
 	}
 }
+
+int				count_routes(t_routes *routes)
+{
+	int			count;
+
+	count = 0;
+	while (routes)
+	{
+		routes = routes->next;
+		count++;
+	}
+	return (count);
+}

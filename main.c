@@ -30,7 +30,7 @@ static void		print_input(t_input *input)
 	output = NULL;
 	while (input)
 	{
-		tmp = ft_strjoin_new(output, input->line, &len, '\n');
+		tmp = ft_append(output, input->line, &len, '\n');
 		if (output != NULL)
 			free(output);
 		output = tmp;
@@ -143,7 +143,7 @@ int				main(void)
 	if (!(head = (t_input *)malloc(sizeof(t_input))))
 		handle_error();
 	input = head;
-	farm.ants = get_ants(&farm.amount, &input);
+	farm.ants = get_ants(&farm.ant_count, &input);
 	create_room_list(&farm.rooms, &line, &input);
 	if (!(line))
 		handle_error();
@@ -154,8 +154,8 @@ int				main(void)
 	farm.count = count_routes(farm.routes);
 	farm.ordered = routes_to_array(farm.count, farm.routes);
 	order_routes(farm.ordered);
-	farm.start->ant_count = farm.amount;
-	farm.needed_routes = count_needed_routes(farm.routes, farm.ordered[0]);
-	solve(farm, farm.ordered, farm.needed_routes);
+	farm.start->ant_count = farm.ant_count;
+	farm.max_path_count = count_max_path_count(farm.routes, farm.ordered[0]);
+	solve(farm, farm.ordered, farm.max_path_count);
 	return (0);
 }

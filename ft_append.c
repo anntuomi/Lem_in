@@ -5,7 +5,7 @@ static int	ft_joins1(char const *s1, char *new)
 	int i;
 
 	i = 0;
-	if (s1 != NULL)
+	if (s1)
 	{
 		while (s1[i])
 		{
@@ -27,12 +27,12 @@ static char	*add_end(char *new, int i, char c)
 	return (new);
 }
 
-char		*ft_strjoin_new(char const *s1, char const *s2, int *len, char c)
+char		*ft_append(char const *s1, char const *s2, int *len, char c)
 {
-	char				*new;
-	int					length;
-	int					i;
-	int					start;
+	char	*new;
+	int		length;
+	int		i;
+	int		start;
 
 	length = *len + ft_strlen(s2);
 	if (c != 0)
@@ -41,7 +41,7 @@ char		*ft_strjoin_new(char const *s1, char const *s2, int *len, char c)
 		handle_error();
 	start = 0;
 	i = ft_joins1(s1, new);
-	if (s2 != NULL)
+	if (s2)
 	{
 		while (s2[start])
 		{

@@ -18,7 +18,7 @@ int				count_unvisited(t_path *path, t_route *route)
 	unvisited = 0;
 	while (path)
 	{
-		if (is_unvisited(path->content, route))
+		if (is_unvisited(path->room, route))
 			unvisited++;
 		path = path->next;
 	}

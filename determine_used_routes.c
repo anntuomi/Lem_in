@@ -1,16 +1,16 @@
 #include "lemin.h"
 
-static t_routes		**save_routes(t_routes **temp, t_routes **used, \
-t_variables *var)
+static t_routes		**save_routes(t_routes **tmp, t_routes **used, \
+t_var *var)
 {
 	int i;
 
 	i = 0;
 	if (var->moves < var->least_moves)
 	{
-		while (temp[i] && i < var->current_path_count)
+		while (tmp[i] && i < var->current_path_count)
 		{
-			used[i] = temp[i];
+			used[i] = tmp[i];
 			i++;
 		}
 		while (i < var->orig_path_count)
@@ -26,22 +26,53 @@ t_variables *var)
 	return (used);
 }
 
-static t_variables	update_lowest_moves(t_routes **temp_routes, \
-t_variables var, int j, int amount)
+static t_var	update_lowest_moves(t_routes **tmp_routes, \
+t_var var, int j, int ant_count)
 {
 	int tested_moves;
 
 	if (j == var.orig_path_count)
-		tested_moves = calculate_moves(temp_routes, j, amount);
-	else if (temp_routes[j] != NULL)
-		tested_moves = calculate_moves(temp_routes, j + 1, amount);
-	if ((temp_routes[j] != NULL || j == var.orig_path_count) && \
+		tested_moves = calculate_moves(tmp_routes, j, ant_count);
+	else if (tmp_routes[j])
+		tested_moves = calculate_moves(tmp_routes, j + 1, ant_count);
+	if ((tmp_routes[j] || j == var.orig_path_count) && \
 		(var.moves == -1 || tested_moves < var.moves))
 	{
 		var.moves = tested_moves;
 		var.current_path_count = j + 1;
 	}
 	return (var);
+}
+
+/*
+** Finds a combination of unique routes and saves it to tmp.
+** Moves are counted after every new added path.
+** If a combination with moves less than the previous
+** least moves combination is found, **used is updated with the
+** new lowest move combination.
+*/
+
+static t_routes		**update_used_routes(t_var *var_pointer, t_routes **tmp,
+t_routes **used, t_farm farm)
+{
+	int			j;
+	t_var		var;
+
+	j = 1;
+	var = *var_pointer;
+	while (j <= var.orig_path_count)
+	{
+		tmp[j] = find_next_unique(0, tmp, farm.ordered);
+		var = update_lowest_moves(tmp, var, j, farm.ant_count);
+		if (!tmp[j])
+		{
+			save_routes(tmp, used, &var);
+			break ;
+		}
+		j++;
+	}
+	*var_pointer = var;
+	return (used);
 }
 
 static t_routes		**one_move_route(t_routes **ordered, int **path_count)
@@ -56,42 +87,11 @@ static t_routes		**one_move_route(t_routes **ordered, int **path_count)
 	return (used_routes);
 }
 
-/*
-** Finds a combination of unique routes and saves it to tmp.
-** Moves are counted after every new added path.
-** If a combination with moves less than the previous
-** least moves combination is found, **used is updated with the
-** new lowest move combination.
-*/
-
-static t_routes		**update_used_routes(t_variables *var_pointer,
-t_routes **tmp, t_routes **used, t_farm farm)
-{
-	int			j;
-	t_variables	var;
-
-	j = 1;
-	var = *var_pointer;
-	while (j <= var.orig_path_count)
-	{
-		tmp[j] = find_next_unique(0, tmp, farm.ordered);
-		var = update_lowest_moves(tmp, var, j, farm.amount);
-		if (tmp[j] == NULL)
-		{
-			save_routes(tmp, used, &var);
-			break ;
-		}
-		j++;
-	}
-	*var_pointer = var;
-	return (used);
-}
-
 t_routes			**determine_used_routes(t_farm farm, int *path_count)
 {
 	t_routes	**tmp_routes;
 	t_routes	**used_routes;
-	t_variables var;
+	t_var		var;
 	int			i;
 
 	i = 0;
@@ -101,9 +101,8 @@ t_routes			**determine_used_routes(t_farm farm, int *path_count)
 	while ((farm.ordered[i]))
 	{
 		tmp_routes[0] = farm.ordered[i];
-		var = update_lowest_moves(tmp_routes, var, 0, farm.amount);
-		used_routes = update_used_routes(&var, tmp_routes, \
-		used_routes, farm);
+		var = update_lowest_moves(tmp_routes, var, 0, farm.ant_count);
+		used_routes = update_used_routes(&var, tmp_routes, used_routes, farm);
 		i++;
 	}
 	*path_count = var.new_path_count;
