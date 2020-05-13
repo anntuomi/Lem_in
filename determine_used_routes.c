@@ -6,16 +6,18 @@ t_var *var)
 	int			i;
 
 	i = 0;
+	if (used)
+		free(used);
+	if (!(used = (t_routes **)malloc(sizeof(t_routes *) * \
+	var->current_path_count + 1)))
+		handle_error();
 	while (tmp[i] && i < var->current_path_count)
 	{
 		used[i] = tmp[i];
 		i++;
 	}
-	while (i < var->max_path_count)
-	{
-		used[i] = NULL;
-		i++;
-	}
+	used[i] = NULL;
+	i++;
 	var->new_path_count = var->current_path_count;
 	if (var->moves != -1)
 		var->least_moves = var->moves;
@@ -49,7 +51,7 @@ t_var var, int j, int ant_count)
 */
 
 void			check_for_lowest_move_combination(t_var *var_pointer,
-t_routes **tmp, t_routes **used, t_farm farm)
+t_routes **tmp, t_routes ***used, t_farm farm)
 {
 	int			j;
 	t_var		var;
@@ -63,7 +65,7 @@ t_routes **tmp, t_routes **used, t_farm farm)
 		if (!tmp[j])
 		{
 			if (var.moves < var.least_moves)
-				used = save_routes(tmp, used, &var);
+				*used = save_routes(tmp, *used, &var);
 			var.moves = -1;
 			break ;
 		}
@@ -99,7 +101,7 @@ t_routes		**determine_used_routes(t_farm farm, int *path_count)
 	{
 		tmp_routes[0] = farm.ordered[i];
 		check_for_lowest_move_combination(&var, tmp_routes,
-		used_routes, farm);
+		&used_routes, farm);
 		i++;
 	}
 	*path_count = var.new_path_count;

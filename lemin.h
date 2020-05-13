@@ -96,7 +96,7 @@ void			*set_route_before_fork(t_routes *routes, t_routes *before_fork);
 void			create_room_list(t_room **head, char **line, t_input **input);
 void			handle_error(void);
 void			initialize_variables(int path_count, t_routes ***used_routes,
-				t_routes ***most_uniques, t_var *var);
+				t_routes ***tmp, t_var *var);
 void			order_routes(t_routes **routes);
 void			print_output(char **output, int *len);
 void			set_input(t_input **input, char *line, int room);
