@@ -1,26 +1,5 @@
 #include "lemin.h"
 
-static void		print_input(t_input *input)
-{
-	char	*output;
-	char	*tmp;
-	int		len;
-
-	output = NULL;
-	len = 0;
-	while (input)
-	{
-		tmp = ft_append(output, input->line, &len, '\n');
-		if (output)
-			free(output);
-		output = tmp;
-		input = input->next;
-		if (len > 1000 || !input)
-			print_output(&output, &len);
-	}
-	ft_putchar('\n');
-}
-
 static void		find_edges(t_room *room, t_room **start, t_room **end)
 {
 	*start = NULL;
@@ -37,21 +16,6 @@ static void		find_edges(t_room *room, t_room **start, t_room **end)
 	}
 	if (!*start || !*end)
 		handle_error();
-}
-
-void			set_input(t_input **input, char *line, int rooms)
-{
-	if (line[0] == '#' && line[1] == '#' &&
-	((rooms && determine_room_type(line) == NORMAL) || !rooms))
-		free(line);
-	else
-	{
-		if (!((*input)->next = (t_input *)malloc(sizeof(t_input))))
-			handle_error();
-		*input = (*input)->next;
-		(*input)->line = line;
-		(*input)->next = NULL;
-	}
 }
 
 static t_route	**get_ants(int *ant_count, t_input **input)

@@ -1,13 +1,5 @@
 #include "lemin.h"
 
-void			print_output(char **output, int *len)
-{
-	write(1, *output, *len);
-	free(*output);
-	*output = NULL;
-	*len = 0;
-}
-
 static void		assign_paths(t_route **ants, t_routes **routes, int path_count,
 int ant_count)
 {
@@ -66,7 +58,8 @@ void			solve(t_farm farm)
 	{
 		line = move_ants(farm.ants);
 		tmp = ft_append(output, line, &len, '\n');
-		free(output);
+		if (output)
+			free(output);
 		output = tmp;
 		free(line);
 		if (len > 1000 || farm.end->ant_count == farm.ant_count)
