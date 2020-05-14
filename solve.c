@@ -1,7 +1,23 @@
 #include "lemin.h"
 
-static void		assign_paths(t_route **ants, t_routes **routes, int path_count,
+int				calculate_moves(t_routes **routes, int path_count,
 int ant_count)
+{
+	int			moves;
+	int			rooms;
+	int			i;
+
+	rooms = 0;
+	i = 0;
+	while (i < path_count)
+		rooms += routes[i++]->rooms - 2;
+	moves = (ant_count + rooms) / path_count +
+	((ant_count + rooms) % path_count ? 1 : 0);
+	return (moves);
+}
+
+static void		assign_paths(t_route **ants, int ant_count, t_routes **routes,
+int path_count)
 {
 	int			moves;
 	int			i;
@@ -22,22 +38,6 @@ int ant_count)
 	ants[i] = NULL;
 }
 
-int				calculate_moves(t_routes **routes, int path_count,
-int ant_count)
-{
-	int			moves;
-	int			rooms;
-	int			i;
-
-	i = 0;
-	rooms = 0;
-	while (i < path_count)
-		rooms += routes[i++]->rooms - 2;
-	moves = ant_count + rooms;
-	moves = !(moves % path_count) ? moves / path_count : moves / path_count + 1;
-	return (moves);
-}
-
 void			solve(t_farm farm)
 {
 	t_routes	**used_routes;
@@ -47,11 +47,10 @@ void			solve(t_farm farm)
 	int			len;
 	int			moves;
 
-	output = NULL;
-	line = NULL;
-	used_routes = determine_used_routes(farm, &farm.path_count);
+	used_routes = determine_used_routes(&farm);
 	order_routes(used_routes);
-	assign_paths(farm.ants, used_routes, farm.path_count, farm.ant_count);
+	assign_paths(farm.ants, farm.ant_count, used_routes, farm.path_count);
+	output = NULL;
 	len = 0;
 	moves = 0;
 	while (farm.end->ant_count != farm.ant_count)

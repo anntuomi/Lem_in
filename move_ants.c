@@ -1,13 +1,13 @@
 #include "lemin.h"
 
-static char	*prefix_char(char *str, char *prefix, int prefix_len)
+static char		*prefix_char(char *str, char *prefix, int prefix_len)
 {
 	char		*result;
 	int			i;
 	int			j;
 
-	if (!(result = (char *)malloc(sizeof(char) * ft_strlen(str) +
-	prefix_len + 1)))
+	if (!(result = (char *)malloc(sizeof(char) *
+	(ft_strlen(str) + prefix_len + 1))))
 		handle_error();
 	i = 0;
 	while (i < prefix_len)
@@ -17,22 +17,18 @@ static char	*prefix_char(char *str, char *prefix, int prefix_len)
 	}
 	j = 0;
 	while (str[j])
-	{
-		result[i] = str[j];
-		i++;
-		j++;
-	}
+		result[i++] = str[j++];
 	result[i] = '\0';
 	return (result);
 }
 
-static char	*add_to_command_line(char *line, char *nbr, char *name,
+static char		*add_to_command_line(char *line, char *nbr, char *name,
 int *first)
 {
+	char		*result;
 	char		*block;
 	char		*number_prefix;
 	char		*name_prefix;
-	char		*result;
 
 	if (!*first)
 		number_prefix = prefix_char(nbr, " L", 2);
@@ -55,15 +51,13 @@ int *first)
 	return (result);
 }
 
-char		*move_ants(t_route **ants)
+char			*move_ants(t_route **ants)
 {
 	int			first;
 	int			i;
-	int			len;
 	char		*line;
 	char		*nbr;
 
-	len = 0;
 	first = 1;
 	i = 0;
 	line = NULL;

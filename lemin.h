@@ -85,11 +85,10 @@ int				count_unvisited(t_path *path, t_route *route);
 int				determine_room_type(char *line);
 int				is_unvisited(t_room *room, t_route *route);
 t_route			*get_route(t_room *room, int index);
-t_routes		**determine_used_routes(t_farm farm, int *path_count);
+t_routes		**determine_used_routes(t_farm *farm);
 t_routes		**routes_to_array(int route_count, t_routes *routes);
 t_routes		*del_dead_ends(t_routes *routes);
-t_routes		*find_next_unique(int i, t_routes **used_routes,
-				t_routes **ordered);
+t_routes		*find_next_unique(t_routes **ordered, t_routes **used_routes);
 t_routes		*get_routes(t_room *start);
 t_routes		*get_routes_to_end(t_room *start);
 void			*set_route_before_fork(t_routes *routes, t_routes *before_fork);
@@ -98,11 +97,11 @@ void			handle_error(void);
 void			initialize_variables(int path_count, t_routes ***used_routes,
 				t_routes ***tmp, t_var *var);
 void			order_routes(t_routes **routes);
+void			print_input(t_input *input);
 void			print_output(char **output, int *len);
 void			set_input(t_input **input, char *line, int room);
 void			set_links(char *line, t_room *room, t_input **input);
 void			set_routes(t_routes *routes, t_room *room);
 void			solve(t_farm farm);
-void			print_input(t_input *input);
 
 #endif

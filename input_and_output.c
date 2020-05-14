@@ -1,6 +1,6 @@
 #include "lemin.h"
 
-void	print_output(char **output, int *len)
+void			print_output(char **output, int *len)
 {
 	write(1, *output, *len);
 	free(*output);
@@ -8,11 +8,11 @@ void	print_output(char **output, int *len)
 	*len = 0;
 }
 
-void	print_input(t_input *input)
+void			print_input(t_input *input)
 {
-	char	*output;
-	char	*tmp;
-	int		len;
+	char		*output;
+	char		*tmp;
+	int			len;
 
 	output = NULL;
 	len = 0;
@@ -29,7 +29,7 @@ void	print_input(t_input *input)
 	ft_putchar('\n');
 }
 
-void	set_input(t_input **input, char *line, int rooms)
+void			set_input(t_input **input, char *line, int rooms)
 {
 	if (line[0] == '#' && line[1] == '#' &&
 	((rooms && determine_room_type(line) == NORMAL) || !rooms))

@@ -1,5 +1,11 @@
 #include "lemin.h"
 
+void			handle_error(void)
+{
+	ft_putstr_fd("ERROR\n", 2);
+	exit(EXIT_FAILURE);
+}
+
 static void		find_edges(t_room *room, t_room **start, t_room **end)
 {
 	*start = NULL;
@@ -43,7 +49,6 @@ static t_route	**get_ants(int *ant_count, t_input **input)
 	(*input)->next = NULL;
 	if (!(ants = (t_route **)malloc(sizeof(t_route *) * (*ant_count + 1))))
 		handle_error();
-	ants[*ant_count] = NULL;
 	return (ants);
 }
 
