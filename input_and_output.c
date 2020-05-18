@@ -13,6 +13,7 @@ void	print_input(t_input *input)
 	char	*output;
 	char	*tmp;
 	int		len;
+	t_input	*next;
 
 	output = NULL;
 	len = 0;
@@ -22,7 +23,11 @@ void	print_input(t_input *input)
 		if (output)
 			free(output);
 		output = tmp;
-		input = input->next;
+		if (input->line)
+			free(input->line);
+		next = input->next;
+		free(input);
+		input = next;
 		if (len > 1000 || !input)
 			print_output(&output, &len);
 	}

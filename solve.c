@@ -20,6 +20,7 @@ int ant_count)
 		ants[i++] = routes[j++]->route;
 	}
 	ants[i] = NULL;
+	free(routes);
 }
 
 int				calculate_moves(t_routes **routes, int path_count,

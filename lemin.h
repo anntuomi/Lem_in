@@ -104,5 +104,6 @@ void			set_links(char *line, t_room *room, t_input **input);
 void			set_routes(t_routes *routes, t_room *room);
 void			solve(t_farm farm);
 void			print_input(t_input *input);
+void			free_memory(t_farm farm);
 
 #endif

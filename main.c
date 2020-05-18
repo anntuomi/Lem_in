@@ -71,5 +71,6 @@ int				main(void)
 	farm.start->ant_count = farm.ant_count;
 	farm.path_count = count_max_path_count(farm.routes, farm.ordered[0]);
 	solve(farm);
+	free_memory(farm);
 	return (0);
 }
