@@ -103,10 +103,7 @@ void			set_input(t_input **input, char *line, int room);
 void			set_links(char *line, t_room *room, t_input **input);
 void			set_routes(t_routes *routes, t_room *room);
 void			solve(t_farm farm);
-<<<<<<< HEAD
 void			print_input(t_input *input);
 void			free_memory(t_farm farm);
-=======
->>>>>>> 0c2f59406d38549f3904b1827a931ccb6b1d4ca2
 
 #endif
