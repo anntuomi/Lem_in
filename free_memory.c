@@ -1,14 +1,46 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_memory.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atuomine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/01 14:02:31 by atuomine          #+#    #+#             */
+/*   Updated: 2020/06/01 14:02:33 by atuomine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lemin.h"
+
+void			ft_delete(char **array)
+{
+	int i;
+
+	i = 0;
+	while (array[i] != NULL)
+	{
+		ft_strdel(&array[i]);
+		i++;
+	}
+	free(array);
+	array = NULL;
+}
 
 static void		free_rooms(t_room *room)
 {
 	t_room *next_room;
+	t_path *next_path;
 
 	while (room)
 	{
 		next_room = room->next;
 		free(room->name);
-		free(room->paths);
+		while (room->paths)
+		{
+			next_path = room->paths->next;
+			free(room->paths);
+			room->paths = next_path;
+		}
 		free(room);
 		room = next_room;
 	}

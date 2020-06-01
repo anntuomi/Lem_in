@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atuomine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/01 14:03:36 by atuomine          #+#    #+#             */
+/*   Updated: 2020/06/01 14:03:37 by atuomine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lemin.h"
 
 void			handle_error(void)
@@ -63,6 +75,7 @@ int				main(void)
 		handle_error();
 	input = head;
 	farm.ants = get_ants(&farm.ant_count, &input);
+	farm.rooms = NULL;
 	create_room_list(&farm.rooms, &line, &input);
 	if (!line)
 		handle_error();

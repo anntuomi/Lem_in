@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_routes.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atuomine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/01 14:02:46 by atuomine          #+#    #+#             */
+/*   Updated: 2020/06/01 14:02:48 by atuomine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lemin.h"
 
 int				is_unvisited(t_room *room, t_route *route)
@@ -37,7 +49,7 @@ t_route			*get_route(t_room *room, int index)
 	return (route);
 }
 
-void			*set_route_before_fork(t_routes *routes, t_routes *before_fork)
+void			set_route_before_fork(t_routes *routes, t_routes *before_fork)
 {
 	t_route		*route;
 	t_route		*bf;

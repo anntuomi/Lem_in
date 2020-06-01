@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   input_and_output.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atuomine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/01 14:03:18 by atuomine          #+#    #+#             */
+/*   Updated: 2020/06/01 14:03:20 by atuomine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lemin.h"
 
 void			print_output(char **output, int *len)
@@ -38,7 +50,10 @@ void			set_input(t_input **input, char *line, int rooms)
 {
 	if (line[0] == '#' && line[1] == '#' &&
 	((rooms && determine_room_type(line) == NORMAL) || !rooms))
+	{
 		free(line);
+		line = NULL;
+	}
 	else
 	{
 		if (!((*input)->next = (t_input *)malloc(sizeof(t_input))))

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_room.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atuomine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/01 14:03:04 by atuomine          #+#    #+#             */
+/*   Updated: 2020/06/01 14:03:06 by atuomine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lemin.h"
 
 static t_room	*new_room(int room_type, char **input)
@@ -19,7 +31,7 @@ static t_room	*new_room(int room_type, char **input)
 	new->ant_count = 0;
 	new->paths = NULL;
 	new->next = NULL;
-	ft_2ddel(input);
+	ft_delete(input);
 	return (new);
 }
 
@@ -50,7 +62,7 @@ static int		validate_room_input(char **input, t_room **head)
 		size++;
 	if (size == 1 && ft_strchr(input[0], '-'))
 	{
-		ft_2ddel(input);
+		ft_delete(input);
 		return (NOT_ROOM);
 	}
 	if (size != 3 || !ft_isnum(input[1]) || !ft_isnum(input[2]))

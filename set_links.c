@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set_links.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atuomine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/01 14:04:10 by atuomine          #+#    #+#             */
+/*   Updated: 2020/06/01 14:04:12 by atuomine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lemin.h"
 
 static int		is_dup(int id, t_path *path)
@@ -46,6 +58,7 @@ static t_room	*get_room(char *input, t_room *room)
 		room = room->next;
 	}
 	handle_error();
+	return (NULL);
 }
 
 static int		count_words(char **array)
@@ -78,7 +91,7 @@ void			set_links(char *line, t_room *room, t_input **input)
 				room2 = get_room(rooms[1], room);
 				set_link(room1, room2);
 				set_link(room2, room1);
-				ft_2ddel(rooms);
+				ft_delete(rooms);
 			}
 		}
 		set_input(input, line, 0);

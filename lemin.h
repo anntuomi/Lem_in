@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lemin.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atuomine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/01 14:03:28 by atuomine          #+#    #+#             */
+/*   Updated: 2020/06/01 14:03:29 by atuomine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef LEMIN_H
 # define LEMIN_H
 
@@ -91,7 +103,7 @@ t_routes		*del_dead_ends(t_routes *routes);
 t_routes		*find_next_unique(t_routes **ordered, t_routes **used_routes);
 t_routes		*get_routes(t_room *start);
 t_routes		*get_routes_to_end(t_room *start);
-void			*set_route_before_fork(t_routes *routes, t_routes *before_fork);
+void			set_route_before_fork(t_routes *routes, t_routes *before_fork);
 void			create_room_list(t_room **head, char **line, t_input **input);
 void			handle_error(void);
 void			initialize_variables(int path_count, t_routes ***used_routes,
@@ -104,5 +116,6 @@ void			set_links(char *line, t_room *room, t_input **input);
 void			set_routes(t_routes *routes, t_room *room);
 void			solve(t_farm farm);
 void			free_memory(t_farm farm);
+void			ft_delete(char **array);
 
 #endif
