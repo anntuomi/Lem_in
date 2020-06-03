@@ -43,7 +43,6 @@ void			*ft_memccpy(void *dst, const void *src, int c, size_t n);
 void			*ft_memchr(const void *str, int c, size_t n);
 void			*ft_memmove(void *dst, const void *src, size_t len);
 void			ft_lstadd(t_list **alst, t_list *new);
-void			ft_2ddel(char **array);
 
 char			*ft_strmapi(char const *s, char(*f)(unsigned int, char));
 char			*ft_strmap(char const *s, char (*f)(char));
