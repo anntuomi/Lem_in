@@ -1,24 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atuomine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/01 14:03:36 by atuomine          #+#    #+#             */
+/*   Updated: 2020/06/01 14:03:37 by atuomine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lemin.h"
 
-static void		print_input(t_input *input)
+void			handle_error(void)
 {
-	char	*output;
-	char	*tmp;
-	int		len;
-
-	output = NULL;
-	len = 0;
-	while (input)
-	{
-		tmp = ft_strjoin_new(output, input->line, &len, '\n');
-		if (output)
-			free(output);
-		output = tmp;
-		input = input->next;
-		if (len > 1000 || !input)
-			print_output(&output, &len);
-	}
-	ft_putchar('\n');
+	ft_putstr_fd("ERROR\n", 2);
+	exit(EXIT_FAILURE);
 }
 
 static void		find_edges(t_room *room, t_room **start, t_room **end)
@@ -37,21 +34,6 @@ static void		find_edges(t_room *room, t_room **start, t_room **end)
 	}
 	if (!*start || !*end)
 		handle_error();
-}
-
-void			set_input(t_input **input, char *line, int rooms)
-{
-	if (line[0] == '#' && line[1] == '#' &&
-	((rooms && determine_room_type(line) == NORMAL) || !rooms))
-		free(line);
-	else
-	{
-		if (!((*input)->next = (t_input *)malloc(sizeof(t_input))))
-			handle_error();
-		*input = (*input)->next;
-		(*input)->line = line;
-		(*input)->next = NULL;
-	}
 }
 
 static t_route	**get_ants(int *ant_count, t_input **input)
@@ -79,33 +61,62 @@ static t_route	**get_ants(int *ant_count, t_input **input)
 	(*input)->next = NULL;
 	if (!(ants = (t_route **)malloc(sizeof(t_route *) * (*ant_count + 1))))
 		handle_error();
-	ants[*ant_count] = NULL;
 	return (ants);
+}
+
+static void		print_routes(t_route **route)
+{
+	t_fork		*fork;
+	int			forks;
+	int			i;
+
+	printf("Route(s)\n");
+	i = 0;
+	while (route[i])
+	{
+		printf("\n%d. Route (%d room(s))\n", i + 1, route[i]->rooms);
+		fork = route[i]->forks;
+		if (fork)
+			printf("Fork(s)\n");
+		else
+			printf("No forks\n");
+		forks = 1;
+		while (fork)
+		{
+			printf("%d. Fork (from %s to %s)\n", forks++, fork->from->name,
+			fork->to->name);
+			fork = fork->next;
+		}
+		i++;
+	}
 }
 
 int				main(void)
 {
-	t_farm		farm;
 	t_input		*head;
 	t_input		*input;
+	t_farm		farm;
 	char		*line;
 
 	if (!(head = (t_input *)malloc(sizeof(t_input))))
 		handle_error();
 	input = head;
 	farm.ants = get_ants(&farm.ant_count, &input);
+	farm.rooms = NULL;
 	create_room_list(&farm.rooms, &line, &input);
 	if (!line)
 		handle_error();
 	find_edges(farm.rooms, &farm.start, &farm.end);
 	set_links(line, farm.rooms, &input);
-	farm.routes = get_routes_to_end(farm.start);
-	print_input(head);
+	farm.routes = get_routes(farm.start);
+	//print_input(head);
 	farm.route_count = count_routes(farm.routes);
 	farm.ordered = routes_to_array(farm.route_count, farm.routes);
 	order_routes(farm.ordered);
+	print_routes(farm.ordered);
 	farm.start->ant_count = farm.ant_count;
-	farm.needed_routes = count_needed_routes(farm.routes, farm.ordered[0]);
+	/*farm.path_count = count_max_path_count(farm.routes, farm.ordered[0]);
 	solve(farm);
+	free_memory(farm);*/
 	return (0);
 }

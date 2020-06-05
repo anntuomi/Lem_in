@@ -1,48 +1,54 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   solve.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atuomine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/01 14:04:15 by atuomine          #+#    #+#             */
+/*   Updated: 2020/06/01 14:04:17 by atuomine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lemin.h"
 
-void			print_output(char **output, int *len)
-{
-	write(1, *output, *len);
-	free(*output);
-	*output = NULL;
-	*len = 0;
-}
-
-int				calculate_moves(t_routes **routes, int needed_routes,
+int				calculate_moves(t_routes **routes, int path_count,
 int ant_count)
 {
 	int			moves;
 	int			rooms;
 	int			i;
 
-	i = 0;
 	rooms = 0;
-	while (i < needed_routes)
+	i = 0;
+	while (i < path_count)
 		rooms += routes[i++]->rooms - 2;
-	moves = (ant_count + rooms) / needed_routes +
-	(moves % needed_routes ? 1 : 0);
+	moves = (ant_count + rooms) / path_count +
+	((ant_count + rooms) % path_count ? 1 : 0);
 	return (moves);
 }
 
-static void		assign_paths(t_route **ants, t_routes **routes,
-int needed_routes, int ant_count)
+static void		assign_paths(t_route **ants, int ant_count, t_routes **routes,
+int path_count)
 {
 	int			moves;
 	int			i;
 	int			j;
 
-	moves = calculate_moves(routes, needed_routes, ant_count);
+	moves = calculate_moves(routes, path_count, ant_count);
 	i = 0;
 	j = 0;
 	while (i < ant_count)
 	{
-		if (j == needed_routes || routes[j]->rooms - 1 > moves)
+		if (j == path_count || routes[j]->rooms - 1 > moves)
 		{
 			j = 0;
 			moves--;
 		}
 		ants[i++] = routes[j++]->route;
 	}
+	ants[i] = NULL;
+	free(routes);
 }
 
 void			solve(t_farm farm)
@@ -52,21 +58,26 @@ void			solve(t_farm farm)
 	char		*line;
 	char		*tmp;
 	int			len;
+	int			moves;
 
-	output = NULL;
-	line = NULL;
 	used_routes = determine_used_routes(&farm);
 	order_routes(used_routes);
-	assign_paths(farm.ants, used_routes, farm.needed_routes, farm.ant_count);
+	assign_paths(farm.ants, farm.ant_count, used_routes, farm.path_count);
+	output = NULL;
 	len = 0;
+	moves = 0;
 	while (farm.end->ant_count != farm.ant_count)
 	{
 		line = move_ants(farm.ants);
-		tmp = ft_strjoin_new(output, line, &len, '\n');
-		free(output);
+		tmp = ft_append(output, line, &len, '\n');
+		if (output)
+			free(output);
 		output = tmp;
 		free(line);
 		if (len > 1000 || farm.end->ant_count == farm.ant_count)
 			print_output(&output, &len);
+		moves++;
 	}
+	char *result = ft_itoa(moves);
+	write(1, result, strlen(result));
 }

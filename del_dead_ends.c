@@ -1,45 +1,58 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   del_dead_ends.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atuomine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/01 14:02:04 by atuomine          #+#    #+#             */
+/*   Updated: 2020/06/01 14:02:08 by atuomine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lemin.h"
 
-static t_routes	*del_route(t_routes *routes)
+static void		del_route(t_route **route, t_route *prev)
 {
-	t_routes	*next;
-	t_route		*route;
-	t_route		*tmp;
+	t_route		*next;
+	t_fork		*fork;
+	t_fork		*tmp;
 
-	next = routes->next;
-	route = routes->route;
-	while (route)
+	next = (*route)->next;
+	if (prev)
+		prev->next = next;
+	fork = (*route)->forks;
+	while (fork)
 	{
-		tmp = route;
-		route = route->next;
+		tmp = fork;
+		fork = fork->next;
 		free(tmp);
 	}
-	free(routes);
-	return (next);
+	free(*route);
+	*route = next;
 }
 
-t_routes		*del_dead_ends(t_routes *route)
+t_route			*del_dead_ends(t_route *route)
 {
-	t_routes	*head;
-	t_routes	*previous;
+	t_route		*head;
+	t_route		*prev;
 
 	while (route && !route->rooms)
-	{
-		previous = route;
-		route = del_route(previous);
-	}
+		del_route(&route, NULL);
 	if (!route)
 		handle_error();
 	head = route;
-	previous = route;
+	prev = route;
 	route = route->next;
 	while (route)
 	{
 		if (!route->rooms)
-			previous->next = del_route(route);
+			del_route(&route, prev);
 		else
-			previous = previous->next;
-		route = previous->next;
+		{
+			route = route->next;
+			prev = prev->next;
+		}
 	}
 	return (head);
 }

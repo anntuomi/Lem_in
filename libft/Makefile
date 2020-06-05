@@ -26,7 +26,7 @@ SRC = ft_atoi.c ft_bzero.c ft_isalnum.c ft_isalpha.c \
 	  ft_strnstr.c ft_strrchr.c ft_strsplit.c ft_strstr.c \
 	  ft_strsub.c ft_strtrim.c ft_tolower.c ft_toupper.c \
 	  ft_lstadd.c ft_lstnew.c ft_atoll.c get_next_line.c \
-	  ft_2ddel.c ft_isnum.c
+	ft_isnum.c
 OBJECT = ft_atoi.o ft_bzero.o ft_isalnum.o ft_isalpha.o \
 	  ft_isascii.o ft_isdigit.o ft_isprint.o ft_itoa.o \
 	  ft_memalloc.o ft_memccpy.o ft_memchr.o ft_memcmp.o \
@@ -41,7 +41,7 @@ OBJECT = ft_atoi.o ft_bzero.o ft_isalnum.o ft_isalpha.o \
 	  ft_strnstr.o ft_strrchr.o ft_strsplit.o ft_strstr.o \
 	  ft_strsub.o ft_strtrim.o ft_tolower.o ft_toupper.o \
 	  ft_lstadd.o ft_lstnew.o ft_atoll.o get_next_line.o \
-	  ft_2ddel.o ft_isnum.o
+	  ft_isnum.o
 SRC2 = ft_printf/addr.c ft_printf/base.c ft_printf/char_and_string.c \
 	   ft_printf/conversion.c ft_printf/decimal.c ft_printf/decimal_long.c \
 	   ft_printf/extraprints.c ft_printf/float.c ft_printf/float_long.c \

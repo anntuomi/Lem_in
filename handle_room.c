@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_room.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atuomine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/01 14:03:04 by atuomine          #+#    #+#             */
+/*   Updated: 2020/06/01 14:03:06 by atuomine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lemin.h"
 
 static t_room	*new_room(int room_type, char **input)
@@ -19,14 +31,14 @@ static t_room	*new_room(int room_type, char **input)
 	new->ant_count = 0;
 	new->paths = NULL;
 	new->next = NULL;
-	ft_2ddel(input);
+	ft_delete(input);
 	return (new);
 }
 
-static t_room	*save_room(t_room *room, t_room **head, char **input,
-int *room_type)
+static t_room	*save_room(t_room *room, t_room **head, int *room_type,
+char **input)
 {
-	if (room == NULL)
+	if (!room)
 	{
 		room = new_room(*room_type, input);
 		*head = room;
@@ -50,8 +62,8 @@ static int		validate_room_input(char **input, t_room **head)
 		size++;
 	if (size == 1 && ft_strchr(input[0], '-'))
 	{
-		ft_2ddel(input);
-		return (NOTROOM);
+		ft_delete(input);
+		return (NOT_ROOM);
 	}
 	if (size != 3 || !ft_isnum(input[1]) || !ft_isnum(input[2]))
 		handle_error();
@@ -62,7 +74,7 @@ static int		validate_room_input(char **input, t_room **head)
 			handle_error();
 		room = room->next;
 	}
-	return (ISROOM);
+	return (IS_ROOM);
 }
 
 int				determine_room_type(char *line)
@@ -93,9 +105,9 @@ void			create_room_list(t_room **head, char **line, t_input **lines)
 		{
 			if (!(input = ft_strsplit(*line, ' ')))
 				handle_error();
-			if (validate_room_input(input, head) == NOTROOM)
+			if (validate_room_input(input, head) == NOT_ROOM)
 				break ;
-			room = save_room(room, head, input, &room_type);
+			room = save_room(room, head, &room_type, input);
 		}
 		set_input(lines, *line, 1);
 	}

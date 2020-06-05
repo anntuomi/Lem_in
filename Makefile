@@ -12,10 +12,12 @@
 
 NAME = lem-in
 INC = libft/includes
-SRC = count_needed_routes.c del_dead_ends.c determine_used_routes.c \
-find_next_unique.c ft_strjoin_new.c get_routes_to_end.c get_routes.c \
-handle_error.c handle_room.c initialize_arrays.c main.c move_ants.c \
+#SRC = count_max_path_count.c del_dead_ends.c determine_used_routes.c \
+find_next_unique.c free_memory.c ft_append.c get_route.c get_routes.c \
+handle_room.c initialize_variables.c input_and_output.c main.c move_ants.c \
 order_routes.c set_links.c solve.c
+SRC = del_dead_ends.c free_memory.c ft_append.c get_route.c get_routes.c \
+handle_room.c input_and_output.c main.c order_routes.c set_links.c
 OBJECT = $(SRC:%.c=%.o)
 LIBRARY = libft
 
@@ -30,8 +32,10 @@ $(NAME):
 	
 clean:
 			/bin/rm -f $(OBJECT)
+			make clean -C libft/
 
 fclean:		clean
 			/bin/rm -f $(NAME)
+			#make fclean -C libft/
 
 re:			fclean all
