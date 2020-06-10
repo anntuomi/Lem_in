@@ -16,8 +16,8 @@ INC = libft/includes
 find_next_unique.c free_memory.c ft_append.c get_route.c get_routes.c \
 handle_room.c initialize_variables.c input_and_output.c main.c move_ants.c \
 order_routes.c set_links.c solve.c
-SRC = del_dead_ends.c free_memory.c ft_append.c get_route.c get_routes.c \
-handle_room.c input_and_output.c main.c order_routes.c set_links.c
+SRC = free_memory.c ft_append.c get_route.c get_routes.c handle_room.c \
+input_and_output.c main.c order_routes.c set_links.c
 OBJECT = $(SRC:%.c=%.o)
 LIBRARY = libft
 

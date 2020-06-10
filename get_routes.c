@@ -102,7 +102,10 @@ void			set_routes(t_route *route, t_room *room, t_room *prev_room)
 			set_fork(route, &fork, prev_room, room);
 		else if (!paths)
 		{
-			route->rooms = 0;
+			if (!prev_route)
+				route->rooms = 0;
+			else
+				del_route(&route, prev_route);
 			break ;
 		}
 		route->rooms++;
@@ -112,9 +115,16 @@ void			set_routes(t_route *route, t_room *room, t_room *prev_room)
 t_route			*get_routes(t_room *start)
 {
 	t_route		*route;
+	t_route		*tmp;
 
 	route = get_route();
 	set_routes(route, start, start);
-	route = del_dead_ends(route);
+	if (!route->rooms)
+	{
+		tmp = route;
+		if (!(route = route->next))
+			handle_error();
+		del_route(&tmp, NULL);
+	}
 	return (route);
 }

@@ -12,6 +12,26 @@
 
 #include "lemin.h"
 
+void			del_route(t_route **route, t_route *prev)
+{
+	t_route		*next;
+	t_fork		*fork;
+	t_fork		*tmp;
+
+	next = (*route)->next;
+	if (prev)
+		prev->next = next;
+	fork = (*route)->forks;
+	while (fork)
+	{
+		tmp = fork;
+		fork = fork->next;
+		free(tmp);
+	}
+	free(*route);
+	*route = NULL;
+}
+
 int				is_unvisited(t_room *room, t_room *prev, t_fork *fork)
 {
 	if (prev != room)
