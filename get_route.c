@@ -34,7 +34,8 @@ void			del_route(t_route **route, t_route *prev)
 
 int				is_unvisited(t_room *room, t_room *prev, t_fork *fork)
 {
-	if (prev != room)
+	if ((prev->type == START || !room->start_connection) &&
+	room->id != prev->id)
 	{
 		while (fork)
 		{

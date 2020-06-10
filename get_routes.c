@@ -114,9 +114,18 @@ void			set_routes(t_route *route, t_room *room, t_room *prev_room)
 
 t_route			*get_routes(t_room *start)
 {
+	t_path		*path;
+	t_room		*room;
 	t_route		*route;
 	t_route		*tmp;
 
+	path = start->paths;
+	while (path)
+	{
+		room = path->room;
+		room->start_connection = 1;
+		path = path->next;
+	}
 	route = get_route();
 	set_routes(route, start, start);
 	if (!route->rooms)

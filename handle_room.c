@@ -29,6 +29,7 @@ static t_room	*new_room(int room_type, char **input)
 	new->type = room_type;
 	new->id = id++;
 	new->ant_count = 0;
+	new->start_connection = 0;
 	new->paths = NULL;
 	new->next = NULL;
 	ft_delete(input);

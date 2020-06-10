@@ -47,6 +47,7 @@ typedef struct	s_room
 	int				type;
 	int				id;
 	int				ant_count;
+	int				start_connection;
 	t_path			*paths;
 	struct s_room	*next;
 }				t_room;
