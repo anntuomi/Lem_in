@@ -96,7 +96,8 @@ char			*ft_append(char const *s1, char const *s2, int *len, char c);
 int				count_routes(t_route *routes);
 int				count_unvisited(t_path *path, t_room *prev, t_fork *forks);
 int				determine_room_type(char *line);
-int				is_unvisited(t_room *room, t_room *prev, t_fork *fork);
+int				is_unvisited(t_room *room, int normal, t_room *prev,
+				t_fork *fork);
 void			set_fork(t_route *route, t_fork **fork, t_room *from,
 				t_room *to);
 void			set_route_before_fork(t_route *route, t_fork **fork,
@@ -118,7 +119,7 @@ void			print_input(t_input *input);
 void			print_output(char **output, int *len);
 void			set_input(t_input **input, char *line, int room);
 void			set_links(char *line, t_room *room, t_input **input);
-void			set_routes(t_route *route, t_room *room, t_room *prev);
+void			set_routes(t_route *route, t_room *room, t_room *prev_room);
 //void            solve(t_farm farm);
 
 #endif

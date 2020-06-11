@@ -38,29 +38,29 @@ static void		set_fork_routes(t_room **room, t_room **prev, t_route *route,
 int *paths)
 {
 	t_path		*path;
-	t_room		*bef;
 	int			first;
+	t_room		*new;
 
 	path = (*room)->paths;
-	bef = *prev;
 	if (is_connected_to_end(path, paths, room, prev))
 		return ;
 	first = 1;
 	while (path)
 	{
-		if (is_unvisited(path->room, bef, route->forks))
+		if (is_unvisited(path->room, (*room)->type, *prev, route->forks))
 		{
 			if (first)
 			{
-				*prev = *room;
-				*room = path->room;
+				new = path->room;
 				first = 0;
 			}
 			else
-				set_routes(route, path->room, *prev);
+				set_routes(route, path->room, *room);
 		}
 		path = path->next;
 	}
+	*prev = *room;
+	*room = new;
 	*paths = (first ? 0 : *paths);
 }
 
