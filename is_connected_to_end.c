@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_route.c                                        :+:      :+:    :+:   */
+/*   is_connected_to_end.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atuomine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,14 +12,43 @@
 
 #include "lemin.h"
 
-void			del_route(t_route **route, t_route *prev)
+void			*del_empty_branches(t_branch **head)
+{
+	t_branch	*branch;
+	t_branch	*prev;
+
+	while (*head && !(*head)->routes)
+	{
+		branch = *head;
+		*head = (*head)->next;
+		free(branch);
+	}
+	if (!(prev = *head))
+		handle_error();
+	branch = prev->next;
+	while (branch)
+	{
+		if (!branch->routes)
+		{
+			prev->next = branch->next;
+			free(branch);
+		}
+		else
+			prev = prev->next;
+		branch = prev->next;
+	}
+}
+
+void			del_route(t_branch *branch, t_route **route, t_route *prev)
 {
 	t_route		*next;
 	t_fork		*fork;
 	t_fork		*tmp;
 
 	next = (*route)->next;
-	if (prev)
+	if (!prev)
+		branch->route = next;
+	else
 		prev->next = next;
 	fork = (*route)->forks;
 	while (fork)
@@ -29,13 +58,13 @@ void			del_route(t_route **route, t_route *prev)
 		free(tmp);
 	}
 	free(*route);
-	*route = NULL;
+	*route = next;
+	branch->routes--;
 }
 
-int				is_unvisited(t_room *room, int normal, t_room *prev,
-t_fork *fork)
+int				is_unvisited(t_room *room, t_room *prev, t_fork *fork)
 {
-	if ((!normal || !room->start_connection) && room->id != prev->id)
+	if (!room->start_connection && room->id != prev->id)
 	{
 		while (fork)
 		{
@@ -48,50 +77,21 @@ t_fork *fork)
 	return (0);
 }
 
-void			set_fork(t_route *route, t_fork **fork, t_room *from,
-t_room *to)
+int				is_connected_to_end(t_path *path, t_room **end, int *fork)
 {
-	t_fork		*new;
+	t_room		*room;
+	int			paths;
 
-	if (!(new = (t_fork *)malloc(sizeof(t_fork))))
-		handle_error();
-	new->from = from;
-	new->to = to;
-	new->next = NULL;
-	if (!*fork)
+	paths = 0;
+	while (path)
 	{
-		*fork = new;
-		route->forks = *fork;
+		room = path->room;
+		if (room->type == END)
+			*end = room;
+		paths++;
+		path = path->next;
 	}
-	else
-	{
-		(*fork)->next = new;
-		*fork = (*fork)->next;
-	}
-}
-
-void			set_route_before_fork(t_route *route, t_fork **fork,
-t_route *before_fork)
-{
-	t_fork		*bf;
-
-	bf = before_fork->forks;
-	while (bf)
-	{
-		set_fork(route, fork, bf->from, bf->to);
-		bf = bf->next;
-	}
-	route->rooms = before_fork->rooms;
-}
-
-t_route			*get_route(void)
-{
-	t_route		*route;
-
-	if (!(route = (t_route *)malloc(sizeof(t_route))))
-		handle_error();
-	route->forks = NULL;
-	route->rooms = 1;
-	route->next = NULL;
-	return (route);
+	if (paths > 2)
+		*fork = 1;
+	return (*end ? 1 : 0);
 }

@@ -64,30 +64,41 @@ static t_route	**get_ants(int *ant_count, t_input **input)
 	return (ants);
 }
 
-static void		print_routes(t_route **route)
+static void		print_branches(t_branch *branch)
 {
+	t_route		*route;
 	t_fork		*fork;
+	int			branches;
+	int			routes;
 	int			forks;
-	int			i;
 
-	printf("Route(s)\n");
-	i = 0;
-	while (route[i])
+	branches = 1;
+	while (branch)
 	{
-		printf("\n%d. Route (%d room(s))\n", i + 1, route[i]->rooms);
-		fork = route[i]->forks;
-		if (fork)
-			printf("Fork(s)\n");
-		else
-			printf("No forks\n");
-		forks = 1;
-		while (fork)
+		printf("%d. Branch (%d route(s))\n", branches, branch->routes);
+		route = branch->route;
+		routes = 1;
+		while (route)
 		{
-			printf("%d. Fork (from %s to %s)\n", forks++, fork->from->name,
-			fork->to->name);
-			fork = fork->next;
+			printf("%d.%d Route (%d room(s))\n", branches, routes,
+			route->rooms);
+			fork = route->forks;
+			forks = 1;
+			while (fork)
+			{
+				printf("%d.%d.%d Fork (from %s to %s)\n", branches, routes,
+				forks++, fork->from->name, fork->to->name);
+				fork = fork->next;
+			}
+			routes++;
+			if (route->next)
+				printf("\n");
+			route = route->next;
 		}
-		i++;
+		branches++;
+		if (branch->next)
+			printf("\n\n");
+		branch = branch->next;
 	}
 }
 
@@ -108,14 +119,14 @@ int				main(void)
 		handle_error();
 	find_edges(farm.rooms, &farm.start, &farm.end);
 	set_links(line, farm.rooms, &input);
-	farm.routes = get_routes(farm.start);
-	//print_input(head);
+	farm.branches = get_branches_to_end(farm.start);
+	print_branches(farm.branches);
+	/*print_input(head);
 	farm.route_count = count_routes(farm.routes);
 	farm.ordered = routes_to_array(farm.route_count, farm.routes);
 	order_routes(farm.ordered);
-	print_routes(farm.ordered);
 	farm.start->ant_count = farm.ant_count;
-	/*farm.path_count = count_max_path_count(farm.routes, farm.ordered[0]);
+	farm.path_count = count_max_path_count(farm.routes, farm.ordered[0]);
 	solve(farm);
 	free_memory(farm);*/
 	return (0);
