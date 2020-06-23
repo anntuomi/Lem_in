@@ -79,7 +79,7 @@ static int		set_routes(t_branch *branch, t_route **route, t_route **prev)
 	if (first->room->type != END)
 	{
 		fork = 0;
-		if (!is_connected_to_end(first->room->paths, &room, &fork))
+		if (!is_connected_to_end(first->room, &room, &fork))
 			set_fork_routes(branch, route, &room, first->room->paths);
 		if (room)
 			set_route(first, room, fork);

@@ -63,25 +63,24 @@ static t_branch	*get_branches(t_room *start)
 	t_branch	*head;
 	t_branch	*branch;
 	t_path		*path;
+	t_room		*room;
+	int			fork;
 
-	head = NULL;
-	path = start->paths;
+	room = NULL;
+	fork = 0;
+	if (is_connected_to_end(start, &room, &fork))
+		return (get_branch(room, start, fork));
+	if (!start->paths)
+		handle_error();
+	head = get_branch(start->paths->room, start, fork);
+	branch = head;
+	path = start->paths->next;
 	while (path)
 	{
-		if (!head)
-		{
-			head = get_branch(path->room, start, (path->next ? 1 : 0));
-			branch = head;
-		}
-		else
-		{
-			branch->next = get_branch(path->room, start, 1);
-			branch = branch->next;
-		}
+		branch->next = get_branch(path->room, start, 1);
+		branch = branch->next;
 		path = path->next;
 	}
-	if (!head)
-		handle_error();
 	return (head);
 }
 

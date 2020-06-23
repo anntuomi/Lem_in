@@ -120,7 +120,7 @@ void			order_routes(t_route **routes);
 void			print_input(t_input *input);
 void			print_output(char **output, int *len);
 void			solve(t_farm farm);*/
-int				is_connected_to_end(t_path *path, t_room **end, int *fork);
+int				is_connected_to_end(t_room *room, t_room **end, int *fork);
 int				is_unvisited(t_room *room, t_room *prev, t_fork *fork);
 t_branch		*get_branches_to_end(t_room *start);
 t_route			*get_fork_route(t_route *before_fork, t_room *room);

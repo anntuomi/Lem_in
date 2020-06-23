@@ -77,21 +77,23 @@ int				is_unvisited(t_room *room, t_room *prev, t_fork *fork)
 	return (0);
 }
 
-int				is_connected_to_end(t_path *path, t_room **end, int *fork)
+int				is_connected_to_end(t_room *room, t_room **end, int *fork)
 {
-	t_room		*room;
+	t_path		*path;
+	t_room		*next;
 	int			paths;
 
 	paths = 0;
+	path = room->paths;
 	while (path)
 	{
-		room = path->room;
-		if (room->type == END)
-			*end = room;
+		next = path->room;
+		if (next->type == END)
+			*end = next;
 		paths++;
 		path = path->next;
 	}
-	if (paths > 2)
+	if ((room->type == START && paths > 1) || paths > 2)
 		*fork = 1;
-	return (*end ? 1 : 0);
+	return ((*end ? 1 : 0));
 }
