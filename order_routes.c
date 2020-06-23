@@ -12,57 +12,72 @@
 
 #include "lemin.h"
 
-void			order_routes(t_route **routes)
+void			order_routes(t_branch **branch, t_route *tmp)
 {
-	t_route		*tmp;
 	int			i;
-	int			j;
+	int			ii;
+	int			iii;
 
 	i = 0;
-	while (routes[i])
+	while (branch[i])
 	{
-		j = i + 1;
-		while (routes[j])
+		ii = 0;
+		while (branch[i]->array[ii])
 		{
-			if (routes[j]->rooms < routes[i]->rooms)
+			iii = ii + 1;
+			while (branch[i]->array[iii])
 			{
-				tmp = routes[i];
-				routes[i] = routes[j];
-				routes[j] = tmp;
+				if (branch[i]->array[iii]->rooms < branch[i]->array[ii]->rooms)
+				{
+					tmp = branch[i]->array[ii];
+					branch[i]->array[ii] = branch[i]->array[iii];
+					branch[i]->array[iii] = tmp;
+				}
+				iii++;
 			}
-			j++;
+			ii++;
 		}
 		i++;
 	}
 }
 
-t_route			**routes_to_array(int route_count, t_route *routes)
+t_branch		**branches_to_array(int count, t_branch *branch, t_route *route)
 {
-	t_route		**array_routes;
+	t_branch	**array;
 	int			i;
+	int			j;
 
-	i = 0;
-	if (!(array_routes = (t_route **)malloc(sizeof(t_route *) *
-	(route_count + 1))))
+	if (!(array = (t_branch **)malloc(sizeof(t_branch *) * (count + 1))))
 		handle_error();
-	while (routes)
+	i = 0;
+	while (branch)
 	{
-		array_routes[i] = routes;
-		i++;
-		routes = routes->next;
+		array[i] = branch;
+		if (!(array[i]->array = (t_route **)malloc(sizeof(t_route *) *
+		(array[i]->routes + 1))))
+			handle_error();
+		j = 0;
+		route = array[i]->route;
+		while (route)
+		{
+			array[i]->array[j++] = route;
+			route = route->next;
+		}
+		array[i++]->array[j] = NULL;
+		branch = branch->next;
 	}
-	array_routes[i] = NULL;
-	return (array_routes);
+	array[i] = NULL;
+	return (array);
 }
 
-int				count_routes(t_route *routes)
+int				count_branches(t_branch *branch)
 {
 	int			count;
 
 	count = 0;
-	while (routes)
+	while (branch)
 	{
-		routes = routes->next;
+		branch = branch->next;
 		count++;
 	}
 	return (count);

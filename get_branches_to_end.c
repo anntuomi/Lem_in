@@ -52,6 +52,7 @@ static t_branch	*get_branch(t_room *room, t_room *prev, int fork)
 	branch->route = get_route(NULL, 2, room, prev);
 	if (fork)
 		set_fork(branch->route, prev, room);
+	branch->array = NULL;
 	branch->routes = 1;
 	branch->next = NULL;
 	room->start_connection = 1;

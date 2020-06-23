@@ -64,41 +64,37 @@ static t_route	**get_ants(int *ant_count, t_input **input)
 	return (ants);
 }
 
-static void		print_branches(t_branch *branch)
+static void		print_branches(t_branch **branch)
 {
-	t_route		*route;
+	t_route		**route;
 	t_fork		*fork;
-	int			branches;
-	int			routes;
-	int			forks;
+	int			i;
+	int			ii;
+	int			iii;
 
-	branches = 1;
-	while (branch)
+	i = 0;
+	while (branch[i])
 	{
-		printf("%d. Branch (%d route(s))\n", branches, branch->routes);
-		route = branch->route;
-		routes = 1;
-		while (route)
+		printf("%d. Branch (%d route(s))\n", i + 1, branch[i]->routes);
+		route = branch[i]->array;
+		ii = 0;
+		while (route[ii])
 		{
-			printf("%d.%d Route (%d room(s))\n", branches, routes,
-			route->rooms);
-			fork = route->forks;
-			forks = 1;
+			printf("%d.%d Route (%d room(s))\n", i + 1, ii + 1,
+			route[ii]->rooms);
+			fork = route[ii]->forks;
+			iii = 1;
 			while (fork)
 			{
-				printf("%d.%d.%d Fork (from %s to %s)\n", branches, routes,
-				forks++, fork->from->name, fork->to->name);
+				printf("%d.%d.%d Fork (from %s to %s)\n", i + 1, ii + 1, iii++,
+				fork->from->name, fork->to->name);
 				fork = fork->next;
 			}
-			routes++;
-			if (route->next)
+			if (route[++ii])
 				printf("\n");
-			route = route->next;
 		}
-		branches++;
-		if (branch->next)
+		if (branch[++i])
 			printf("\n\n");
-		branch = branch->next;
 	}
 }
 
@@ -120,12 +116,12 @@ int				main(void)
 	find_edges(farm.rooms, &farm.start, &farm.end);
 	set_links(line, farm.rooms, &input);
 	farm.branches = get_branches_to_end(farm.start);
-	print_branches(farm.branches);
-	/*print_input(head);
-	farm.route_count = count_routes(farm.routes);
-	farm.ordered = routes_to_array(farm.route_count, farm.routes);
-	order_routes(farm.ordered);
-	farm.start->ant_count = farm.ant_count;
+	//print_input(head);
+	farm.branch_count = count_branches(farm.branches);
+	farm.ordered = branches_to_array(farm.branch_count, farm.branches, NULL);
+	order_routes(farm.ordered, NULL);
+	print_branches(farm.ordered);
+	/*farm.start->ant_count = farm.ant_count;
 	farm.path_count = count_max_path_count(farm.routes, farm.ordered[0]);
 	solve(farm);
 	free_memory(farm);*/

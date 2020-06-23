@@ -72,6 +72,7 @@ typedef struct	s_route
 typedef struct	s_branch
 {
 	t_route			*route;
+	t_route			**array;
 	int				routes;
 	struct s_branch	*next;
 }				t_branch;
@@ -84,8 +85,8 @@ typedef struct	s_farm
 	t_room			*start;
 	t_room			*end;
 	t_branch		*branches;
-	int				route_count;
-	t_route			**ordered;
+	int				branch_count;
+	t_branch		**ordered;
 	int				path_count;
 }				t_farm;
 
@@ -109,14 +110,11 @@ char			*move_ants(t_route **ants);
 int				calculate_moves(t_routes **routes, int path_count,
 				int ant_count);
 int				count_max_path_count(t_routes *routes, t_routes *shortest);
-int				count_routes(t_route *routes);
-t_route			**routes_to_array(int route_count, t_route *routes);
 t_routes		**determine_used_routes(t_farm *farm);
 t_routes		*find_next_unique(t_routes **ordered, t_routes **used_routes);
 void			free_memory(t_farm farm);
 void			initialize_variables(int path_count, t_routes ***used_routes,
 				t_routes ***tmp, t_var *var);
-void			order_routes(t_route **routes);
 void			print_input(t_input *input);
 void			print_output(char **output, int *len);
 void			solve(t_farm farm);*/
@@ -128,5 +126,9 @@ void			*del_empty_branches(t_branch **head);
 void			del_route(t_branch *branch, t_route **route, t_route *prev);
 void			set_branches(t_branch *head);
 void			set_fork(t_route *route, t_room *from, t_room *to);
+int				count_branches(t_branch *branch);
+t_branch		**branches_to_array(int count, t_branch *branch,
+				t_route *route);
+void			order_routes(t_branch **branch, t_route *tmp);
 
 #endif
