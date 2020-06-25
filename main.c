@@ -12,14 +12,61 @@
 
 #include "lemin.h"
 
-void			handle_error(void)
+static void		del_paths(t_path *path, t_path **head, int id)
 {
-	ft_putstr_fd("ERROR\n", 2);
-	exit(EXIT_FAILURE);
+	t_path		*prev;
+	t_room		*tmp;
+
+	free(path);
+	prev = NULL;
+	path = *head;
+	while (path)
+	{
+		tmp = path->room;
+		if (tmp->id == id)
+		{
+			if (!prev)
+				*head = path->next;
+			else
+				prev->next = path->next;
+			free(path);
+			break ;
+		}
+		prev = path;
+		path = path->next;
+	}
 }
 
-static void		find_edges(t_room *room, t_room **start, t_room **end)
+static void		del_room(t_room **head, t_room **room)
 {
+	t_room		*cur;
+	t_room		*next;
+
+	cur = *room;
+	while (cur && cur->type == NORMAL && (!cur->paths || !cur->paths->next))
+	{
+		if ((next = (cur->paths ? cur->paths->room : NULL)))
+			del_paths(cur->paths, &next->paths, cur->id);
+		if (!cur->prev)
+			*head = cur->next;
+		else
+			cur->prev->next = cur->next;
+		if (cur->next)
+			cur->next->prev = cur->prev;
+		if (*room && (*room)->id == cur->id)
+			*room = (*room)->next;
+		free(cur);
+		cur = next;
+	}
+	if (cur && cur->type != NORMAL && !cur->paths)
+		handle_error();
+}
+
+static void		find_edges(t_room **head, t_room **start, t_room **end)
+{
+	t_room		*room;
+
+	room = *head;
 	*start = NULL;
 	*end = NULL;
 	while (room)
@@ -28,9 +75,14 @@ static void		find_edges(t_room *room, t_room **start, t_room **end)
 			*start = room;
 		else if (room->type == END && !*end)
 			*end = room;
-		else if (room->type == START || room->type == END)
+		else if (room->type != NORMAL)
 			handle_error();
-		room = room->next;
+		if (room->type != NORMAL && !room->paths)
+			handle_error();
+		else if (room->type == NORMAL && (!room->paths || !room->paths->next))
+			del_room(head, &room);
+		else
+			room = room->next;
 	}
 	if (!*start || !*end)
 		handle_error();
@@ -98,6 +150,27 @@ static void		print_branches(t_branch **branch)
 	}
 }
 
+static void		print_rooms(t_room *room)
+{
+	t_path		*path;
+	t_room		*tmp;
+	int			i;
+
+	i = 1;
+	while (room)
+	{
+		printf("%d. %s\n", i++, room->name);
+		path = room->paths;
+		while (path)
+		{
+			tmp = path->room;
+			printf("- %s\n", tmp->name);
+			path = path->next;
+		}
+		room = room->next;
+	}
+}
+
 int				main(void)
 {
 	t_input		*head;
@@ -113,15 +186,17 @@ int				main(void)
 	create_room_list(&farm.rooms, &line, &input);
 	if (!line)
 		handle_error();
-	find_edges(farm.rooms, &farm.start, &farm.end);
 	set_links(line, farm.rooms, &input);
-	farm.branches = get_branches_to_end(farm.start);
-	//print_input(head);
+	//print_rooms(farm.rooms);
+	find_edges(&farm.rooms, &farm.start, &farm.end);
+	print_rooms(farm.rooms);
+	/*farm.branches = get_branches_to_end(farm.start);
+	print_input(head);
 	farm.branch_count = count_branches(farm.branches);
 	farm.ordered = branches_to_array(farm.branch_count, farm.branches, NULL);
 	order_routes(farm.ordered, NULL);
 	print_branches(farm.ordered);
-	/*farm.start->ant_count = farm.ant_count;
+	farm.start->ant_count = farm.ant_count;
 	farm.path_count = count_max_path_count(farm.routes, farm.ordered[0]);
 	solve(farm);
 	free_memory(farm);*/
