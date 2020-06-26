@@ -12,44 +12,17 @@
 
 #include "lemin.h"
 
-void			*del_empty_branches(t_branch **head)
+void			del_route(t_branch **branch, t_branch *prev_branch,
+t_route **route, t_route *prev_route)
 {
-	t_branch	*branch;
-	t_branch	*prev;
-
-	while (*head && !(*head)->routes)
-	{
-		branch = *head;
-		*head = (*head)->next;
-		free(branch);
-	}
-	if (!(prev = *head))
-		handle_error();
-	branch = prev->next;
-	while (branch)
-	{
-		if (!branch->routes)
-		{
-			prev->next = branch->next;
-			free(branch);
-		}
-		else
-			prev = prev->next;
-		branch = prev->next;
-	}
-}
-
-void			del_route(t_branch *branch, t_route **route, t_route *prev)
-{
-	t_route		*next;
+	t_branch	*next;
 	t_fork		*fork;
 	t_fork		*tmp;
 
-	next = (*route)->next;
-	if (!prev)
-		branch->route = next;
+	if (!prev_route)
+		(*branch)->route = (*route)->next;
 	else
-		prev->next = next;
+		prev_route->next = (*route)->next;
 	fork = (*route)->forks;
 	while (fork)
 	{
@@ -58,8 +31,15 @@ void			del_route(t_branch *branch, t_route **route, t_route *prev)
 		free(tmp);
 	}
 	free(*route);
-	*route = next;
-	branch->routes--;
+	*route = (!prev_route ? (*branch)->route : prev_route->next);
+	if (!--(*branch)->routes)
+	{
+		next = (*branch)->next;
+		if (prev_branch)
+			prev_branch->next = next;
+		free(*branch);
+		*branch = next;
+	}
 }
 
 int				is_unvisited(t_room *room, t_room *prev, t_fork *fork)

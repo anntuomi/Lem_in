@@ -189,14 +189,14 @@ int				main(void)
 	set_links(line, farm.rooms, &input);
 	//print_rooms(farm.rooms);
 	find_edges(&farm.rooms, &farm.start, &farm.end);
-	print_rooms(farm.rooms);
-	/*farm.branches = get_branches_to_end(farm.start);
-	print_input(head);
+	//print_rooms(farm.rooms);
+	farm.branches = get_branches_to_end(farm.start);
+	//print_input(head);
 	farm.branch_count = count_branches(farm.branches);
 	farm.ordered = branches_to_array(farm.branch_count, farm.branches, NULL);
 	order_routes(farm.ordered, NULL);
 	print_branches(farm.ordered);
-	farm.start->ant_count = farm.ant_count;
+	/*farm.start->ant_count = farm.ant_count;
 	farm.path_count = count_max_path_count(farm.routes, farm.ordered[0]);
 	solve(farm);
 	free_memory(farm);*/

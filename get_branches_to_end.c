@@ -90,7 +90,6 @@ t_branch		*get_branches_to_end(t_room *start)
 	t_branch	*branches;
 
 	branches = get_branches(start);
-	set_branches(branches);
-	del_empty_branches(&branches);
+	set_branches(&branches);
 	return (branches);
 }

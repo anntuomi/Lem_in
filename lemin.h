@@ -123,9 +123,9 @@ int				is_connected_to_end(t_room *room, t_room **end, int *fork);
 int				is_unvisited(t_room *room, t_room *prev, t_fork *fork);
 t_branch		*get_branches_to_end(t_room *start);
 t_route			*get_fork_route(t_route *before_fork, t_room *room);
-void			*del_empty_branches(t_branch **head);
-void			del_route(t_branch *branch, t_route **route, t_route *prev);
-void			set_branches(t_branch *head);
+void			del_route(t_branch **branch, t_branch *prev_branch,
+				t_route **route, t_route *prev_route);
+void			set_branches(t_branch **head);
 void			set_fork(t_route *route, t_room *from, t_room *to);
 int				count_branches(t_branch *branch);
 t_branch		**branches_to_array(int count, t_branch *branch,
