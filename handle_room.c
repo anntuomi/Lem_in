@@ -30,6 +30,9 @@ static t_room	*new_room(int room_type, char **input, t_room *prev)
 	new->id = id++;
 	new->ant_count = 0;
 	new->start_connection = 0;
+	new->used = 0;
+	new->visited = 0;
+	new->depth = -1;
 	new->paths = NULL;
 	new->prev = prev;
 	new->next = NULL;

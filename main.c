@@ -45,6 +45,7 @@ static void		del_room(t_room **head, t_room **room)
 	cur = *room;
 	while (cur && cur->type == NORMAL && (!cur->paths || !cur->paths->next))
 	{
+		free(cur->name);
 		if ((next = (cur->paths ? cur->paths->room : NULL)))
 			del_paths(cur->paths, &next->paths, cur->id);
 		if (!cur->prev)
@@ -171,6 +172,26 @@ static void		print_rooms(t_room *room)
 	}
 }
 
+typedef struct	s_node
+{
+	t_room		*prev_room;
+	t_room		*room;
+	struct s_node *next;
+	struct s_node *previous;
+	int			id;
+	int			path_count;
+}				t_node;
+
+typedef struct	s_level
+{
+	t_node		*nodes;
+	int			depth;
+	int			size;
+	int			end_counter;
+	int			end_capacity;
+	struct s_level *next;
+}				t_level;
+
 int				main(void)
 {
 	t_input		*head;
@@ -189,13 +210,15 @@ int				main(void)
 	set_links(line, farm.rooms, &input);
 	//print_rooms(farm.rooms);
 	find_edges(&farm.rooms, &farm.start, &farm.end);
+	t_route *route;
+	route = find_shortest_route(farm);
 	//print_rooms(farm.rooms);
-	farm.branches = get_branches_to_end(farm.start);
+	//farm.branches = get_branches_to_end(farm.start);
 	//print_input(head);
-	farm.branch_count = count_branches(farm.branches);
-	farm.ordered = branches_to_array(farm.branch_count, farm.branches, NULL);
-	order_routes(farm.ordered, NULL);
-	print_branches(farm.ordered);
+	//farm.branch_count = count_branches(farm.branches);
+	//farm.ordered = branches_to_array(farm.branch_count, farm.branches, NULL);
+	//order_routes(farm.ordered, NULL);
+	//print_branches(farm.ordered);
 	/*farm.start->ant_count = farm.ant_count;
 	farm.path_count = count_max_path_count(farm.routes, farm.ordered[0]);
 	solve(farm);

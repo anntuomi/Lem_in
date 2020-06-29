@@ -19,6 +19,8 @@
 # include "get_next_line.h"
 # include <stdio.h>
 
+# define FALSE 0
+# define TRUE 1
 # define INT_MIN -2147483648
 # define INT_MAX 2147483647
 # define START 0
@@ -36,6 +38,7 @@ typedef struct	s_input
 typedef struct	s_path
 {
 	void			*room;
+	int				flow;
 	struct s_path	*next;
 }				t_path;
 
@@ -48,6 +51,9 @@ typedef struct	s_room
 	int				id;
 	int				ant_count;
 	int				start_connection;
+	int				used;
+	int				visited;
+	int				depth;
 	t_path			*paths;
 	struct s_room	*prev;
 	struct s_room	*next;
@@ -100,6 +106,8 @@ typedef struct	s_var
 	int				max_path_count;
 }				t_var;
 
+
+t_route			*find_shortest_route(t_farm farm);
 int				determine_room_type(char *line);
 void			create_room_list(t_room **head, char **line, t_input **input);
 void			ft_delete(char **array);
