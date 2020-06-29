@@ -12,26 +12,6 @@
 
 #include "lemin.h"
 
-typedef struct	s_node
-{
-	t_room		*prev_room;
-	t_room		*room;
-	struct s_node *next;
-	struct s_node *previous;
-	int			id;
-	int			path_count;
-}				t_node;
-
-typedef struct	s_level
-{
-	t_node		*nodes;
-	int			depth;
-	int			size;
-	int			end_counter;
-	int			end_capacity;
-	struct s_level *next;
-}				t_level;
-
 t_level	*create_starting_level(t_room *start)
 {
 	t_node *current;

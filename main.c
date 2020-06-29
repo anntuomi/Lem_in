@@ -172,25 +172,18 @@ static void		print_rooms(t_room *room)
 	}
 }
 
-typedef struct	s_node
+void			print_route(t_route *route, t_room *start, t_room *end)
 {
-	t_room		*prev_room;
-	t_room		*room;
-	struct s_node *next;
-	struct s_node *previous;
-	int			id;
-	int			path_count;
-}				t_node;
+	t_fork *fork;
 
-typedef struct	s_level
-{
-	t_node		*nodes;
-	int			depth;
-	int			size;
-	int			end_counter;
-	int			end_capacity;
-	struct s_level *next;
-}				t_level;
+	fork = route->forks;
+	printf("Start room %s, end room %s\n", start->name, end->name);
+	while (fork)
+	{
+		printf("from %s to %s\n", fork->from->name, fork->to->name);
+		fork = fork->next;
+	}
+}
 
 int				main(void)
 {
@@ -210,8 +203,9 @@ int				main(void)
 	set_links(line, farm.rooms, &input);
 	//print_rooms(farm.rooms);
 	find_edges(&farm.rooms, &farm.start, &farm.end);
-	t_route *route;
-	route = find_shortest_route(farm);
+	t_route *shortest;
+	shortest = find_shortest_route(farm);
+	print_route(shortest, farm.start, farm.end);
 	//print_rooms(farm.rooms);
 	//farm.branches = get_branches_to_end(farm.start);
 	//print_input(head);
