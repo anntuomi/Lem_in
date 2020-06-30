@@ -85,7 +85,7 @@ t_route **route, t_route **prev_route)
 			set_route(first, room, fork);
 		else
 		{
-			del_route(branch, *prev_branch, route, *prev_route);
+			del_route(branch, prev_branch, route, *prev_route);
 			return (0);
 		}
 	}

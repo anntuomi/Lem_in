@@ -12,17 +12,15 @@
 
 #include "lemin.h"
 
-void			del_route(t_branch **branch, t_branch *prev_branch,
+void			del_route(t_branch **branch, t_branch **prev_branch,
 t_route **route, t_route *prev_route)
 {
 	t_branch	*next;
 	t_fork		*fork;
 	t_fork		*tmp;
 
-	if (!prev_route)
-		(*branch)->route = (*route)->next;
-	else
-		prev_route->next = (*route)->next;
+	!prev_route ? ((*branch)->route = (*route)->next) :
+	(prev_route->next = (*route)->next);
 	fork = (*route)->forks;
 	while (fork)
 	{
@@ -32,14 +30,16 @@ t_route **route, t_route *prev_route)
 	}
 	free(*route);
 	*route = (!prev_route ? (*branch)->route : prev_route->next);
-	if (!--(*branch)->routes)
+	next = (!--(*branch)->routes || !*route ? (*branch)->next : *branch);
+	if (!(*branch)->routes)
 	{
-		next = (*branch)->next;
-		if (prev_branch)
-			prev_branch->next = next;
+		if (*prev_branch)
+			(*prev_branch)->next = next;
 		free(*branch);
-		*branch = next;
 	}
+	else if (!*route)
+		*prev_branch = *branch;
+	*branch = next;
 }
 
 int				is_unvisited(t_room *room, t_room *prev, t_fork *fork)
