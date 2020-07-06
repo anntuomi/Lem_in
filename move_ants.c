@@ -63,7 +63,7 @@ int *first)
 	return (result);
 }
 
-char			*move_ants(t_route **ants)
+char			*move_ants(t_fork **ants)
 {
 	int			first;
 	int			i;
@@ -75,15 +75,15 @@ char			*move_ants(t_route **ants)
 	line = NULL;
 	while (ants[i])
 	{
-		if (ants[i]->room->type != END &&
-		(!ants[i]->next->room->ant_count || ants[i]->next->room->type == END))
+		if (ants[i]->from->type != END &&
+		(!ants[i]->next->from->ant_count || ants[i]->next->from->type == END))
 		{
-			ants[i]->room->ant_count--;
+			ants[i]->from->ant_count--;
 			ants[i] = ants[i]->next;
-			ants[i]->room->ant_count++;
+			ants[i]->from->ant_count++;
 			if (!(nbr = ft_itoa(i + 1)))
 				handle_error();
-			line = add_to_command_line(line, nbr, ants[i]->room->name, &first);
+			line = add_to_command_line(line, nbr, ants[i]->from->name, &first);
 		}
 		i++;
 	}

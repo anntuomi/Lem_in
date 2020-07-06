@@ -28,6 +28,7 @@
 # define END 2
 # define NOT_ROOM 0
 # define IS_ROOM 1
+# define UNUSED -10
 
 typedef struct	s_input
 {
@@ -53,6 +54,7 @@ typedef struct	s_room
 	int				start_connection;
 	int				used;
 	int				visited;
+	int				temp_visited;
 	int				depth;
 	t_path			*paths;
 	struct s_room	*prev;
@@ -107,7 +109,7 @@ typedef struct	s_level
 typedef struct	s_farm
 {
 	int				ant_count;
-	t_route			**ants;
+	t_fork			**ants;
 	t_room			*rooms;
 	t_room			*start;
 	t_room			*end;
@@ -134,7 +136,8 @@ void			ft_delete(char **array);
 void			handle_error(void);
 void			set_input(t_input **input, char *line, int room);
 void			set_links(char *line, t_room *room, t_input **input);
-/*char			*ft_append(char const *s1, char const *s2, int *len, char c);
+/*
+char			*ft_append(char const *s1, char const *s2, int *len, char c);
 char			*move_ants(t_route **ants);
 int				calculate_moves(t_routes **routes, int path_count,
 				int ant_count);
@@ -147,6 +150,11 @@ void			initialize_variables(int path_count, t_routes ***used_routes,
 void			print_input(t_input *input);
 void			print_output(char **output, int *len);
 void			solve(t_farm farm);*/
+void			print_input(t_input *input);
+void			print_output(char **output, int *len);
+char			*ft_append(char const *s1, char const *s2, int *len, char c);
+char			*move_ants(t_fork **ants);
+void			order_routes_simple(t_route **routes);
 int				is_connected_to_end(t_room *room, t_room **end, int *fork);
 int				is_unvisited(t_room *room, t_room *prev, t_fork *fork);
 t_branch		*get_branches_to_end(t_room *start);

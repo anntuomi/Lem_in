@@ -18,7 +18,7 @@ initialize_variables.c input_and_output.c is_connected_to_end.c main.c \
 move_ants.c order_routes.c set_branches.c set_links.c solve.c
 SRC = free_memory.c get_branches_to_end.c handle_error.c handle_room.c \
 input_and_output.c is_connected_to_end.c main.c order_routes.c set_branches.c \
-set_links.c find_shortest_route.c
+set_links.c find_shortest_route.c move_ants.c ft_append.c
 OBJECT = $(SRC:%.c=%.o)
 LIBRARY = libft
 

@@ -37,7 +37,7 @@ static void		set_link(t_room *room1, t_room *room2)
 			handle_error();
 		new->room = room2;
 		new->next = NULL;
-		new->flow = -10;
+		new->flow = UNUSED;
 		if (!room1->paths)
 			room1->paths = new;
 		else

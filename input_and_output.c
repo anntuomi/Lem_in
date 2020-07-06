@@ -12,7 +12,7 @@
 
 #include "lemin.h"
 
-/*void			print_output(char **output, int *len)
+void			print_output(char **output, int *len)
 {
 	write(1, *output, *len);
 	free(*output);
@@ -44,7 +44,7 @@ void			print_input(t_input *input)
 			print_output(&output, &len);
 	}
 	ft_putchar('\n');
-}*/
+}
 
 void			set_input(t_input **input, char *line, int rooms)
 {

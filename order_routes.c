@@ -41,6 +41,30 @@ void			order_routes(t_branch **branch, t_route *tmp)
 	}
 }
 
+void			order_routes_simple(t_route **routes)
+{
+	int			i;
+	int			ii;
+	t_route		*tmp;
+	
+	i = 0;
+	while (routes[i])
+	{
+		ii = i + 1;
+		while (routes[ii])
+		{
+			if (routes[ii]->rooms < routes[i]->rooms)
+			{
+				tmp = routes[i];
+				routes[i] = routes[ii];
+				routes[ii] = tmp;
+			}
+			ii++;
+		}
+		i++;
+	}
+}
+
 t_branch		**branches_to_array(int count, t_branch *branch, t_route *route)
 {
 	t_branch	**array;

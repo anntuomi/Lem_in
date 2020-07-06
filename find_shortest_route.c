@@ -28,23 +28,40 @@ t_level	*create_starting_level(t_room *start)
 	current_connection = start->paths;
 	while (current_connection)
 	{
-		current = (t_node *)malloc(sizeof(t_node) * 1);
-		current->room = ((t_room *)current_connection->room);
-		current->room->used = 2;
-		current->room->depth = 1;
-		current->prev_room = start;
-		current->next = head;
-		current->id = id;
-		current->previous = NULL;
-		current->path_count = 1;
-		head = current;
+		if (current_connection->flow == UNUSED)
+		{
+			current = (t_node *)malloc(sizeof(t_node) * 1);
+			current->room = ((t_room *)current_connection->room);
+			current->room->used = 2;
+			//current->room->depth = 1;
+			current->prev_room = start;
+			current->next = head;
+			current->id = id;
+			current->previous = NULL;
+			current->path_count = 1;
+			head = current;
+			id++;
+			level->size++;
+		}
 		current_connection = current_connection->next;
-		id++;
-		level->size++;
 	}
+	//start->depth = 0;
 	level->nodes = head;
-	level->depth = 1;
+	//level->depth = 1;
 	return (level);
+}
+
+void	block_flow(t_room *room, int id_of_blocked_room)
+{
+	t_path *current;
+
+	current = room->paths;
+	while (current)
+	{
+		if (((t_room *)current->room)->id == id_of_blocked_room)
+			current->flow = 0;
+		current = current->next;
+	}
 }
 
 t_level *create_level(t_level *previous, int depth)
@@ -54,6 +71,8 @@ t_level *create_level(t_level *previous, int depth)
 	t_node *new_lvl;
 	t_path *previous_connections;
 	t_node *head;
+	int emergency_path_counter;
+	int	valid_path_counter;
 	int id;
 
 	new = (t_level *)malloc(sizeof(t_level) * 1);
@@ -64,11 +83,13 @@ t_level *create_level(t_level *previous, int depth)
 	while (previous_lvl)
 	{
 		previous_connections = previous_lvl->room->paths;
+		emergency_path_counter = 0;
+		valid_path_counter = 0;
 		id = previous_lvl->id;
 		previous_lvl->path_count = 0;
 		while (previous_connections && previous_lvl->room->type != END)
 		{
-			if (((t_room *)previous_connections->room)->used == FALSE || ((t_room *)previous_connections->room)->depth == depth)
+			if (((t_room *)previous_connections->room)->used != 2 && previous_connections->flow == UNUSED) //|| ((t_room *)previous_connections->room)->depth == depth)
 			{
 				new_lvl = (t_node *)malloc(sizeof(t_node) * 1);
 				new_lvl->room = ((t_room *)previous_connections->room);
@@ -76,21 +97,52 @@ t_level *create_level(t_level *previous, int depth)
 					new_lvl->room->used = 2;
 				if (new_lvl->room->type == END)
 					new->end_counter++;
-                new_lvl->room->depth = depth;
+                //new_lvl->room->depth = depth;
 				new_lvl->prev_room = previous_lvl->room;
 				new_lvl->next = head;
 				new_lvl->id = id;
 				new_lvl->path_count = previous_lvl->path_count;
 				new_lvl->previous = previous_lvl;
 				head = new_lvl;
+				valid_path_counter++;
 			}
+			else if (previous_connections->flow == -1)
+				emergency_path_counter++;
 			previous_connections = previous_connections->next;
+		}
+		if (valid_path_counter == 0 && emergency_path_counter > 0)
+		{
+			previous_connections = previous_lvl->room->paths;
+			id = previous_lvl->id;
+			previous_lvl->path_count = 0;
+			while (previous_connections && previous_lvl->room->type != END)
+			{
+				if (((t_room *)previous_connections->room)->used != 2 && previous_connections->flow == -1) //|| ((t_room *)previous_connections->room)->depth == depth)
+				{
+					//previous_connections->flow = 0;
+					new_lvl = (t_node *)malloc(sizeof(t_node) * 1);
+					new_lvl->room = ((t_room *)previous_connections->room);
+					//block_flow(new_lvl->room, previous_lvl->room->id);
+					if (new_lvl->room->type != END)
+						new_lvl->room->used = 2;
+					if (new_lvl->room->type == END)
+						new->end_counter++;
+					//new_lvl->room->depth = depth;
+					new_lvl->prev_room = previous_lvl->room;
+					new_lvl->next = head;
+					new_lvl->id = id;
+					new_lvl->path_count = previous_lvl->path_count;
+					new_lvl->previous = previous_lvl;
+					head = new_lvl;
+				}
+				previous_connections = previous_connections->next;
+			}
 		}
 		previous_lvl = previous_lvl->next;
 	}
 	new->end_capacity = (depth - 2) * new->end_counter;
 	new->nodes = head;
-	new->depth = depth;
+	//new->depth = depth;
 	if (head == NULL)
 		new = NULL;
 	return (new);
@@ -103,11 +155,17 @@ void	mark_flows(t_room *to, t_room *from)
 	path = to->paths;
 	while (((t_room *)path->room)->id != from->id)
 		path = path->next;
-	path->flow = -1;
+	if (path->flow != UNUSED)
+		path->flow = 0;
+	else
+		path->flow = -1;
 	path = from->paths;
 	while (((t_room *)path->room)->id != to->id)
 		path = path->next;
-	path->flow = 1;
+	if (path->flow != UNUSED)
+		path->flow = 0;
+	else
+		path->flow = 1;
 }
 
 t_fork *save_route(t_node *nodes_head, t_room *start)
@@ -196,7 +254,7 @@ void	delete_levels(t_level *network, t_room *room_list)
 		if (current->used == 2)
 		{	
 			current->used = 0;
-			current->depth = -1;
+			//current->depth = -1;
 		}
 		current = current->next;
 	}
@@ -212,10 +270,12 @@ t_route	*find_shortest_route(t_farm farm)
 	route_head = NULL;
 	farm.start->used = 1;
 	network = create_starting_level(farm.start);
+	if (network->size == 0)
+		return NULL;
 	network_head = network;
 	mark_end_connections(farm.end);
-	network->depth = 2;
-	i = 3;
+	//network->depth = 2;
+	i = 2;
 	int end_counter;
 	end_counter = 0;
 	network_head = network;
