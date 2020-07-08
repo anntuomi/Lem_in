@@ -46,35 +46,37 @@ static void		free_rooms(t_room *room)
 	}
 }
 
-static void		free_current_route(t_route *route)
+static void		free_route(t_route *route)
 {
-	t_route *next_route;
+	t_fork	*fork;
+	t_fork	*tmp;
 
-	while (route)
+	fork = route->forks;
+	while (fork)
 	{
-		next_route = route->next;
-		free(route);
-		route = next_route;
+		tmp = fork;
+		fork = fork->next;
+		free(tmp);
 	}
+	free(route);
 }
 
-static void		free_routes(t_routes **ordered)
+static void		free_branches(t_branch *branch)
 {
 	int i;
 
 	i = 0;
-	while (ordered[i])
+	while (branch)
 	{
-		free_current_route(ordered[i]->route);
-		free(ordered[i]);
-		i++;
+		free_route(branch->route);
+		free(branch);
+		branch = branch->next;
 	}
-	free(ordered);
 }
 
 void			free_memory(t_farm farm)
 {
 	free_rooms(farm.rooms);
 	free(farm.ants);
-	free_routes(farm.ordered);
+	free_branches(farm.branches);
 }

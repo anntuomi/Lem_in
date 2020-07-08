@@ -12,7 +12,7 @@
 
 #include "lemin.h"
 
-int				calculate_moves(t_routes **routes, int path_count,
+int				calculate_moves(t_route **routes, int path_count,
 int ant_count)
 {
 	int			moves;
@@ -28,8 +28,8 @@ int ant_count)
 	return (moves);
 }
 
-static void		assign_paths(t_route **ants, int ant_count, t_routes **routes,
-int path_count)
+static void		assign_paths(t_ant **ants, int ant_count, t_route **routes,
+int path_count, t_room *start)
 {
 	int			moves;
 	int			i;
@@ -45,7 +45,12 @@ int path_count)
 			j = 0;
 			moves--;
 		}
-		ants[i++] = routes[j++]->route;
+		if (!(ants[i] = (t_ant *)malloc(sizeof(t_ant))))
+			handle_error();
+		ants[i]->forks = routes[j]->forks;
+		ants[i]->room = start;
+		ants[i]->prev = NULL;
+		ants[i++]->fork = routes[j++]->forks;
 	}
 	ants[i] = NULL;
 	free(routes);
@@ -53,16 +58,16 @@ int path_count)
 
 void			solve(t_farm farm)
 {
-	t_routes	**used_routes;
 	char		*output;
 	char		*line;
 	char		*tmp;
 	int			len;
 	int			moves;
 
-	used_routes = determine_used_routes(&farm);
-	order_routes(used_routes);
-	assign_paths(farm.ants, farm.ant_count, used_routes, farm.path_count);
+	/*used_routes = determine_used_routes(&farm);
+	order_routes(used_routes);*/
+	assign_paths(farm.ants, farm.ant_count, farm.ordered, farm.route_count,
+	farm.start);
 	output = NULL;
 	len = 0;
 	moves = 0;
@@ -74,10 +79,11 @@ void			solve(t_farm farm)
 			free(output);
 		output = tmp;
 		free(line);
-		if (len > 1000 || farm.end->ant_count == farm.ant_count)
-			print_output(&output, &len);
+		/*if (len > 1000 || farm.end->ant_count == farm.ant_count)
+			print_output(&output, &len);*/
 		moves++;
 	}
 	char *result = ft_itoa(moves);
 	write(1, result, strlen(result));
+	printf("\n");
 }

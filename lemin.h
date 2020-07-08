@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include "libft.h"
 # include "get_next_line.h"
+# include <stdio.h>
 
 # define INT_MIN -2147483648
 # define INT_MAX 2147483647
@@ -38,6 +39,10 @@ typedef struct	s_path
 	struct s_path	*next;
 }				t_path;
 
+/*
+** T_room variables depth, branch and route are not yet used.
+*/
+
 typedef struct	s_room
 {
 	char			*name;
@@ -46,34 +51,70 @@ typedef struct	s_room
 	int				type;
 	int				id;
 	int				ant_count;
+	int				start_connection;
+	int				used;
+	int				depth;
+	void			*branch;
+	void			*route;
 	t_path			*paths;
+	struct s_room	*prev;
 	struct s_room	*next;
 }				t_room;
 
+typedef struct	s_fork
+{
+	t_room			*from;
+	t_room			*to;
+	struct s_fork	*next;
+}				t_fork;
+
+/*
+** T_route and t_branch id variables are not yet used.
+*/
+
 typedef struct	s_route
 {
+	int				id;
+	void			*branch;
+	t_fork			*forks;
+	int				rooms;
 	t_room			*room;
-	int				index;
+	t_room			*prev;
+	t_fork			*fork;
 	struct s_route	*next;
 }				t_route;
 
-typedef struct	s_routes
+typedef struct	s_branch
 {
+	int				id;
 	t_route			*route;
-	int				rooms;
-	struct s_routes	*next;
-}				t_routes;
+	t_route			**array;
+	int				routes;
+	struct s_branch	*next;
+}				t_branch;
+
+/*
+** New t_ant struct
+*/
+
+typedef struct	s_ant
+{
+	t_fork			*forks;
+	t_room			*room;
+	t_room			*prev;
+	t_fork			*fork;
+}				t_ant;
 
 typedef struct	s_farm
 {
 	int				ant_count;
-	t_route			**ants;
+	t_ant			**ants;
 	t_room			*rooms;
 	t_room			*start;
 	t_room			*end;
-	t_routes		*routes;
+	t_branch		*branches;
 	int				route_count;
-	t_routes		**ordered;
+	t_route			**ordered;
 	int				path_count;
 }				t_farm;
 
@@ -86,36 +127,35 @@ typedef struct	s_var
 	int				max_path_count;
 }				t_var;
 
-char			*ft_append(char const *s1, char const *s2, int *len,
-				char c);
-char			*move_ants(t_route **ants);
-int				calculate_moves(t_routes **routes, int path_count,
-				int ant_count);
-int				count_max_path_count(t_routes *routes, t_routes *shortest);
-int				count_routes(t_routes *routes);
-int				count_unvisited(t_path *path, t_route *route);
 int				determine_room_type(char *line);
-int				is_unvisited(t_room *room, t_route *route);
-t_route			*get_route(t_room *room, int index);
-t_routes		**determine_used_routes(t_farm *farm);
-t_routes		**routes_to_array(int route_count, t_routes *routes);
-t_routes		*del_dead_ends(t_routes *routes);
-t_routes		*find_next_unique(t_routes **ordered, t_routes **used_routes);
-t_routes		*get_routes(t_room *start);
-t_routes		*get_routes_to_end(t_room *start);
-void			set_route_before_fork(t_routes *routes, t_routes *before_fork);
 void			create_room_list(t_room **head, char **line, t_input **input);
+void			ft_delete(char **array);
 void			handle_error(void);
-void			initialize_variables(int path_count, t_routes ***used_routes,
-				t_routes ***tmp, t_var *var);
-void			order_routes(t_routes **routes);
-void			print_input(t_input *input);
-void			print_output(char **output, int *len);
 void			set_input(t_input **input, char *line, int room);
 void			set_links(char *line, t_room *room, t_input **input);
-void			set_routes(t_routes *routes, t_room *room);
-void			solve(t_farm farm);
+char			*ft_append(char const *s1, char const *s2, int *len, char c);
+char			*move_ants(t_ant **ants);
 void			free_memory(t_farm farm);
-void			ft_delete(char **array);
+void			print_input(t_input *input);
+void			print_output(char **output, int *len);
+int				calculate_moves(t_route **routes, int path_count,
+				int ant_count);
+void			solve(t_farm farm);
+int				is_connected_to_end(t_room *room, t_room **end, int *fork);
+int				is_unvisited(t_room *room, t_room *prev, t_fork *fork);
+t_branch		*get_branches_to_end(t_room *start);
+t_route			*get_fork_route(t_route *before_fork, t_room *room);
+void			del_route(t_branch **branch, t_branch **prev_branch,
+				t_route **route, t_route *prev_route);
+void			set_branches(t_branch **head);
+void			set_fork(t_route *route, t_room *from, t_room *to);
+int				count_routes(t_branch *branch);
+t_route			**routes_to_array(int count, t_branch *branch);
+void			order_routes(t_route **array);
+/*int				count_max_path_count(t_routes *routes, t_routes *shortest);
+t_routes		**determine_used_routes(t_farm *farm);
+t_routes		*find_next_unique(t_routes **ordered, t_routes **used_routes);
+void			initialize_variables(int path_count, t_routes ***used_routes,
+				t_routes ***tmp, t_var *var);*/
 
 #endif

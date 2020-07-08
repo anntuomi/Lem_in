@@ -12,7 +12,7 @@
 
 #include "lemin.h"
 
-static t_room	*new_room(int room_type, char **input)
+static t_room	*new_room(int room_type, char **input, t_room *prev)
 {
 	t_room		*new;
 	static int	id = 0;
@@ -29,7 +29,13 @@ static t_room	*new_room(int room_type, char **input)
 	new->type = room_type;
 	new->id = id++;
 	new->ant_count = 0;
+	new->start_connection = 0;
+	new->used = 0;
+	new->depth = 0;
+	new->branch = NULL;
+	new->route = NULL;
 	new->paths = NULL;
+	new->prev = prev;
 	new->next = NULL;
 	ft_delete(input);
 	return (new);
@@ -40,12 +46,12 @@ char **input)
 {
 	if (!room)
 	{
-		room = new_room(*room_type, input);
+		room = new_room(*room_type, input, NULL);
 		*head = room;
 	}
 	else
 	{
-		room->next = new_room(*room_type, input);
+		room->next = new_room(*room_type, input, room);
 		room = room->next;
 	}
 	*room_type = NORMAL;
