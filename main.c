@@ -222,17 +222,12 @@ int				main(void)
 		handle_error();
 	set_links(line, farm.rooms, &input);
 	find_edges(&farm.rooms, &farm.start, &farm.end);
-	//print_rooms(farm.rooms);
-	farm.branches = get_branches_to_end(farm.start);
-	//print_input(head);
-	farm.route_count = count_routes(farm.branches);
-	farm.ordered = routes_to_array(farm.route_count, farm.branches);
+	find_best_routes(&farm);
 	order_routes(farm.ordered);
-	//print_routes(farm.ordered);
-	//printf("unique %d\n", are_unique_routes(farm.ordered));
 	farm.start->ant_count = farm.ant_count;
-	//farm.path_count = count_max_path_count(farm.routes, farm.ordered[0]);
-	solve(farm);
+	char *result = solve(farm);
 	//free_memory(farm);
+	print_input(head);
+	printf("%s\n", result);
 	return (0);
 }

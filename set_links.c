@@ -36,6 +36,7 @@ static void		set_link(t_room *room1, t_room *room2)
 		if (!(new = (t_path *)malloc(sizeof(t_path))))
 			handle_error();
 		new->room = room2;
+		new->flow = UNUSED;
 		new->next = NULL;
 		if (!room1->paths)
 			room1->paths = new;

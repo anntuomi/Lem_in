@@ -44,7 +44,7 @@ t_route **route, t_route *prev_route)
 
 int				is_unvisited(t_room *room, t_room *prev, t_fork *fork)
 {
-	if (!room->start_connection && room->id != prev->id)
+	if (room->connection != START && room->id != prev->id)
 	{
 		while (fork)
 		{
@@ -68,7 +68,7 @@ int				is_connected_to_end(t_room *room, t_room **end, int *fork)
 	while (path)
 	{
 		next = path->room;
-		if (next->type == END)
+		if (path->flow == 1 && next->type == END)
 			*end = next;
 		paths++;
 		path = path->next;

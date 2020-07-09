@@ -62,7 +62,7 @@ static t_branch	*get_branch(t_room *room, t_room *prev, int fork)
 	branch->array = NULL;
 	branch->routes = 1;
 	branch->next = NULL;
-	room->start_connection = 1;
+	room->connection = START;
 	return (branch);
 }
 
@@ -80,15 +80,24 @@ static t_branch	*get_branches(t_room *start)
 		return (get_branch(room, start, fork));
 	if (!start->paths)
 		handle_error();
-	head = get_branch(start->paths->room, start, fork);
+	path = start->paths;
+	while (path->flow != 1)
+		path = path->next;
+	head = get_branch(path->room, start, fork);
 	branch = head;
-	path = start->paths->next;
+	path = path->next;
+	int branch_counter = 1;
 	while (path)
 	{
-		branch->next = get_branch(path->room, start, 1);
-		branch = branch->next;
+		if (path->flow == 1)
+		{
+			branch->next = get_branch(path->room, start, 1);
+			branch_counter++;
+			branch = branch->next;
+		}
 		path = path->next;
 	}
+	printf("Branch counter %d\n", branch_counter);
 	return (head);
 }
 

@@ -56,7 +56,7 @@ int path_count, t_room *start)
 	free(routes);
 }
 
-void			solve(t_farm farm)
+char			*solve(t_farm farm)
 {
 	char		*output;
 	char		*line;
@@ -79,11 +79,12 @@ void			solve(t_farm farm)
 			free(output);
 		output = tmp;
 		free(line);
-		/*if (len > 1000 || farm.end->ant_count == farm.ant_count)
-			print_output(&output, &len);*/
+		if (len > 1000 || farm.end->ant_count == farm.ant_count)
+			print_output(&output, &len);
 		moves++;
 	}
 	char *result = ft_itoa(moves);
 	write(1, result, strlen(result));
 	printf("\n");
+	return (result);
 }

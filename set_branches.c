@@ -54,7 +54,7 @@ t_room **room, t_path *path)
 	{
 		if (is_unvisited(path->room, first->prev, first->forks))
 		{
-			if (!((t_room *)path->room)->used)
+			if (!((t_room *)path->room)->used && path->flow == 1)
 			{
 				if (!*room)
 					*room = path->room;

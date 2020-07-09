@@ -29,9 +29,9 @@ static t_room	*new_room(int room_type, char **input, t_room *prev)
 	new->type = room_type;
 	new->id = id++;
 	new->ant_count = 0;
-	new->start_connection = 0;
+	new->connection = NORMAL;
 	new->used = 0;
-	new->depth = 0;
+	new->used2 = 0;
 	new->branch = NULL;
 	new->route = NULL;
 	new->paths = NULL;

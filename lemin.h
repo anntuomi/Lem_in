@@ -26,6 +26,7 @@
 # define END 2
 # define NOT_ROOM 0
 # define IS_ROOM 1
+# define UNUSED -10
 
 typedef struct	s_input
 {
@@ -36,6 +37,7 @@ typedef struct	s_input
 typedef struct	s_path
 {
 	void			*room;
+	int				flow;
 	struct s_path	*next;
 }				t_path;
 
@@ -51,9 +53,9 @@ typedef struct	s_room
 	int				type;
 	int				id;
 	int				ant_count;
-	int				start_connection;
+	int				connection;
 	int				used;
-	int				depth;
+	int				used2;
 	void			*branch;
 	void			*route;
 	t_path			*paths;
@@ -118,6 +120,33 @@ typedef struct	s_farm
 	int				path_count;
 }				t_farm;
 
+typedef struct		s_group
+{
+	t_route			**routes;
+	int				path_count;
+	int				moves;
+	struct s_group	*next;
+
+}					t_group;
+
+typedef struct	s_node
+{
+	t_room		*prev_room;
+	t_room		*room;
+	struct s_node *next;
+	struct s_node *previous;
+}				t_node;
+
+typedef struct	s_level
+{
+	t_node		*nodes;
+	int			depth;
+	int			size;
+	int			end_counter;
+	int			end_capacity;
+	struct s_level *next;
+}				t_level;
+
 typedef struct	s_var
 {
 	int				least_moves;
@@ -127,6 +156,8 @@ typedef struct	s_var
 	int				max_path_count;
 }				t_var;
 
+int				edmonds_karp_traverse(t_farm farm);
+void			find_best_routes(t_farm *farm);
 int				determine_room_type(char *line);
 void			create_room_list(t_room **head, char **line, t_input **input);
 void			ft_delete(char **array);
@@ -140,7 +171,7 @@ void			print_input(t_input *input);
 void			print_output(char **output, int *len);
 int				calculate_moves(t_route **routes, int path_count,
 				int ant_count);
-void			solve(t_farm farm);
+char			*solve(t_farm farm);
 int				is_connected_to_end(t_room *room, t_room **end, int *fork);
 int				is_unvisited(t_room *room, t_room *prev, t_fork *fork);
 t_branch		*get_branches_to_end(t_room *start);
