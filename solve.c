@@ -28,63 +28,63 @@ int ant_count)
 	return (moves);
 }
 
-static void		assign_paths(t_ant **ants, int ant_count, t_route **routes,
-int path_count, t_room *start)
+static void		assign_paths(t_farm farm, int flags)
 {
 	int			moves;
 	int			i;
 	int			j;
 
-	moves = calculate_moves(routes, path_count, ant_count);
+	moves = calculate_moves(farm.ordered, farm.route_count, farm.ant_count);
 	i = 0;
 	j = 0;
-	while (i < ant_count)
+	while (i < farm.ant_count)
 	{
-		if (j == path_count || routes[j]->rooms - 1 > moves)
+		if (j == farm.route_count || farm.ordered[j]->rooms - 1 > moves)
 		{
 			j = 0;
 			moves--;
 		}
-		if (!(ants[i] = (t_ant *)malloc(sizeof(t_ant))))
-			handle_error();
-		ants[i]->forks = routes[j]->forks;
-		ants[i]->room = start;
-		ants[i]->prev = NULL;
-		ants[i++]->fork = routes[j++]->forks;
+		if (!(farm.ants[i] = (t_ant *)malloc(sizeof(t_ant))))
+			handle_error(flags, "Malloc error");
+		farm.ants[i]->forks = farm.ordered[j]->forks;
+		farm.ants[i]->room = farm.start;
+		farm.ants[i]->prev = NULL;
+		farm.ants[i++]->fork = farm.ordered[j++]->forks;
 	}
-	ants[i] = NULL;
-	free(routes);
+	farm.ants[i] = NULL;
+	free(farm.ordered);
 }
 
-char			*solve(t_farm farm)
+char			*solve(t_farm farm, int flags)
 {
 	char		*output;
 	char		*line;
 	char		*tmp;
 	int			len;
-	int			moves;
+	int			turns;
 
-	/*used_routes = determine_used_routes(&farm);
-	order_routes(used_routes);*/
-	assign_paths(farm.ants, farm.ant_count, farm.ordered, farm.route_count,
-	farm.start);
+	assign_paths(farm, flags);
 	output = NULL;
 	len = 0;
-	moves = 0;
+	turns = 0;
 	while (farm.end->ant_count != farm.ant_count)
 	{
-		line = move_ants(farm.ants);
-		tmp = ft_append(output, line, &len, '\n');
+		line = move_ants(farm.ants, flags);
+		tmp = ft_append(output, line, &len, '\n', flags);
 		if (output)
 			free(output);
 		output = tmp;
 		free(line);
 		if (len > 1000 || farm.end->ant_count == farm.ant_count)
 			print_output(&output, &len);
-		moves++;
+		turns++;
 	}
-	char *result = ft_itoa(moves);
-	write(1, result, strlen(result));
-	printf("\n");
+	if (flags == TURNS || flags == ERROR_TURNS)
+	{
+		ft_putstr("\nTurns: ");
+		ft_putnbr(turns);
+		ft_putchar('\n');
+	}
+	char *result = ft_itoa(turns);
 	return (result);
 }

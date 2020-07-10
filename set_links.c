@@ -26,7 +26,7 @@ static int		is_dup(int id, t_path *path)
 	return (0);
 }
 
-static void		set_link(t_room *room1, t_room *room2)
+static void		set_link(t_room *room1, t_room *room2, int flags)
 {
 	t_path		*new;
 	t_path		*path;
@@ -34,7 +34,7 @@ static void		set_link(t_room *room1, t_room *room2)
 	if (!is_dup(room2->id, room1->paths))
 	{
 		if (!(new = (t_path *)malloc(sizeof(t_path))))
-			handle_error();
+			handle_error(flags, "Malloc error");
 		new->room = room2;
 		new->flow = UNUSED;
 		new->next = NULL;
@@ -50,7 +50,7 @@ static void		set_link(t_room *room1, t_room *room2)
 	}
 }
 
-static t_room	*get_room(char *input, t_room *room)
+static t_room	*get_room(char *input, t_room *room, int flags)
 {
 	while (room)
 	{
@@ -58,7 +58,7 @@ static t_room	*get_room(char *input, t_room *room)
 			return (room);
 		room = room->next;
 	}
-	handle_error();
+	handle_error(flags, "A link includes an undefined room");
 	return (NULL);
 }
 
@@ -72,7 +72,7 @@ static int		count_words(char **array)
 	return (words);
 }
 
-void			set_links(char *line, t_room *room, t_input **input)
+void			set_links(char *line, t_room *room, t_input **input, int flags)
 {
 	char		**rooms;
 	t_room		*room1;
@@ -85,18 +85,18 @@ void			set_links(char *line, t_room *room, t_input **input)
 		if (line[0] != '#')
 		{
 			if (!(rooms = ft_strsplit(line, '-')) || count_words(rooms) != 2)
-				handle_error();
+				handle_error(flags,
+				"Malloc error or a link is not defined by: name1-name2");
 			if (!ft_strequ(rooms[0], rooms[1]))
 			{
-				room1 = get_room(rooms[0], room);
-				room2 = get_room(rooms[1], room);
-				set_link(room1, room2);
-				set_link(room2, room1);
+				room1 = get_room(rooms[0], room, flags);
+				room2 = get_room(rooms[1], room, flags);
+				set_link(room1, room2, flags);
+				set_link(room2, room1, flags);
 				ft_delete(rooms);
 			}
 		}
-		set_input(input, line, 0);
-		if (first)
-			first = 0;
+		set_input(input, line, 0, flags);
+		first = 0;
 	}
 }

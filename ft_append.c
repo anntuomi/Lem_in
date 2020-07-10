@@ -39,7 +39,8 @@ static int		ft_joins1(char const *s1, char *new)
 	return (i);
 }
 
-char			*ft_append(char const *s1, char const *s2, int *len, char c)
+char			*ft_append(char const *s1, char const *s2, int *len, char c,
+int flags)
 {
 	char		*new;
 	int			length;
@@ -50,7 +51,7 @@ char			*ft_append(char const *s1, char const *s2, int *len, char c)
 	if (c)
 		length += 1;
 	if (!(new = ft_strnew(length)))
-		handle_error();
+		handle_error(flags, "Malloc error");
 	start = 0;
 	i = ft_joins1(s1, new);
 	if (s2)

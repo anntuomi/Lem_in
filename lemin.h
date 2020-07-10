@@ -19,6 +19,10 @@
 # include "get_next_line.h"
 # include <stdio.h>
 
+# define NO_FLAGS 0
+# define ERROR 1
+# define TURNS 2
+# define ERROR_TURNS 3
 # define INT_MIN -2147483648
 # define INT_MAX 2147483647
 # define START 0
@@ -157,31 +161,33 @@ typedef struct	s_var
 }				t_var;
 
 int				edmonds_karp_traverse(t_farm farm);
-void			find_best_routes(t_farm *farm);
+void			find_best_routes(t_farm *farm, int flags);
 int				determine_room_type(char *line);
-void			create_room_list(t_room **head, char **line, t_input **input);
+void			create_room_list(t_room **head, char **line, t_input **input,
+				int flags);
 void			ft_delete(char **array);
-void			handle_error(void);
-void			set_input(t_input **input, char *line, int room);
-void			set_links(char *line, t_room *room, t_input **input);
-char			*ft_append(char const *s1, char const *s2, int *len, char c);
-char			*move_ants(t_ant **ants);
+void			handle_error(int flags, char *str);
+void			set_input(t_input **input, char *line, int room, int flags);
+void			set_links(char *line, t_room *room, t_input **input, int flags);
+char			*ft_append(char const *s1, char const *s2, int *len, char c,
+				int flags);
+char			*move_ants(t_ant **ants, int flags);
 void			free_memory(t_farm farm);
-void			print_input(t_input *input);
+void			print_input(t_input *input, int flags);
 void			print_output(char **output, int *len);
 int				calculate_moves(t_route **routes, int path_count,
 				int ant_count);
-char			*solve(t_farm farm);
+char			*solve(t_farm farm, int flags);
 int				is_connected_to_end(t_room *room, t_room **end, int *fork);
 int				is_unvisited(t_room *room, t_room *prev, t_fork *fork);
-t_branch		*get_branches_to_end(t_room *start);
-t_route			*get_fork_route(t_route *before_fork, t_room *room);
+t_branch		*get_branches_to_end(t_room *start, int flags);
+t_route			*get_fork_route(t_route *before_fork, t_room *room, int flags);
 void			del_route(t_branch **branch, t_branch **prev_branch,
 				t_route **route, t_route *prev_route);
-void			set_branches(t_branch **head);
-void			set_fork(t_route *route, t_room *from, t_room *to);
+void			set_branches(t_branch **head, int flags);
+void			set_fork(t_route *route, t_room *from, t_room *to, int flags);
 int				count_routes(t_branch *branch);
-t_route			**routes_to_array(int count, t_branch *branch);
+t_route			**routes_to_array(int count, t_branch *branch, int flags);
 void			order_routes(t_route **array);
 /*int				count_max_path_count(t_routes *routes, t_routes *shortest);
 t_routes		**determine_used_routes(t_farm *farm);

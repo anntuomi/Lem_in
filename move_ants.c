@@ -12,7 +12,7 @@
 
 #include "lemin.h"
 
-static char		*prefix_char(char *str, char *prefix, int prefix_len)
+static char		*prefix_char(char *str, char *prefix, int prefix_len, int flags)
 {
 	char		*result;
 	int			i;
@@ -20,7 +20,7 @@ static char		*prefix_char(char *str, char *prefix, int prefix_len)
 
 	if (!(result = (char *)malloc(sizeof(char) *
 	(ft_strlen(str) + prefix_len + 1))))
-		handle_error();
+		handle_error(flags, "Malloc error");
 	i = 0;
 	while (i < prefix_len)
 	{
@@ -35,7 +35,7 @@ static char		*prefix_char(char *str, char *prefix, int prefix_len)
 }
 
 static char		*add_to_command_line(char *line, char *nbr, char *name,
-int *first)
+int *first, int flags)
 {
 	char		*result;
 	char		*block;
@@ -43,27 +43,27 @@ int *first)
 	char		*name_prefix;
 
 	if (!*first)
-		number_prefix = prefix_char(nbr, " L", 2);
+		number_prefix = prefix_char(nbr, " L", 2, flags);
 	else
 	{
-		number_prefix = prefix_char(nbr, "L", 1);
+		number_prefix = prefix_char(nbr, "L", 1, flags);
 		*first = 0;
 	}
 	free(nbr);
-	name_prefix = prefix_char(name, "-", 1);
+	name_prefix = prefix_char(name, "-", 1, flags);
 	if (!(block = ft_strjoin(number_prefix, name_prefix)))
-		handle_error();
+		handle_error(flags, "Malloc error");
 	free(number_prefix);
 	free(name_prefix);
 	if (!(result = ft_strjoin(line, block)))
-		handle_error();
+		handle_error(flags, "Malloc error");
 	if (line)
 		free(line);
 	free(block);
 	return (result);
 }
 
-char			*move_ants(t_ant **ants)
+char			*move_ants(t_ant **ants, int flags)
 {
 	int			first;
 	int			i;
@@ -102,9 +102,9 @@ char			*move_ants(t_ant **ants)
 				if (fork)
 					ants[i]->fork = ants[i]->fork->next;
 				if (!(nbr = ft_itoa(i + 1)))
-					handle_error();
+					handle_error(flags, "Malloc error");
 				line = add_to_command_line(line, nbr, ants[i]->room->name,
-				&first);
+				&first, flags);
 			}
 		}
 		i++;

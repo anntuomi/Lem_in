@@ -12,8 +12,14 @@
 
 #include "lemin.h"
 
-void			handle_error(void)
+void			handle_error(int flags, char *str)
 {
-	ft_putstr_fd("ERROR\n", 2);
+	ft_putstr_fd("ERROR", 2);
+	if (flags == ERROR || flags == ERROR_TURNS)
+	{
+		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(str, 2);
+	}
+	ft_putstr_fd("\n", 2);
 	exit(EXIT_FAILURE);
 }

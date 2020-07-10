@@ -44,7 +44,7 @@ void			delete_group(t_group *group)
 	group = NULL;
 }
 
-t_group			*rebuild_routes(t_farm farm)
+t_group			*rebuild_routes(t_farm farm, int flags)
 {
 	t_group		*group;
 	t_branch	*branches;
@@ -53,9 +53,9 @@ t_group			*rebuild_routes(t_farm farm)
 	t_path		*current;
 	
 	group = (t_group *)malloc(sizeof(t_group));
-	branches = get_branches_to_end(farm.start);
+	branches = get_branches_to_end(farm.start, flags);
 	group->path_count = count_routes(branches);
-	group->routes = routes_to_array(group->path_count, branches);
+	group->routes = routes_to_array(group->path_count, branches, flags);
 	free(branches);
 	if (group->path_count > 0)
 		group->moves = calculate_moves(group->routes, group->path_count, farm.ant_count);
@@ -91,7 +91,7 @@ void			clear_used_status(t_room *rooms)
 //    have either flow UNUSED or -1. More info in
 //    edmonds_karp_traverse.c
 
-void	find_best_routes(t_farm *farm)
+void	find_best_routes(t_farm *farm, int flags)
 {
 	int path_found;
 	t_group *groups;
@@ -99,14 +99,14 @@ void	find_best_routes(t_farm *farm)
 
 	path_found = edmonds_karp_traverse(*farm);
 	if (path_found)
-		best = rebuild_routes(*farm);
+		best = rebuild_routes(*farm, flags);
 	while (path_found)
 	{
 		clear_used_status(farm->rooms);
 		path_found = edmonds_karp_traverse(*farm);
 		if (path_found)
 		{
-			groups = rebuild_routes(*farm);
+			groups = rebuild_routes(*farm, flags);
 			if (best->moves == -1 || (groups->moves != -1 && groups->moves < best->moves))
 			{
 				delete_group(best);
