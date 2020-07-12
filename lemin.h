@@ -137,6 +137,7 @@ typedef struct	s_node
 {
 	t_room		*prev_room;
 	t_room		*room;
+	int			id;
 	struct s_node *next;
 	struct s_node *previous;
 }				t_node;
@@ -160,7 +161,7 @@ typedef struct	s_var
 	int				max_path_count;
 }				t_var;
 
-int				edmonds_karp_traverse(t_farm farm);
+int				edmonds_karp_traverse(t_farm farm, int flags);
 void			find_best_routes(t_farm *farm, int flags);
 int				determine_room_type(char *line);
 void			create_room_list(t_room **head, char **line, t_input **input,
@@ -173,11 +174,12 @@ char			*ft_append(char const *s1, char const *s2, int *len, char c,
 				int flags);
 char			*move_ants(t_ant **ants, int flags);
 void			free_memory(t_farm farm);
+void			free_route(t_route *route);
 void			print_input(t_input *input, int flags);
 void			print_output(char **output, int *len);
 int				calculate_moves(t_route **routes, int path_count,
 				int ant_count);
-char			*solve(t_farm farm, int flags);
+void			solve(t_farm farm, int flags);
 int				is_connected_to_end(t_room *room, t_room **end, int *fork);
 int				is_unvisited(t_room *room, t_room *prev, t_fork *fork);
 t_branch		*get_branches_to_end(t_room *start, int flags);

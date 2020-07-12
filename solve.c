@@ -52,10 +52,9 @@ static void		assign_paths(t_farm farm, int flags)
 		farm.ants[i++]->fork = farm.ordered[j++]->forks;
 	}
 	farm.ants[i] = NULL;
-	free(farm.ordered);
 }
 
-char			*solve(t_farm farm, int flags)
+void			solve(t_farm farm, int flags)
 {
 	char		*output;
 	char		*line;
@@ -85,6 +84,4 @@ char			*solve(t_farm farm, int flags)
 		ft_putnbr(turns);
 		ft_putchar('\n');
 	}
-	char *result = ft_itoa(turns);
-	return (result);
 }

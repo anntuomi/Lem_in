@@ -16,20 +16,22 @@ static t_node	*make_node(t_room *room, t_room *prev_room, t_node *head, t_node *
 {
 	t_node *node;
 
-	node = (t_node *)malloc(sizeof(t_node) * 1);
+	if (!(node = (t_node *)malloc(sizeof(t_node) * 1)))
+		return (NULL);
 	node->room = room;
 	node->prev_room = prev_room;
 	node->next = head;
 	node->previous = prev;
 	return (node);
 }
-static t_level	*create_starting_level(t_room *start)
+static t_level	*create_starting_level(t_room *start, int flags)
 {
 	t_node *head;
 	t_path *connection;
 	t_level *level;
 
-	level = (t_level *)malloc(sizeof(t_level) * 1);
+	if (!(level = (t_level *)malloc(sizeof(t_level) * 1)))
+		handle_error(flags, "Malloc error");
 	level->next = NULL;
 	level->size = 0;
 	head = NULL;
@@ -39,7 +41,8 @@ static t_level	*create_starting_level(t_room *start)
 	{
 		if (connection->flow == UNUSED)
 		{
-			head = make_node(((t_room *)connection->room), start, head, NULL);
+			if (!(head = make_node(((t_room *)connection->room), start, head, NULL)))
+				handle_error(flags, "Malloc error");
 			if (head->room->type == END)
 				level->end_counter++;
 			level->size++;
@@ -56,8 +59,8 @@ static t_level	*create_starting_level(t_room *start)
 	return (level);
 }
 
-static t_node	*add_parent_node_children(t_node *parent_node, t_node *head,
-int *end_counter)
+static t_node	*add_children(t_node *parent_node, t_node *head,
+int *end_counter, int flags)
 {
 	t_path *previous_connections;
 
@@ -68,8 +71,9 @@ int *end_counter)
 		(previous_connections->flow == UNUSED || \
 		previous_connections->flow == -1))
 		{
-			head = make_node(((t_room *)previous_connections->room), \
-			parent_node->room, head, parent_node);
+			if (!(head = make_node(((t_room *)previous_connections->room), \
+			parent_node->room, head, parent_node)))
+				handle_error(flags, "Malloc error");
 			if (head->room->type == END)
 				*end_counter = *end_counter + 1;
 		}
@@ -91,21 +95,22 @@ void	mark_level_as_used(t_node *node_head)
 	}
 }
 
-static t_level	*create_level(t_level *previous, int depth)
+static t_level	*create_level(t_level *previous, int depth, int flags)
 {
 	t_node *parent_node;
 	t_level *new;
 	t_path *previous_connections;
 	t_node *head;
 
-	new = (t_level *)malloc(sizeof(t_level) * 1);
+	if (!(new = (t_level *)malloc(sizeof(t_level) * 1)))
+		handle_error(flags, "Malloc error");
 	new->next = NULL;
 	parent_node = previous->nodes;
 	head = NULL;
 	new->end_counter = 0;
 	while (parent_node)
 	{
-		head = add_parent_node_children(parent_node, head, &new->end_counter);
+		head = add_children(parent_node, head, &new->end_counter, flags);
 		parent_node = parent_node->next;
 	}
 	new->nodes = head;
@@ -203,7 +208,7 @@ static void		delete_levels(t_level *network, t_room *room_list)
 //    all available path flows are either 1 or 0). Returns 1 if an augmenting path
 //	  was found and 0 otherwise.
 
-int 		edmonds_karp_traverse(t_farm farm)
+int 		edmonds_karp_traverse(t_farm farm, int flags)
 {
 	t_level *network;
 	t_level *network_head;
@@ -211,8 +216,8 @@ int 		edmonds_karp_traverse(t_farm farm)
 	int		depth;
 
 	path_found = 0;
-	farm.start->used2 = 1;
-	network = create_starting_level(farm.start);
+	farm.start->used2 = 2;
+	network = create_starting_level(farm.start, flags);
 	network_head = network;
 	depth = 2;
 	while (network)
@@ -222,7 +227,7 @@ int 		edmonds_karp_traverse(t_farm farm)
 			path_found = set_augmenting_path(network, farm.start);
 			break ;
 		}
-		network->next = create_level(network, depth);
+		network->next = create_level(network, depth, flags);
 		network = network->next;
 		depth++;
 	}

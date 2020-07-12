@@ -55,6 +55,7 @@ static void		del_room(t_room **head, t_room **room, int flags)
 			cur->next->prev = cur->prev;
 		if (*room && (*room)->id == cur->id)
 			*room = (*room)->next;
+		free(cur->name);
 		free(cur);
 		cur = next;
 	}
@@ -252,12 +253,11 @@ int				main(int ac, char **av)
 	set_links(line, farm.rooms, &input, flags);
 	find_edges(&farm.rooms, &farm.start, &farm.end, flags);
 	find_best_routes(&farm, flags);
+	//exit(1);
 	print_input(head, flags);
 	order_routes(farm.ordered);
 	farm.start->ant_count = farm.ant_count;
-	char *result = solve(farm, flags);
-	//free_memory(farm);
-	/*print_input(head);
-	printf("%s\n", result);*/
+	solve(farm, flags);
+	free_memory(farm);
 	return (0);
 }

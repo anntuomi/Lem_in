@@ -12,21 +12,6 @@
 
 #include "lemin.h"
 
-static void		free_route(t_route *route)
-{
-	t_fork	*fork;
-	t_fork	*tmp;
-
-	fork = route->forks;
-	while (fork)
-	{
-		tmp = fork;
-		fork = fork->next;
-		free(tmp);
-	}
-	free(route);
-}
-
 void			delete_group(t_group *group)
 {
 	t_route **route;
@@ -36,7 +21,7 @@ void			delete_group(t_group *group)
 	i = 0;
 	while (route[i])
 	{
-		free(route[i]);
+		free_route(route[i]);
 		i++;
 	}
 	free(group->routes);
@@ -44,6 +29,38 @@ void			delete_group(t_group *group)
 	group = NULL;
 }
 
+t_group		*save_group_copy(t_group *group, int flags, t_group *old)
+{
+	t_group *new;
+
+	if (old)
+		delete_group(old);
+	if (!(new = (t_group *)malloc(sizeof(t_group))))
+		handle_error(flags, "Malloc error");
+	new->path_count = group->path_count;
+	new->routes = group->routes;
+	new->moves = group->moves;
+	free(group);
+	group = NULL;
+	return (new);
+
+}
+
+void			delete_branches(t_branch *branch)
+{
+	t_branch *current;
+	t_branch *next;
+
+	current = branch;
+	while (current)
+	{
+		next = current->next;
+		//MAKE SURE ARRAY IS ACTUALLY USED
+		free(current->array);
+		free(current);
+		current = next;
+	}
+}
 t_group			*rebuild_routes(t_farm farm, int flags)
 {
 	t_group		*group;
@@ -52,11 +69,12 @@ t_group			*rebuild_routes(t_farm farm, int flags)
 	int			length;
 	t_path		*current;
 	
-	group = (t_group *)malloc(sizeof(t_group));
+	if (!(group = (t_group *)malloc(sizeof(t_group))))
+		handle_error(flags, "Malloc error");
 	branches = get_branches_to_end(farm.start, flags);
 	group->path_count = count_routes(branches);
 	group->routes = routes_to_array(group->path_count, branches, flags);
-	free(branches);
+	delete_branches(branches);
 	if (group->path_count > 0)
 		group->moves = calculate_moves(group->routes, group->path_count, farm.ant_count);
 	else
@@ -97,21 +115,18 @@ void	find_best_routes(t_farm *farm, int flags)
 	t_group *groups;
 	t_group *best;
 
-	path_found = edmonds_karp_traverse(*farm);
-	if (path_found)
+	groups = NULL;
+	if ((path_found = edmonds_karp_traverse(*farm, flags)))
 		best = rebuild_routes(*farm, flags);
 	while (path_found)
 	{
 		clear_used_status(farm->rooms);
-		path_found = edmonds_karp_traverse(*farm);
-		if (path_found)
+		if ((path_found = edmonds_karp_traverse(*farm, flags)))
 		{
 			groups = rebuild_routes(*farm, flags);
-			if (best->moves == -1 || (groups->moves != -1 && groups->moves < best->moves))
-			{
-				delete_group(best);
-				best = groups;
-			}
+			if (best->moves == -1 || (groups->moves != -1 && \
+			groups->moves < best->moves))
+				best = save_group_copy(groups, flags, best);
 			else if (groups)
 				delete_group(groups);
 		}
