@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_branches_to_end.c                              :+:      :+:    :+:   */
+/*   find_best_routes.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atuomine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -98,7 +98,7 @@ void			clear_used_status(t_room *rooms)
 	while (current)
 	{
 		current->used = 0;
-		current->used2 = 0;
+		current->visited = 0;
 		current = current->next;
 	}
 }
