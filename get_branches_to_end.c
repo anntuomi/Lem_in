@@ -82,24 +82,19 @@ static t_branch	*get_branches(t_room *start, int flags)
 		return (get_branch(room, start, fork, flags));
 	path = start->paths;
 	while (path->flow != 1)
-	{
 		path = path->next;
-	}
 	head = get_branch(path->room, start, fork, flags);
 	branch = head;
 	path = path->next;
-	int branch_counter = 1;
 	while (path)
 	{
 		if (path->flow == 1)
 		{
 			branch->next = get_branch(path->room, start, 1, flags);
-			branch_counter++;
 			branch = branch->next;
 		}
 		path = path->next;
 	}
-	//printf("Branch counter %d\n", branch_counter);
 	return (head);
 }
 

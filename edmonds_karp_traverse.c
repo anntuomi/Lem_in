@@ -12,9 +12,10 @@
 
 #include "lemin.h"
 
-static t_node	*make_node(t_room *room, t_room *prev_room, t_node *head, t_node *prev)
+static t_node	*make_node(t_room *room, t_room *prev_room, t_node *head,
+t_node *prev)
 {
-	t_node *node;
+	t_node		*node;
 
 	if (!(node = (t_node *)malloc(sizeof(t_node) * 1)))
 		return (NULL);
@@ -24,11 +25,12 @@ static t_node	*make_node(t_room *room, t_room *prev_room, t_node *head, t_node *
 	node->previous = prev;
 	return (node);
 }
+
 static t_level	*create_starting_level(t_room *start, int flags)
 {
-	t_node *head;
-	t_path *connection;
-	t_level *level;
+	t_node		*head;
+	t_path		*connection;
+	t_level		*level;
 
 	if (!(level = (t_level *)malloc(sizeof(t_level) * 1)))
 		handle_error(flags, "Malloc error");
@@ -41,7 +43,8 @@ static t_level	*create_starting_level(t_room *start, int flags)
 	{
 		if (connection->flow == UNUSED)
 		{
-			if (!(head = make_node(((t_room *)connection->room), start, head, NULL)))
+			if (!(head = make_node(((t_room *)connection->room), start, head,
+			NULL)))
 				handle_error(flags, "Malloc error");
 			if (head->room->type == END)
 				level->end_counter++;
@@ -62,7 +65,7 @@ static t_level	*create_starting_level(t_room *start, int flags)
 static t_node	*add_children(t_node *parent_node, t_node *head,
 int *end_counter, int flags)
 {
-	t_path *previous_connections;
+	t_path		*previous_connections;
 
 	previous_connections = parent_node->room->paths;
 	while (previous_connections && parent_node->room->type != END)
@@ -82,9 +85,9 @@ int *end_counter, int flags)
 	return (head);
 }
 
-void	mark_level_as_used(t_node *node_head)
+void			mark_level_as_used(t_node *node_head)
 {
-	t_node *node;
+	t_node		*node;
 
 	node = node_head;
 	while (node)
@@ -97,10 +100,10 @@ void	mark_level_as_used(t_node *node_head)
 
 static t_level	*create_level(t_level *previous, int depth, int flags)
 {
-	t_node *parent_node;
-	t_level *new;
-	t_path *previous_connections;
-	t_node *head;
+	t_node		*parent_node;
+	t_level		*new;
+	t_path		*previous_connections;
+	t_node		*head;
 
 	if (!(new = (t_level *)malloc(sizeof(t_level) * 1)))
 		handle_error(flags, "Malloc error");
@@ -126,8 +129,8 @@ static t_level	*create_level(t_level *previous, int depth, int flags)
 
 void			mark_flows(t_room *to, t_room *from)
 {
-	t_path *path;
-	
+	t_path		*path;
+
 	path = to->paths;
 	while (((t_room *)path->room)->id != from->id)
 		path = path->next;
@@ -146,7 +149,7 @@ void			mark_flows(t_room *to, t_room *from)
 
 static int		set_augmenting_path(t_level *level, t_room *start)
 {
-	t_node *node;
+	t_node		*node;
 
 	node = level->nodes;
 	while (node)
@@ -167,10 +170,10 @@ static int		set_augmenting_path(t_level *level, t_room *start)
 
 static void		delete_levels(t_level *network, t_room *room_list)
 {
-	t_level *next;
-	t_node *node;
-	t_node *node_next;
-	t_room *current;
+	t_level		*next;
+	t_node		*node;
+	t_node		*node_next;
+	t_room		*current;
 
 	while (network)
 	{
@@ -193,27 +196,29 @@ static void		delete_levels(t_level *network, t_room *room_list)
 	}
 }
 
-// 1. Creates a node for each room from start of which
-//    flow is still unused. (create_starting_level)
-// 2. Creates new BFS levels until one or more node reaches
-//    end. (create_level) When one does, end counter is increased.
-//    This function can move through paths that have either flow UNUSED or -1,
-//    and to rooms of which used2 is not marked yet.
-// 3. Once end counter is above zero, we find one of the
-//    nodes that reached end and move backwards in the tree (set_augmenting_path).
-//    On the way back we set flows (mark_flows): If the path we move through was UNUSED,
-//    we set the flow to be 1 towards end and -1 towards start.
-//    If the flows have been previously marked, we set them to 0.
-// 4. The function stops once end is found or no new connections can be made (if
-//    all available path flows are either 1 or 0). Returns 1 if an augmenting path
-//	  was found and 0 otherwise.
+/*
+** 1. Creates a node for each room from start of which flow is still unused.
+**    (create_starting_level)
+** 2. Creates new BFS levels until one or more node reaches end. (create_level)
+**    When one does, end counter is increased. This function can move through
+**    paths that have either flow UNUSED or -1, and to rooms of which used2 is
+**    not marked yet.
+** 3. Once end counter is above zero, we find one of the nodes that reached end
+**    and move backwards in the tree (set_augmenting_path). On the way back we
+**    set flows (mark_flows): If the path we move through was UNUSED, we set the
+**    flow to be 1 towards end and -1 towards start. If the flows have been
+**    previously marked, we set them to 0.
+** 4. The function stops once end is found or no new connections can be made (if
+**    all available path flows are either 1 or 0). Returns 1 if an augmenting
+**    path was found and 0 otherwise.
+*/
 
-int 		edmonds_karp_traverse(t_farm farm, int flags)
+int				edmonds_karp_traverse(t_farm farm, int flags)
 {
-	t_level *network;
-	t_level *network_head;
-	int		path_found;
-	int		depth;
+	t_level		*network;
+	t_level		*network_head;
+	int			path_found;
+	int			depth;
 
 	path_found = 0;
 	farm.start->used2 = 2;

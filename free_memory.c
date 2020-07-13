@@ -14,7 +14,7 @@
 
 void			ft_delete(char **array)
 {
-	int i;
+	int			i;
 
 	i = 0;
 	while (array[i] != NULL)
@@ -28,8 +28,8 @@ void			ft_delete(char **array)
 
 static void		free_rooms(t_room *room)
 {
-	t_room *next_room;
-	t_path *next_path;
+	t_room		*next_room;
+	t_path		*next_path;
 
 	while (room)
 	{
@@ -46,10 +46,10 @@ static void		free_rooms(t_room *room)
 	}
 }
 
-void		free_route(t_route *route)
+void			free_route(t_route *route)
 {
-	t_fork	*fork;
-	t_fork	*tmp;
+	t_fork		*fork;
+	t_fork		*tmp;
 
 	fork = route->forks;
 	while (fork)
@@ -63,7 +63,7 @@ void		free_route(t_route *route)
 
 static void		free_routes(t_route **routes)
 {
-	int i;
+	int			i;
 
 	i = 0;
 	while (routes[i])
@@ -76,7 +76,7 @@ static void		free_routes(t_route **routes)
 
 void			free_memory(t_farm farm)
 {
-	int i;
+	int			i;
 
 	free_rooms(farm.rooms);
 	free_routes(farm.ordered);

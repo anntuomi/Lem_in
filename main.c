@@ -118,95 +118,6 @@ static t_ant	**get_ants(int *ant_count, t_input **input, int flags)
 	return (ants);
 }
 
-/*
-** Route_cmp and are_unique_routes functions are only used in testing
-*/
-
-static int		route_cmp(t_fork *route1, t_fork *head)
-{
-	t_fork		*route2;
-
-	while (route1)
-	{
-		route2 = head;
-		while (route2)
-		{
-			if (route1->from->type != START && route2->from->type != START &&
-			route2->from->id == route1->from->id)
-				return (1);
-			route2 = route2->next;
-		}
-		route1 = route1->next;
-	}
-	return (0);
-}
-
-static int		are_unique_routes(t_route **route)
-{
-	t_fork		*fork;
-	int			i;
-	int			j;
-
-	i = 0;
-	while (route[i])
-	{
-		j = i + 1;
-		while (route[j])
-		{
-			if (route_cmp(route[i]->forks, route[j]->forks))
-				return (0);
-			j++;
-		}
-		i++;
-	}
-	return (1);
-}
-
-static void		print_routes(t_route **route)
-{
-	t_fork		*fork;
-	int			i;
-	int			j;
-
-	i = 0;
-	while (route[i])
-	{
-		printf("%d. Route %d (%d room(s))\n", i + 1, route[i]->id,
-		route[i]->rooms);
-		fork = route[i]->forks;
-		j = 1;
-		while (fork)
-		{
-			printf("%d.%d Fork (from %s to %s)\n", i + 1, j++,
-			fork->from->name, fork->to->name);
-			fork = fork->next;
-		}
-		if (route[++i])
-			printf("\n");
-	}
-}
-
-static void		print_rooms(t_room *room)
-{
-	t_path		*path;
-	t_room		*tmp;
-	int			i;
-
-	i = 1;
-	while (room)
-	{
-		printf("%d. %s\n", i++, room->name);
-		path = room->paths;
-		while (path)
-		{
-			tmp = path->room;
-			printf("- %s\n", tmp->name);
-			path = path->next;
-		}
-		room = room->next;
-	}
-}
-
 static int		get_flags(int ac, char **av)
 {
 	int			error;
@@ -253,7 +164,6 @@ int				main(int ac, char **av)
 	set_links(line, farm.rooms, &input, flags);
 	find_edges(&farm.rooms, &farm.start, &farm.end, flags);
 	find_best_routes(&farm, flags);
-	//exit(1);
 	print_input(head, flags);
 	order_routes(farm.ordered);
 	farm.start->ant_count = farm.ant_count;
