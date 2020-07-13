@@ -54,8 +54,6 @@ void			delete_branches(t_branch *branch)
 	while (current)
 	{
 		next = current->next;
-		//MAKE SURE ARRAY IS ACTUALLY USED
-		free(current->array);
 		free(current);
 		current = next;
 	}
@@ -97,8 +95,8 @@ void			clear_used_status(t_room *rooms)
 	current = rooms;
 	while (current)
 	{
+		current->visited = 0;
 		current->used = 0;
-		current->used2 = 0;
 		current = current->next;
 	}
 }

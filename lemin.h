@@ -53,10 +53,8 @@ typedef struct	s_room
 	int				id;
 	int				ant_count;
 	int				connection;
+	int				visited;
 	int				used;
-	int				used2;
-	void			*branch;
-	void			*route;
 	t_path			*paths;
 	struct s_room	*prev;
 	struct s_room	*next;
@@ -71,13 +69,13 @@ typedef struct	s_fork
 
 typedef struct	s_route
 {
-	int				id;
 	void			*branch;
 	t_fork			*forks;
 	int				rooms;
 	t_room			*room;
-	t_room			*prev;
+	t_room			*prev_room;
 	t_fork			*fork;
+	struct s_route	*prev;
 	struct s_route	*next;
 }				t_route;
 
@@ -85,8 +83,8 @@ typedef struct	s_branch
 {
 	int				id;
 	t_route			*route;
-	t_route			**array;
 	int				routes;
+	struct s_branch	*prev;
 	struct s_branch	*next;
 }				t_branch;
 
@@ -157,15 +155,15 @@ int				count_routes(t_branch *branch);
 int				determine_room_type(char *line);
 int				edmonds_karp_traverse(t_farm farm, int flags);
 int				is_connected_to_end(t_room *room, t_room **end, int *fork);
-int				is_unvisited(t_room *room, t_room *prev, t_fork *fork);
 t_branch		*get_branches_to_end(t_room *start, int flags);
 t_route			**routes_to_array(int count, t_branch *branch, int flags);
 t_route			*get_fork_route(t_route *before_fork, t_room *room, int flags);
 void			create_room_list(t_room **head, char **line, t_input **input,
 				int flags);
-void			del_route(t_branch **branch, t_branch **prev_branch,
-				t_route **route, t_route *prev_route);
+void			del_route(t_branch **branch, t_route **route);
 void			find_best_routes(t_farm *farm, int flags);
+void			find_edges(t_room **head, t_room **start, t_room **end,
+				int flags);
 void			free_memory(t_farm farm);
 void			free_route(t_route *route);
 void			ft_delete(char **array);

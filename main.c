@@ -12,82 +12,16 @@
 
 #include "lemin.h"
 
-static void		del_paths(t_path *path, t_path **head, int id)
+void			handle_error(int flags, char *str)
 {
-	t_path		*prev;
-	t_room		*tmp;
-
-	free(path);
-	prev = NULL;
-	path = *head;
-	while (path)
+	ft_putstr_fd("ERROR", 2);
+	if (flags == ERROR || flags == ERROR_TURNS)
 	{
-		tmp = path->room;
-		if (tmp->id == id)
-		{
-			if (!prev)
-				*head = path->next;
-			else
-				prev->next = path->next;
-			free(path);
-			break ;
-		}
-		prev = path;
-		path = path->next;
+		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(str, 2);
 	}
-}
-
-static void		del_room(t_room **head, t_room **room, int flags)
-{
-	t_room		*cur;
-	t_room		*next;
-
-	cur = *room;
-	while (cur && cur->type == NORMAL && (!cur->paths || !cur->paths->next))
-	{
-		if ((next = (cur->paths ? cur->paths->room : NULL)))
-			del_paths(cur->paths, &next->paths, cur->id);
-		if (!cur->prev)
-			*head = cur->next;
-		else
-			cur->prev->next = cur->next;
-		if (cur->next)
-			cur->next->prev = cur->prev;
-		if (*room && (*room)->id == cur->id)
-			*room = (*room)->next;
-		free(cur->name);
-		free(cur);
-		cur = next;
-	}
-	if (cur && cur->type != NORMAL && !cur->paths)
-		handle_error(flags, "No paths");
-}
-
-static void		find_edges(t_room **head, t_room **start, t_room **end,
-int flags)
-{
-	t_room		*room;
-
-	room = *head;
-	*start = NULL;
-	*end = NULL;
-	while (room)
-	{
-		if (room->type == START && !*start)
-			*start = room;
-		else if (room->type == END && !*end)
-			*end = room;
-		else if (room->type != NORMAL)
-			handle_error(flags, "Multiple ##start or ##end rooms");
-		if (room->type != NORMAL && !room->paths)
-			handle_error(flags, "No paths");
-		else if (room->type == NORMAL && (!room->paths || !room->paths->next))
-			del_room(head, &room, flags);
-		else
-			room = room->next;
-	}
-	if (!*start || !*end)
-		handle_error(flags, "No ##start or/and ##end");
+	ft_putstr_fd("\n", 2);
+	exit(EXIT_FAILURE);
 }
 
 static t_ant	**get_ants(int *ant_count, t_input **input, int flags)

@@ -36,44 +36,45 @@ void			set_fork(t_route *route, t_room *from, t_room *to, int flags)
 static void		set_route(t_route *route, t_room *room, int fork, int flags)
 {
 	route->rooms++;
-	route->prev = route->room;
+	route->prev_room = route->room;
 	route->room = room;
-	room->used = 1;
+	room->visited = 1;
 	if (fork)
-		set_fork(route, route->prev, route->room, flags);
+		set_fork(route, route->prev_room, route->room, flags);
 }
 
 static void		set_fork_routes(t_branch *branch, t_route **route,
-t_room **room, t_path *path, int flags)
+t_room **room, int flags)
 {
 	t_route		*first;
 	t_route		*tmp;
+	t_path		*path;
 
 	first = *route;
+	path = first->room->paths;
 	while (path)
 	{
-		if (is_unvisited(path->room, first->prev, first->forks))
+		if (!((t_room *)path->room)->visited && path->flow == 1)
 		{
-			if (!((t_room *)path->room)->used && path->flow == 1)
+			if (!*room)
+				*room = path->room;
+			else
 			{
-				if (!*room)
-					*room = path->room;
-				else
-				{
-					tmp = *route;
-					*route = get_fork_route(first, path->room, flags);
-					(*route)->next = tmp->next;
-					tmp->next = *route;
-					branch->routes++;
-				}
+				tmp = *route;
+				*route = get_fork_route(first, path->room, flags);
+				(*route)->prev = tmp;
+				(*route)->next = tmp->next;
+				if (tmp->next)
+					tmp->next->prev = *route;
+				tmp->next = *route;
+				branch->routes++;
 			}
 		}
 		path = path->next;
 	}
 }
 
-static int		set_routes(t_branch **branch, t_branch **prev_branch,
-t_route **route, t_route **prev_route, int flags)
+static int		set_routes(t_branch **branch, t_route **route, int flags)
 {
 	t_route		*first;
 	t_room		*room;
@@ -83,69 +84,51 @@ t_route **route, t_route **prev_route, int flags)
 	room = NULL;
 	if ((first = *route) && first->room->type != END)
 	{
-		fork = 0;
 		if (!is_connected_to_end(first->room, &room, &fork))
-			set_fork_routes(*branch, route, &room, first->room->paths, flags);
+			set_fork_routes(*branch, route, &room, flags);
 		if (room)
 			set_route(first, room, fork, flags);
 		else
 		{
-			del_route(branch, prev_branch, route, *prev_route);
+			del_route(branch, route);
 			return (0);
 		}
 		if (room && room->type == END)
 		{
 			id = (*branch)->id;
-			*prev_route = NULL;
 			*route = (*branch)->route;
 			while (*branch && (*branch)->id == id)
 			{
 				if ((*route)->room->type != END)
-					del_route(branch, prev_branch, route, *prev_route);
-				else
-				{
-					*prev_route = *route;
-					if (!(*route = (*route)->next))
-					{
-						*prev_branch = *branch;
-						*branch = (*branch)->next;
-					}
-				}
+					del_route(branch, route);
+				else if (!(*route = (*route)->next))
+					*branch = (*branch)->next;
 			}
 			return (0);
 		}
 	}
-	*prev_route = *route;
 	if (!(*route = (*route)->next))
-	{
-		*prev_branch = *branch;
 		*branch = (*branch)->next;
-	}
 	return ((room && room->type != END ? 1 : 0));
 }
 
 void			set_branches(t_branch **head, int flags)
 {
 	t_branch	*branch;
-	t_branch	*prev_branch;
 	t_route		*route;
-	t_route		*prev_route;
 	int			rooms_left;
 
 	rooms_left = 0;
-	prev_branch = NULL;
 	branch = *head;
 	while (branch)
 	{
-		prev_route = NULL;
 		route = branch->route;
 		while (route)
 		{
-			if (set_routes(&branch, &prev_branch, &route, &prev_route,
-			flags) && !rooms_left)
+			if (set_routes(&branch, &route, flags) && !rooms_left)
 				rooms_left = 1;
 		}
-		if (!prev_branch)
+		if (branch && !branch->prev)
 			*head = branch;
 	}
 	if (rooms_left)

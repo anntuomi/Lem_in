@@ -70,7 +70,7 @@ int *end_counter, int flags)
 	previous_connections = parent_node->room->paths;
 	while (previous_connections && parent_node->room->type != END)
 	{
-		if (((t_room *)previous_connections->room)->used2 != 2 && \
+		if (((t_room *)previous_connections->room)->used != 2 && \
 		(previous_connections->flow == UNUSED || \
 		previous_connections->flow == -1))
 		{
@@ -93,7 +93,7 @@ void			mark_level_as_used(t_node *node_head)
 	while (node)
 	{
 		if (node->room->type != END)
-			node->room->used2 = 2;
+			node->room->used = 2;
 		node = node->next;
 	}
 }
@@ -191,7 +191,7 @@ static void		delete_levels(t_level *network, t_room *room_list)
 	current = room_list;
 	while (current)
 	{
-		current->used2 = 0;
+		current->used = 0;
 		current = current->next;
 	}
 }
@@ -221,7 +221,7 @@ int				edmonds_karp_traverse(t_farm farm, int flags)
 	int			depth;
 
 	path_found = 0;
-	farm.start->used2 = 2;
+	farm.start->used = 2;
 	network = create_starting_level(farm.start, flags);
 	network_head = network;
 	depth = 2;
