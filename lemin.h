@@ -54,7 +54,7 @@ typedef struct	s_room
 	int				ant_count;
 	int				connection;
 	int				used;
-	int				used2;
+	int				visited;
 	void			*branch;
 	void			*route;
 	t_path			*paths;
@@ -132,10 +132,7 @@ typedef struct	s_node
 typedef struct	s_level
 {
 	t_node			*nodes;
-	int				depth;
-	int				size;
 	int				end_counter;
-	int				end_capacity;
 	struct s_level	*next;
 }				t_level;
 
@@ -156,6 +153,8 @@ int				calculate_moves(t_route **routes, int path_count,
 int				count_routes(t_branch *branch);
 int				determine_room_type(char *line);
 int				edmonds_karp_traverse(t_farm farm, int flags);
+t_level			*create_starting_level(t_room *start, int flags);
+t_level			*create_level(t_level *previous, int flags);
 int				is_connected_to_end(t_room *room, t_room **end, int *fork);
 int				is_unvisited(t_room *room, t_room *prev, t_fork *fork);
 t_branch		*get_branches_to_end(t_room *start, int flags);

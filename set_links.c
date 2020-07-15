@@ -93,8 +93,8 @@ void			set_links(char *line, t_room *room, t_input **input, int flags)
 				room2 = get_room(rooms[1], room, flags);
 				set_link(room1, room2, flags);
 				set_link(room2, room1, flags);
-				ft_delete(rooms);
 			}
+			ft_delete(rooms);
 		}
 		set_input(input, line, 0, flags);
 		first = 0;
