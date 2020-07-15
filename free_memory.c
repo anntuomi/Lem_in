@@ -12,20 +12,6 @@
 
 #include "lemin.h"
 
-void			ft_delete(char **array)
-{
-	int			i;
-
-	i = 0;
-	while (array[i] != NULL)
-	{
-		ft_strdel(&array[i]);
-		i++;
-	}
-	free(array);
-	array = NULL;
-}
-
 static void		free_rooms(t_room *room)
 {
 	t_room		*next_room;

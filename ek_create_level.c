@@ -34,7 +34,7 @@ int *end_counter, int flags)
 	previous_connections = parent_node->room->paths;
 	while (previous_connections && parent_node->room->type != END)
 	{
-		if (((t_room *)previous_connections->room)->visited != 1 && \
+		if (((t_room *)previous_connections->room)->used != 1 && \
 		(previous_connections->flow == UNUSED || \
 		previous_connections->flow == -1))
 		{
@@ -57,7 +57,7 @@ static void		mark_level_as_used(t_node *node_head)
 	while (node)
 	{
 		if (node->room->type != END)
-			node->room->visited = 1;
+			node->room->used = 1;
 		node = node->next;
 	}
 }
@@ -85,6 +85,7 @@ t_level			*create_starting_level(t_room *start, int flags)
 		}
 		path = path->next;
 	}
+	mark_level_as_used(level->nodes);
 	return (level);
 }
 

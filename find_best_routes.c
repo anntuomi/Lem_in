@@ -12,23 +12,6 @@
 
 #include "lemin.h"
 
-void			delete_group(t_group *group)
-{
-	t_route		**route;
-	int			i;
-
-	route = group->routes;
-	i = 0;
-	while (route[i])
-	{
-		free_route(route[i]);
-		i++;
-	}
-	free(group->routes);
-	free(group);
-	group = NULL;
-}
-
 t_group			*save_group_copy(t_group *group, int flags, t_group *old)
 {
 	t_group		*new;
@@ -43,22 +26,6 @@ t_group			*save_group_copy(t_group *group, int flags, t_group *old)
 	free(group);
 	group = NULL;
 	return (new);
-}
-
-void			delete_branches(t_branch *branch)
-{
-	t_branch	*current;
-	t_branch	*next;
-
-	current = branch;
-	while (current)
-	{
-		next = current->next;
-		//MAKE SURE ARRAY IS ACTUALLY USED
-		free(current->array);
-		free(current);
-		current = next;
-	}
 }
 
 t_group			*rebuild_routes(t_farm farm, int flags)

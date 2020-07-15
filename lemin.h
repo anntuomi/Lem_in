@@ -145,8 +145,15 @@ typedef struct	s_var
 	int				max_path_count;
 }				t_var;
 
-char			*ft_append(char const *s1, char const *s2, int *len, char c,
+typedef struct	s_block
+{
+	char		*ant_room_name;
+	char		*ant_nbr;
+}				t_block;
+
+char			*add_to_command_line(char *line, t_block *block, int *first,
 				int flags);
+char			*ft_append(char const *s1, char const *s2, int *len, char c);
 char			*move_ants(t_ant **ants, int flags);
 int				calculate_moves(t_route **routes, int path_count,
 				int ant_count);
@@ -168,6 +175,8 @@ void			find_best_routes(t_farm *farm, int flags);
 void			free_memory(t_farm farm);
 void			free_route(t_route *route);
 void			ft_delete(char **array);
+void			delete_group(t_group *group);
+void			delete_branches(t_branch *branch);
 void			handle_error(int flags, char *str);
 void			order_routes(t_route **array);
 void			print_input(t_input *input, int flags);

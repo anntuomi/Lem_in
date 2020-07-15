@@ -54,6 +54,16 @@ static void		assign_paths(t_farm farm, int flags)
 	farm.ants[i] = NULL;
 }
 
+static void		print_turns(int turns, int flags)
+{
+	if (flags == TURNS || flags == ERROR_TURNS)
+	{
+		ft_putstr("\nTurns: ");
+		ft_putnbr(turns);
+		ft_putchar('\n');
+	}
+}
+
 void			solve(t_farm farm, int flags)
 {
 	char		*output;
@@ -69,7 +79,9 @@ void			solve(t_farm farm, int flags)
 	while (farm.end->ant_count != farm.ant_count)
 	{
 		line = move_ants(farm.ants, flags);
-		tmp = ft_append(output, line, &len, '\n', flags);
+		tmp = ft_append(output, line, &len, '\n');
+		if (!tmp && len == -10)
+			handle_error(flags, "Malloc error");
 		if (output)
 			free(output);
 		output = tmp;
@@ -78,10 +90,5 @@ void			solve(t_farm farm, int flags)
 			print_output(&output, &len);
 		turns++;
 	}
-	if (flags == TURNS || flags == ERROR_TURNS)
-	{
-		ft_putstr("\nTurns: ");
-		ft_putnbr(turns);
-		ft_putchar('\n');
-	}
+	print_turns(turns, flags);
 }

@@ -31,7 +31,9 @@ void			print_input(t_input *input, int flags)
 	len = 0;
 	while (input)
 	{
-		tmp = ft_append(output, input->line, &len, '\n', flags);
+		tmp = ft_append(output, input->line, &len, '\n');
+		if (!tmp && len == -10)
+			handle_error(flags, "Malloc error");		
 		if (output)
 			free(output);
 		output = tmp;

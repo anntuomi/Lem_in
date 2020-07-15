@@ -76,7 +76,7 @@ static void		delete_levels(t_level *network, t_room *room_list)
 	current = room_list;
 	while (current)
 	{
-		current->visited = 0;
+		current->used = 0;
 		current = current->next;
 	}
 }
@@ -86,16 +86,16 @@ static void		delete_levels(t_level *network, t_room *room_list)
 **    (create_starting_level)
 ** 2. Creates new BFS levels until one or more node reaches end. (create_level)
 **    When one does, end counter is increased. This function can move through
-**    paths that have either flow UNUSED or -1, and to rooms of which visited is
-**    not marked yet.
+**    paths that have either flow UNUSED or -1, and to rooms of which visited
+**    is not marked yet.
 ** 3. Once end counter is above zero, we find one of the nodes that reached end
 **    and move backwards in the tree (set_augmenting_path). On the way back we
-**    set flows (mark_flows): If the path we move through was UNUSED, we set the
-**    flow to be 1 towards end and -1 towards start. If the flows have been
+**    set flows (mark_flows): If the path we move through was UNUSED, we set
+**    the flow to be 1 towards end and -1 towards start. If the flows have been
 **    previously marked, we set them to 0.
-** 4. The function stops once end is found or no new connections can be made (if
-**    all available path flows are either 1 or 0). Returns 1 if an augmenting
-**    path was found and 0 otherwise.
+** 4. The function stops once end is found or no new connections can be made
+**    (if all available path flows are either 1 or 0). Returns 1 if an 
+**    augmenting path was found and 0 otherwise.
 */
 
 int				edmonds_karp_traverse(t_farm farm, int flags)
@@ -105,7 +105,7 @@ int				edmonds_karp_traverse(t_farm farm, int flags)
 	int			path_found;
 
 	path_found = 0;
-	farm.start->visited = 1;
+	farm.start->used = 1;
 	network = create_starting_level(farm.start, flags);
 	if (!network->nodes)
 	{

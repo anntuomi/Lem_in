@@ -38,7 +38,7 @@ static void		set_route(t_route *route, t_room *room, int fork, int flags)
 	route->rooms++;
 	route->prev = route->room;
 	route->room = room;
-	room->used = 1;
+	room->visited = 1;
 	if (fork)
 		set_fork(route, route->prev, route->room, flags);
 }
@@ -54,7 +54,7 @@ t_room **room, t_path *path, int flags)
 	{
 		if (is_unvisited(path->room, first->prev, first->forks))
 		{
-			if (!((t_room *)path->room)->used && path->flow == 1)
+			if (!((t_room *)path->room)->visited && path->flow == 1)
 			{
 				if (!*room)
 					*room = path->room;

@@ -27,7 +27,7 @@ int flags)
 	route->prev = prev;
 	route->fork = NULL;
 	route->next = NULL;
-	room->used = 1;
+	room->visited = 1;
 	return (route);
 }
 
