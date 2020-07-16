@@ -12,12 +12,12 @@
 
 #include "lemin.h"
 
-void			set_fork(t_route *route, t_room *from, t_room *to, int flags)
+void			set_fork(t_route *route, t_room *from, t_room *to)
 {
 	t_fork		*fork;
 
 	if (!(fork = (t_fork *)malloc(sizeof(t_fork))))
-		handle_error(flags, "Malloc error");
+		handle_error(0, "Malloc error");
 	fork->from = from;
 	fork->to = to;
 	fork->next = NULL;
@@ -33,18 +33,18 @@ void			set_fork(t_route *route, t_room *from, t_room *to, int flags)
 	}
 }
 
-static void		set_route(t_route *route, t_room *room, int fork, int flags)
+static void		set_route(t_route *route, t_room *room, int fork)
 {
 	route->rooms++;
 	route->prev = route->room;
 	route->room = room;
 	room->visited = 1;
 	if (fork)
-		set_fork(route, route->prev, route->room, flags);
+		set_fork(route, route->prev, route->room);
 }
 
 static void		set_fork_routes(t_branch *branch, t_route **route,
-t_room **room, t_path *path, int flags)
+t_room **room, t_path *path)
 {
 	t_route		*first;
 	t_route		*tmp;
@@ -61,7 +61,7 @@ t_room **room, t_path *path, int flags)
 				else
 				{
 					tmp = *route;
-					*route = get_fork_route(first, path->room, flags);
+					*route = get_fork_route(first, path->room);
 					(*route)->next = tmp->next;
 					tmp->next = *route;
 					branch->routes++;
@@ -73,7 +73,7 @@ t_room **room, t_path *path, int flags)
 }
 
 static int		set_routes(t_branch **branch, t_branch **prev_branch,
-t_route **route, t_route **prev_route, int flags)
+t_route **route, t_route **prev_route)
 {
 	t_route		*first;
 	t_room		*room;
@@ -85,9 +85,9 @@ t_route **route, t_route **prev_route, int flags)
 	{
 		fork = 0;
 		if (!is_connected_to_end(first->room, &room, &fork))
-			set_fork_routes(*branch, route, &room, first->room->paths, flags);
+			set_fork_routes(*branch, route, &room, first->room->paths);
 		if (room)
-			set_route(first, room, fork, flags);
+			set_route(first, room, fork);
 		else
 		{
 			del_route(branch, prev_branch, route, *prev_route);
@@ -124,7 +124,7 @@ t_route **route, t_route **prev_route, int flags)
 	return ((room && room->type != END ? 1 : 0));
 }
 
-void			set_branches(t_branch **head, int flags)
+void			set_branches(t_branch **head)
 {
 	t_branch	*branch;
 	t_branch	*prev_branch;
@@ -141,13 +141,13 @@ void			set_branches(t_branch **head, int flags)
 		route = branch->route;
 		while (route)
 		{
-			if (set_routes(&branch, &prev_branch, &route, &prev_route,
-			flags) && !rooms_left)
+			if (set_routes(&branch, &prev_branch, &route, &prev_route) &&
+			!rooms_left)
 				rooms_left = 1;
 		}
 		if (!prev_branch)
 			*head = branch;
 	}
 	if (rooms_left)
-		set_branches(head, flags);
+		set_branches(head);
 }

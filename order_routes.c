@@ -36,13 +36,13 @@ void			order_routes(t_route **array)
 	}
 }
 
-t_route			**routes_to_array(int count, t_branch *branch, int flags)
+t_route			**routes_to_array(int count, t_branch *branch)
 {
 	t_route		**array;
 	int			i;
 
 	if (!(array = (t_route **)malloc(sizeof(t_route *) * (count + 1))))
-		handle_error(flags, "Malloc error");
+		handle_error(0, "Malloc error");
 	i = 0;
 	while (branch)
 	{

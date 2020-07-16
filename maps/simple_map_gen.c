@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   simple_map_gen.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atuomine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/01 14:03:36 by atuomine          #+#    #+#             */
+/*   Updated: 2020/06/01 14:03:37 by atuomine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include <unistd.h>
 #include "ft_printf.h"
@@ -5,11 +17,15 @@
 
 void	create_links(int block_size, int room_count)
 {
-	int link1 = 2;
-	int link2 = 3;
-	int block_nbr = 0;
-	int block_limit = block_size;
+	int link1;
+	int link2;
+	int block_nbr;
+	int block_limit;
 
+	link1 = 2;
+	link2 = 3;
+	block_nbr = 0;
+	block_limit = block_size;
 	while (link2 <= room_count)
 	{
 		ft_printf("1-%d\n", link1);
@@ -26,7 +42,8 @@ void	create_links(int block_size, int room_count)
 	}
 }
 
-void		create_rooms(int path_count, int room_count, int ant_amount, int block_size)
+void	create_rooms(int path_count, int room_count, int ant_amount,
+int block_size)
 {
 	int x;
 	int y;
@@ -82,7 +99,7 @@ void	set_limits(int *path_count, int *ant_count, int *room_count)
 	}
 }
 
-int	main(int argc, char **argv)
+int		main(int argc, char **argv)
 {
 	int		room_name;
 	int		path_count;

@@ -12,8 +12,7 @@
 
 #include "lemin.h"
 
-static char		*prefix_char(char *str, char *prefix, int prefix_len,
-int flags)
+static char		*prefix_char(char *str, char *prefix, int prefix_len)
 {
 	char		*result;
 	int			i;
@@ -21,7 +20,7 @@ int flags)
 
 	if (!(result = (char *)malloc(sizeof(char) *
 	(ft_strlen(str) + prefix_len + 1))))
-		handle_error(flags, "Malloc error");
+		handle_error(0, "Malloc error");
 	i = 0;
 	while (i < prefix_len)
 	{
@@ -36,7 +35,7 @@ int flags)
 }
 
 char			*add_to_command_line(char *line, t_block *block,
-int *first, int flags)
+int *first)
 {
 	char	*result;
 	char	*block_text;
@@ -44,20 +43,20 @@ int *first, int flags)
 	char	*name_prefix;
 
 	if (!*first)
-		number_prefix = prefix_char(block->ant_nbr, " L", 2, flags);
+		number_prefix = prefix_char(block->ant_nbr, " L", 2);
 	else
 	{
-		number_prefix = prefix_char(block->ant_nbr, "L", 1, flags);
+		number_prefix = prefix_char(block->ant_nbr, "L", 1);
 		*first = 0;
 	}
 	free(block->ant_nbr);
-	name_prefix = prefix_char(block->ant_room_name, "-", 1, flags);
+	name_prefix = prefix_char(block->ant_room_name, "-", 1);
 	if (!(block_text = ft_strjoin(number_prefix, name_prefix)))
-		handle_error(flags, "Malloc error");
+		handle_error(0, "Malloc error");
 	free(number_prefix);
 	free(name_prefix);
 	if (!(result = ft_strjoin(line, block_text)))
-		handle_error(flags, "Malloc error");
+		handle_error(0, "Malloc error");
 	if (line)
 		free(line);
 	free(block_text);

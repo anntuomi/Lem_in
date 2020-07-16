@@ -20,7 +20,7 @@ void			print_output(char **output, int *len)
 	*len = 0;
 }
 
-void			print_input(t_input *input, int flags)
+void			print_input(t_input *input)
 {
 	char	*output;
 	char	*tmp;
@@ -32,8 +32,6 @@ void			print_input(t_input *input, int flags)
 	while (input)
 	{
 		tmp = ft_append(output, input->line, &len, '\n');
-		if (!tmp && len == -10)
-			handle_error(flags, "Malloc error");		
 		if (output)
 			free(output);
 		output = tmp;
@@ -48,7 +46,7 @@ void			print_input(t_input *input, int flags)
 	ft_putchar('\n');
 }
 
-void			set_input(t_input **input, char *line, int rooms, int flags)
+void			set_input(t_input **input, char *line, int rooms)
 {
 	if (line[0] == '#' && line[1] == '#' &&
 	((rooms && determine_room_type(line) == NORMAL) || !rooms))
@@ -59,7 +57,7 @@ void			set_input(t_input **input, char *line, int rooms, int flags)
 	else
 	{
 		if (!((*input)->next = (t_input *)malloc(sizeof(t_input))))
-			handle_error(flags, "Malloc error");
+			handle_error(0, "Malloc error");
 		*input = (*input)->next;
 		(*input)->line = line;
 		(*input)->next = NULL;

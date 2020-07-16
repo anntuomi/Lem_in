@@ -50,10 +50,7 @@ char			*ft_append(char const *s1, char const *s2, int *len, char c)
 	if (c)
 		length += 1;
 	if (!(new = ft_strnew(length)))
-	{
-		*len = -10;
-		return (NULL);
-	}
+		handle_error(0, "Malloc error");
 	start = 0;
 	i = ft_joins1(s1, new);
 	if (s2)

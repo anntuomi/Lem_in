@@ -27,7 +27,7 @@ t_node *prev)
 }
 
 static t_node	*add_children(t_node *parent_node, t_node *head,
-int *end_counter, int flags)
+int *end_counter)
 {
 	t_path		*previous_connections;
 
@@ -40,7 +40,7 @@ int *end_counter, int flags)
 		{
 			if (!(head = make_node(((t_room *)previous_connections->room), \
 			parent_node->room, head, parent_node)))
-				handle_error(flags, "Malloc error");
+				handle_error(0, "Malloc error");
 			if (head->room->type == END)
 				*end_counter = *end_counter + 1;
 		}
@@ -62,13 +62,13 @@ static void		mark_level_as_used(t_node *node_head)
 	}
 }
 
-t_level			*create_starting_level(t_room *start, int flags)
+t_level			*create_starting_level(t_room *start)
 {
 	t_path		*path;
 	t_level		*level;
 
 	if (!(level = (t_level *)malloc(sizeof(t_level) * 1)))
-		handle_error(flags, "Malloc error");
+		handle_error(0, "Malloc error");
 	level->next = NULL;
 	level->nodes = NULL;
 	level->end_counter = 0;
@@ -79,7 +79,7 @@ t_level			*create_starting_level(t_room *start, int flags)
 		{
 			if (!(level->nodes = make_node(((t_room *)path->room),
 			start, level->nodes, NULL)))
-				handle_error(flags, "Malloc error");
+				handle_error(0, "Malloc error");
 			if (level->nodes->room->type == END)
 				level->end_counter++;
 		}
@@ -89,7 +89,7 @@ t_level			*create_starting_level(t_room *start, int flags)
 	return (level);
 }
 
-t_level			*create_level(t_level *previous, int flags)
+t_level			*create_level(t_level *previous)
 {
 	t_node		*parent_node;
 	t_level		*new;
@@ -97,14 +97,14 @@ t_level			*create_level(t_level *previous, int flags)
 	t_node		*head;
 
 	if (!(new = (t_level *)malloc(sizeof(t_level) * 1)))
-		handle_error(flags, "Malloc error");
+		handle_error(0, "Malloc error");
 	new->next = NULL;
 	parent_node = previous->nodes;
 	head = NULL;
 	new->end_counter = 0;
 	while (parent_node)
 	{
-		head = add_children(parent_node, head, &new->end_counter, flags);
+		head = add_children(parent_node, head, &new->end_counter);
 		parent_node = parent_node->next;
 	}
 	new->nodes = head;

@@ -12,14 +12,14 @@
 
 #include "lemin.h"
 
-t_group			*save_group_copy(t_group *group, int flags, t_group *old)
+t_group			*save_group_copy(t_group *group, t_group *old)
 {
 	t_group		*new;
 
 	if (old)
 		delete_group(old);
 	if (!(new = (t_group *)malloc(sizeof(t_group))))
-		handle_error(flags, "Malloc error");
+		handle_error(0, "Malloc error");
 	new->path_count = group->path_count;
 	new->routes = group->routes;
 	new->moves = group->moves;
@@ -28,7 +28,7 @@ t_group			*save_group_copy(t_group *group, int flags, t_group *old)
 	return (new);
 }
 
-t_group			*rebuild_routes(t_farm farm, int flags)
+t_group			*rebuild_routes(t_farm farm)
 {
 	t_group		*group;
 	t_branch	*branches;
@@ -37,10 +37,10 @@ t_group			*rebuild_routes(t_farm farm, int flags)
 	t_path		*current;
 
 	if (!(group = (t_group *)malloc(sizeof(t_group))))
-		handle_error(flags, "Malloc error");
-	branches = get_branches_to_end(farm.start, flags);
+		handle_error(0, "Malloc error");
+	branches = get_branches_to_end(farm.start);
 	group->path_count = count_routes(branches);
-	group->routes = routes_to_array(group->path_count, branches, flags);
+	group->routes = routes_to_array(group->path_count, branches);
 	delete_branches(branches);
 	if (group->path_count > 0)
 	{
@@ -82,24 +82,24 @@ void			clear_used_status(t_room *rooms)
 **    edmonds_karp_traverse.c
 */
 
-void			find_best_routes(t_farm *farm, int flags)
+void			find_best_routes(t_farm *farm)
 {
 	int			path_found;
 	t_group		*groups;
 	t_group		*best;
 
 	groups = NULL;
-	if ((path_found = edmonds_karp_traverse(*farm, flags)))
-		best = rebuild_routes(*farm, flags);
+	if ((path_found = edmonds_karp_traverse(*farm)))
+		best = rebuild_routes(*farm);
 	while (path_found)
 	{
 		clear_used_status(farm->rooms);
-		if ((path_found = edmonds_karp_traverse(*farm, flags)))
+		if ((path_found = edmonds_karp_traverse(*farm)))
 		{
-			groups = rebuild_routes(*farm, flags);
+			groups = rebuild_routes(*farm);
 			if (best->moves == -1 || (groups->moves != -1 && \
 			groups->moves < best->moves))
-				best = save_group_copy(groups, flags, best);
+				best = save_group_copy(groups, best);
 			else if (groups)
 				delete_group(groups);
 		}

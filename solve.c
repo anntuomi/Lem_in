@@ -28,7 +28,7 @@ int ant_count)
 	return (moves);
 }
 
-static void		assign_paths(t_farm farm, int flags)
+static void		assign_paths(t_farm farm)
 {
 	int			moves;
 	int			i;
@@ -45,7 +45,7 @@ static void		assign_paths(t_farm farm, int flags)
 			moves--;
 		}
 		if (!(farm.ants[i] = (t_ant *)malloc(sizeof(t_ant))))
-			handle_error(flags, "Malloc error");
+			handle_error(0, "Malloc error");
 		farm.ants[i]->forks = farm.ordered[j]->forks;
 		farm.ants[i]->room = farm.start;
 		farm.ants[i]->prev = NULL;
@@ -72,16 +72,14 @@ void			solve(t_farm farm, int flags)
 	int			len;
 	int			turns;
 
-	assign_paths(farm, flags);
+	assign_paths(farm);
 	output = NULL;
 	len = 0;
 	turns = 0;
 	while (farm.end->ant_count != farm.ant_count)
 	{
-		line = move_ants(farm.ants, flags);
+		line = move_ants(farm.ants);
 		tmp = ft_append(output, line, &len, '\n');
-		if (!tmp && len == -10)
-			handle_error(flags, "Malloc error");
 		if (output)
 			free(output);
 		output = tmp;

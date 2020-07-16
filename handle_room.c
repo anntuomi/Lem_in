@@ -12,7 +12,7 @@
 
 #include "lemin.h"
 
-static t_room	*new_room(int room_type, char **input, t_room *prev, int flags)
+static t_room	*new_room(int room_type, char **input, t_room *prev)
 {
 	t_room		*new;
 	static int	id = 0;
@@ -21,10 +21,10 @@ static t_room	*new_room(int room_type, char **input, t_room *prev, int flags)
 	if (!(new = (t_room *)malloc(sizeof(t_room))) ||
 	!(new->name = ft_strdup(input[0])) ||
 	(tmp = ft_atoll(input[1])) < INT_MIN || tmp > INT_MAX)
-		handle_error(flags, "Malloc error or coord_x is not an integer");
+		handle_error(0, "Malloc error or coord_x is not an integer");
 	new->x = (int)tmp;
 	if ((tmp = ft_atoll(input[2])) < INT_MIN || tmp > INT_MAX)
-		handle_error(flags, "Coord_y is not an integer");
+		handle_error(0, "Coord_y is not an integer");
 	new->y = (int)tmp;
 	new->type = room_type;
 	new->id = id++;
@@ -41,24 +41,21 @@ static t_room	*new_room(int room_type, char **input, t_room *prev, int flags)
 	return (new);
 }
 
-static t_room	*save_room(t_room *room, t_room **head, int *room_type,
-char **input, int flags)
+static t_room	*save_room(t_room *room, int *room_type,
+char **input)
 {
 	if (!room)
-	{
-		room = new_room(*room_type, input, NULL, flags);
-		*head = room;
-	}
+		room = new_room(*room_type, input, NULL);
 	else
 	{
-		room->next = new_room(*room_type, input, room, flags);
+		room->next = new_room(*room_type, input, room);
 		room = room->next;
 	}
 	*room_type = NORMAL;
 	return (room);
 }
 
-static int		validate_room_input(char **input, t_room **head, int flags)
+static int		validate_room_input(char **input, t_room **head)
 {
 	int			size;
 	t_room		*room;
@@ -72,12 +69,12 @@ static int		validate_room_input(char **input, t_room **head, int flags)
 		return (NOT_ROOM);
 	}
 	if (size != 3 || !ft_isnum(input[1]) || !ft_isnum(input[2]))
-		handle_error(flags, "A room is not defined by: name coord_x coord_y");
+		handle_error(0, "A room is not defined by: name coord_x coord_y");
 	room = *head;
 	while (room)
 	{
 		if (ft_strequ(input[0], room->name))
-			handle_error(flags, "Multiple rooms with the same name");
+			handle_error(0, "Multiple rooms with the same name");
 		room = room->next;
 	}
 	return (IS_ROOM);
@@ -93,8 +90,7 @@ int				determine_room_type(char *line)
 		return (NORMAL);
 }
 
-void			create_room_list(t_room **head, char **line, t_input **lines,
-int flags)
+void			create_room_list(t_room **head, char **line, t_input **lines)
 {
 	int			room_type;
 	char		**input;
@@ -105,17 +101,19 @@ int flags)
 	while (get_next_line(0, line) == 1)
 	{
 		if (*line[0] == 'L')
-			handle_error(flags, "Room name starts with 'L'");
+			handle_error(0, "Room name starts with 'L'");
 		if (*line[0] == '#')
 			room_type = determine_room_type(*line);
 		else
 		{
 			if (!(input = ft_strsplit(*line, ' ')))
-				handle_error(flags, "Malloc error");
-			if (validate_room_input(input, head, flags) == NOT_ROOM)
+				handle_error(0, "Malloc error");
+			if (validate_room_input(input, head) == NOT_ROOM)
 				break ;
-			room = save_room(room, head, &room_type, input, flags);
+			room = save_room(room, &room_type, input);
+			if (!(*head))
+				*head = room;
 		}
-		set_input(lines, *line, 1, flags);
+		set_input(lines, *line, 1);
 	}
 }

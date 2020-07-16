@@ -94,11 +94,11 @@ static void		delete_levels(t_level *network, t_room *room_list)
 **    the flow to be 1 towards end and -1 towards start. If the flows have been
 **    previously marked, we set them to 0.
 ** 4. The function stops once end is found or no new connections can be made
-**    (if all available path flows are either 1 or 0). Returns 1 if an 
+**    (if all available path flows are either 1 or 0). Returns 1 if an
 **    augmenting path was found and 0 otherwise.
 */
 
-int				edmonds_karp_traverse(t_farm farm, int flags)
+int				edmonds_karp_traverse(t_farm farm)
 {
 	t_level		*network;
 	t_level		*network_head;
@@ -106,7 +106,7 @@ int				edmonds_karp_traverse(t_farm farm, int flags)
 
 	path_found = 0;
 	farm.start->used = 1;
-	network = create_starting_level(farm.start, flags);
+	network = create_starting_level(farm.start);
 	if (!network->nodes)
 	{
 		free(network);
@@ -120,7 +120,7 @@ int				edmonds_karp_traverse(t_farm farm, int flags)
 			path_found = set_augmenting_path(network, farm.start);
 			break ;
 		}
-		network->next = create_level(network, flags);
+		network->next = create_level(network);
 		network = network->next;
 	}
 	delete_levels(network_head, farm.rooms);

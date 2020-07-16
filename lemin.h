@@ -151,27 +151,26 @@ typedef struct	s_block
 	char		*ant_nbr;
 }				t_block;
 
-char			*add_to_command_line(char *line, t_block *block, int *first,
-				int flags);
+char			*add_to_command_line(char *line, t_block *block, int *first);
 char			*ft_append(char const *s1, char const *s2, int *len, char c);
-char			*move_ants(t_ant **ants, int flags);
+char			*move_ants(t_ant **ants);
 int				calculate_moves(t_route **routes, int path_count,
 				int ant_count);
+void			find_edges(t_room **head, t_room **start, t_room **end);
 int				count_routes(t_branch *branch);
 int				determine_room_type(char *line);
-int				edmonds_karp_traverse(t_farm farm, int flags);
-t_level			*create_starting_level(t_room *start, int flags);
-t_level			*create_level(t_level *previous, int flags);
+int				edmonds_karp_traverse(t_farm farm);
+t_level			*create_starting_level(t_room *start);
+t_level			*create_level(t_level *previous);
 int				is_connected_to_end(t_room *room, t_room **end, int *fork);
 int				is_unvisited(t_room *room, t_room *prev, t_fork *fork);
-t_branch		*get_branches_to_end(t_room *start, int flags);
-t_route			**routes_to_array(int count, t_branch *branch, int flags);
-t_route			*get_fork_route(t_route *before_fork, t_room *room, int flags);
-void			create_room_list(t_room **head, char **line, t_input **input,
-				int flags);
+t_branch		*get_branches_to_end(t_room *start);
+t_route			**routes_to_array(int count, t_branch *branch);
+t_route			*get_fork_route(t_route *before_fork, t_room *room);
+void			create_room_list(t_room **head, char **line, t_input **input);
 void			del_route(t_branch **branch, t_branch **prev_branch,
 				t_route **route, t_route *prev_route);
-void			find_best_routes(t_farm *farm, int flags);
+void			find_best_routes(t_farm *farm);
 void			free_memory(t_farm farm);
 void			free_route(t_route *route);
 void			ft_delete(char **array);
@@ -179,12 +178,12 @@ void			delete_group(t_group *group);
 void			delete_branches(t_branch *branch);
 void			handle_error(int flags, char *str);
 void			order_routes(t_route **array);
-void			print_input(t_input *input, int flags);
+void			print_input(t_input *input);
 void			print_output(char **output, int *len);
-void			set_branches(t_branch **head, int flags);
-void			set_fork(t_route *route, t_room *from, t_room *to, int flags);
-void			set_input(t_input **input, char *line, int room, int flags);
-void			set_links(char *line, t_room *room, t_input **input, int flags);
+void			set_branches(t_branch **head);
+void			set_fork(t_route *route, t_room *from, t_room *to);
+void			set_input(t_input **input, char *line, int room);
+void			set_links(char *line, t_room *room, t_input **input);
 void			solve(t_farm farm, int flags);
 
 #endif

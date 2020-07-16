@@ -22,14 +22,14 @@ static void			take_step(t_ant *ant, t_room *room, int is_fork)
 		ant->fork = ant->fork->next;
 }
 
-static t_block		*make_block(char *name, int i, int flags)
+static t_block		*make_block(char *name, int i)
 {
 	t_block *block;
 
 	if (!(block = (t_block *)malloc(sizeof(t_block))))
-		handle_error(flags, "Malloc error");
+		handle_error(0, "Malloc error");
 	if (!(block->ant_nbr = ft_itoa(i + 1)))
-		handle_error(flags, "Malloc error");
+		handle_error(0, "Malloc error");
 	block->ant_room_name = name;
 	return (block);
 }
@@ -54,7 +54,7 @@ static t_room		*set_up(t_ant **ants, int i, int *is_fork)
 	return (room);
 }
 
-char				*move_ants(t_ant **ants, int flags)
+char				*move_ants(t_ant **ants)
 {
 	int			first;
 	int			i;
@@ -75,7 +75,7 @@ char				*move_ants(t_ant **ants, int flags)
 			{
 				take_step(ants[i], room, is_fork);
 				line = add_to_command_line(line,
-				make_block(ants[i]->room->name, i, flags), &first, flags);
+				make_block(ants[i]->room->name, i), &first);
 			}
 		}
 		i++;
