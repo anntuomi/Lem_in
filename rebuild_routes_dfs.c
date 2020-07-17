@@ -12,6 +12,36 @@
 
 #include "lemin.h"
 
+t_room			**reorder(t_room **original, int *group_size, int reorder_by,
+int offset)
+{
+	t_room	**new;
+	int		i;
+	int		picker;
+
+	if (!(new = (t_room **)malloc(sizeof(t_room *) * (*group_size + 1))))
+		handle_error(0, "Malloc error");
+	i = 0;
+	while (offset < reorder_by && i < *group_size)
+	{
+		picker = offset + reorder_by;
+		while (picker < *group_size)
+		{
+			new[i] = original[picker];
+			picker = picker + reorder_by;
+			i++;
+		}
+		new[i] = original[offset];
+		i++;
+		offset++;
+	}
+	new[i] = NULL;
+	*group_size = i;
+	if (original)
+		free(original);
+	return (new);
+}
+
 t_fork			*create_fork(t_room *from, t_room *to)
 {
 	t_fork *fork;

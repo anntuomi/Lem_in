@@ -174,6 +174,8 @@ t_group			*rebuild_routes_dfs(t_farm farm, int orig_group_size,
 t_level			*create_level(t_level *previous);
 t_level			*create_starting_level(t_room *start);
 t_room			**count_group_size(t_room *start, int *group_size);
+t_room			**reorder(t_room **original, int *group_size, int reorder_by,
+				int offset);
 t_route			**routes_to_array(int count, t_branch *branch);
 t_route			*get_fork_route(t_route *before_fork, t_room *room);
 void			create_room_list(t_room **head, char **line, t_input **lines);

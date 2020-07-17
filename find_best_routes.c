@@ -71,22 +71,32 @@ void			check_dfs(t_farm *farm, t_group **best)
 	t_room		**starting_rooms;
 	t_group		*groups;
 	int			group_size;
+	int			reorder_by;
+	int			orig_group_size;
 
+	reorder_by = 1;
 	groups = NULL;
-	starting_rooms = count_group_size(farm->start, &group_size);
-	groups = rebuild_routes_dfs(*farm, group_size, starting_rooms, 0);
-	if ((*best)->moves == -1 || (groups->moves != -1 && \
-	groups->moves < (*best)->moves))
-		*best = save_group_copy(groups, *best);
-	else if (groups)
-		delete_group(groups);
-	if (starting_rooms)
-		free(starting_rooms);
+	starting_rooms = count_group_size(farm->start, &orig_group_size);
+	while (reorder_by < 6)
+	{
+		group_size = orig_group_size;
+		groups = rebuild_routes_dfs(*farm, group_size, starting_rooms, 0);
+		if ((*best)->moves == -1 || (groups->moves != -1 && \
+		groups->moves < (*best)->moves))
+			*best = save_group_copy(groups, *best);
+		else if (groups)
+			delete_group(groups);
+		if (reorder_by == 5)
+			break ;
+		starting_rooms = reorder(starting_rooms, &group_size, reorder_by, 0);
+		reorder_by++;
+		clear_used_status(farm->rooms);
+	}
 }
 
 /*
 ** 1. Runs EK to find the shortest route to end, and marks the flows on paths
-**    (1 towards end, -1 away from end)
+**    (1 towards end, -1 away from end).
 ** 2. Uses rebuild_routes to build a route. Rebuild_routes uses BFS to move
 **    through paths that have flow of 1. Paths that have flow other than 1 are
 **    ignored.

@@ -95,7 +95,7 @@ int				main(int ac, char **av)
 	set_links(line, farm.rooms, &input);
 	find_edges(&farm.rooms, &farm.start, &farm.end);
 	find_best_routes(&farm);
-	//print_input(head);
+	print_input(head);
 	order_routes(farm.ordered);
 	farm.start->ant_count = farm.ant_count;
 	solve(farm, flags);
