@@ -32,9 +32,6 @@ t_group			*rebuild_routes(t_farm farm, int state)
 {
 	t_group		*group;
 	t_branch	*branches;
-	int			i;
-	int			length;
-	t_path		*current;
 
 	if (!(group = (t_group *)malloc(sizeof(t_group))))
 		handle_error(0, "Malloc error");
@@ -104,7 +101,6 @@ void			find_best_routes(t_farm *farm)
 	int			path_found;
 	t_group		*groups;
 	t_group		*best;
-	t_room		**starting_rooms;
 
 	groups = NULL;
 	best = rebuild_routes(*farm, SIMPLE);

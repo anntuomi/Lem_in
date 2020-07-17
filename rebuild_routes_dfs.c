@@ -58,7 +58,6 @@ t_room **starting_rooms, int j)
 {
 	t_group *group;
 	int		group_size;
-	t_path	*current;
 
 	if (!(group = (t_group *)malloc(sizeof(t_group))))
 		handle_error(0, "Malloc error");

@@ -18,6 +18,7 @@ static t_room	*new_room(int room_type, char **input, t_room *prev)
 	static int	id = 0;
 	long long	tmp;
 
+	tmp = 0;
 	if (!(new = (t_room *)malloc(sizeof(t_room))) ||
 	!(new->name = ft_strdup(input[0])) ||
 	(tmp = ft_atoll(input[1])) < INT_MIN || tmp > INT_MAX)

@@ -16,7 +16,6 @@ int				del_route(t_branch **branch, t_branch **prev_branch,
 t_route **route, t_route *prev_route)
 {
 	t_branch	*next;
-	t_fork		*tmp;
 
 	!prev_route ? ((*branch)->route = (*route)->next) :
 	(prev_route->next = (*route)->next);

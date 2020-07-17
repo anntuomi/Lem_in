@@ -39,8 +39,6 @@ t_room			**count_group_size(t_room *start, int *group_size)
 {
 	int		size;
 	t_path	*current;
-	t_room	**starting_rooms;
-	int		i;
 
 	size = 0;
 	current = start->paths;

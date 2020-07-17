@@ -32,7 +32,7 @@ void			mark_flows(t_room *to, t_room *from)
 		path->flow = 1;
 }
 
-static int		set_augmenting_path(t_level *level, t_room *start)
+static int		set_augmenting_path(t_level *level)
 {
 	t_node		*node;
 
@@ -117,7 +117,7 @@ int				edmonds_karp_traverse(t_farm farm)
 	{
 		if (network->end_counter)
 		{
-			path_found = set_augmenting_path(network, farm.start);
+			path_found = set_augmenting_path(network);
 			break ;
 		}
 		network->next = create_level(network);

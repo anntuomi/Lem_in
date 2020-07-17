@@ -16,6 +16,7 @@ static int		get_nbr_of_ants(char *line)
 {
 	long long tmp;
 
+	tmp = 0;
 	if (!line || !ft_isnum(line) || (tmp = ft_atoll(line)) < 1 ||
 	tmp > INT_MAX || ft_strlen(line) > 10)
 		handle_error(0, "Number_of_ants is missing or invalid");

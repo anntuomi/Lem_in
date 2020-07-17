@@ -95,7 +95,6 @@ t_level			*create_level(t_level *previous)
 {
 	t_node		*parent_node;
 	t_level		*new;
-	t_path		*previous_connections;
 	t_node		*head;
 
 	if (!(new = (t_level *)malloc(sizeof(t_level) * 1)))
