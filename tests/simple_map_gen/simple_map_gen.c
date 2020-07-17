@@ -101,7 +101,6 @@ static void	set_limits(int *path_count, int *ant_count, int *room_count)
 
 int			main(int argc, char **argv)
 {
-	int		room_name;
 	int		path_count;
 	int		ant_amount;
 	int		room_count;

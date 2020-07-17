@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "lem_in_checker.h"
+#include <stdio.h>
 
 static t_room	*get_room(int type, char **input)
 {

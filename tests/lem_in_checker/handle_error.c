@@ -17,9 +17,16 @@ void	del_array(char **array)
 	int	i;
 
 	i = 0;
-	while (array[i])
-		ft_strdel(&array[i++]);
-	ft_strdel(array);
+	if (array)
+	{
+		while (array[i])
+		{
+			free(array[i]);
+			i++;
+		}
+		free(array);
+		array = NULL;
+	}
 }
 
 int		is_nbr(char *str)

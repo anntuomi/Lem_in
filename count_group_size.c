@@ -12,13 +12,13 @@
 
 #include "lemin.h"
 
-static t_room	**create_starting_room_array(t_room *start, int group_size)
+static t_room	**create_starting_room_array(t_room *start, int size)
 {
 	t_path	*current;
 	t_room	**start_rooms;
 	int		i;
 
-	if (!(start_rooms = (t_room **)malloc(sizeof(t_room *) * group_size + 1)))
+	if (!(start_rooms = (t_room **)malloc(sizeof(t_room *) * (size + 1))))
 		handle_error(0, "Malloc error");
 	current = start->paths;
 	i = 0;

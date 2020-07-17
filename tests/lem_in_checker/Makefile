@@ -19,11 +19,12 @@ OBJS = $(SRCS:%.c=%.o)
 all: $(LIB) $(NAME)
 
 $(LIB):
-			make -C ../../libft/
+			make re -C ../../libft/
 
 $(NAME):
 			gcc -I $(INCS) -c $(SRCS)
 			gcc $(OBJS) ../../libft/libft.a -o $(NAME)
+			make fclean -C ../../libft/
 
 clean:
 			/bin/rm -f $(OBJS)
@@ -34,3 +35,5 @@ fclean:		clean
 			make fclean -C ../../libft/
 
 re:			fclean all
+
+.PHONY: all clean fclean re

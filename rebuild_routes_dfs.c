@@ -30,7 +30,7 @@ int *group_size, int j)
 	int		i;
 	t_route **routes;
 
-	if (!(routes = (t_route **)malloc(sizeof(t_route *) * *group_size + 1)))
+	if (!(routes = (t_route **)malloc(sizeof(t_route *) * (*group_size + 1))))
 		handle_error(0, "Malloc error");
 	i = 0;
 	while (i < *group_size)

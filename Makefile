@@ -17,7 +17,7 @@ edmonds_karp_traverse.c ek_create_level.c find_best_routes.c find_edges.c \
 free_memory.c ft_append.c get_branches_to_end.c handle_error.c handle_room.c \
 input_and_output.c is_connected_to_end.c main.c move_ants.c order_routes.c \
 rebuild_routes_dfs.c save_dfs_forks.c set_branches.c set_links.c solve.c
-OBJECT = $(SRC:%.c=%.o)
+OBJECT = $(SRC:.c=.o)
 LIBRARY = lib
 
 all: $(LIBRARY) $(NAME)
@@ -31,10 +31,12 @@ $(NAME):
 
 clean:
 			/bin/rm -f $(OBJECT)
-			make clean -C libft/
+			make -C libft/ clean
 
 fclean:		clean
+			make -C libft/ fclean
 			/bin/rm -f $(NAME)
-			make fclean -C libft/
 
 re:			fclean all
+
+.PHONY: all clean fclean re

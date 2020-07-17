@@ -27,7 +27,7 @@ static void		mv_ant(char *mv, int ant_count, t_ant **ants)
 	path = ants[ant]->room->paths;
 	while (path && !ft_strequ(((t_room *)path->room)->name, room))
 		path = path->next;
-	del_array(array);
+	//del_array(array);
 	if (!path || (((t_room *)path->room)->type == NORMAL &&
 	((t_room *)path->room)->ant_count))
 		handle_error("An ant is moved to an undefined or a full room");
@@ -55,7 +55,8 @@ static void		mv_ants(int ant_count, t_ant **ants, t_room *start, t_room *end)
 		while (array[i])
 			mv_ant(array[i++], ant_count, ants);
 		del_array(array);
-		ft_strdel(&line);
+		if (line)
+			ft_strdel(&line);
 		i = 0;
 		while (ants[i])
 			ants[i++]->mvd = 0;
@@ -94,7 +95,10 @@ static t_ant	**get_ants(int *ant_count)
 	int		i;
 
 	while (get_next_line(0, &line) == 1 && line[0] == '#')
-		ft_strdel(&line);
+	{
+		if (line)
+			ft_strdel(&line);
+	}
 	if (!line || (*ant_count = ft_atoi(line)) < 1 ||
 	!(ants = (t_ant **)malloc(sizeof(t_ant *) * (*ant_count + 1))))
 		handle_error("Number_of_ants is missing or invalid or malloc error");

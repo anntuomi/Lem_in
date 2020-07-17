@@ -66,18 +66,6 @@ void			clear_used_status(t_room *rooms)
 	}
 }
 
-/*
-** 1. Runs EK to find the shortest route to end, and marks the flows on paths
-**    (1 towards end, -1 away from end)
-** 2. Uses rebuild_routes to build a route. Rebuild_routes uses BFS to move
-**    through paths that have flow of 1. Paths that have flow other than 1 are
-**    ignored.
-** 3. Repeats steps 1 and 2. until no new start-end connections can be made.
-**    Note that EK is basically like reversed build_routes: It will go through
-**    paths that have either flow UNUSED or -1. More info in
-**    edmonds_karp_traverse.c
-*/
-
 void			check_dfs(t_farm *farm, t_group **best)
 {
 	t_room		**starting_rooms;
@@ -95,6 +83,18 @@ void			check_dfs(t_farm *farm, t_group **best)
 	if (starting_rooms)
 		free(starting_rooms);
 }
+
+/*
+** 1. Runs EK to find the shortest route to end, and marks the flows on paths
+**    (1 towards end, -1 away from end)
+** 2. Uses rebuild_routes to build a route. Rebuild_routes uses BFS to move
+**    through paths that have flow of 1. Paths that have flow other than 1 are
+**    ignored.
+** 3. Repeats steps 1 and 2. until no new start-end connections can be made.
+**    Note that EK is basically like reversed build_routes: It will go through
+**    paths that have either flow UNUSED or -1. More info in
+**    edmonds_karp_traverse.c
+*/
 
 void			find_best_routes(t_farm *farm)
 {

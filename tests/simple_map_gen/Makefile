@@ -22,8 +22,8 @@ $(LIBRARY):
 			make -C ../../libft/
 
 $(NAME):
-			gcc -I $(INC) -c $(SRC)
-			gcc $(OBJECT) ../../libft/libft.a -o $(NAME)
+			gcc -Wall -Wextra -Werror -I $(INC) -c $(SRC)
+			gcc -Wall -Wextra -Werror $(OBJECT) ../../libft/libft.a -o $(NAME)
 
 clean:
 			/bin/rm -f $(OBJECT)
@@ -34,3 +34,5 @@ fclean:		clean
 			make fclean -C ../../libft/
 
 re:			fclean all
+
+.PHONY: all clean fclean re
