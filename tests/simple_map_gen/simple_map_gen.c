@@ -12,10 +12,10 @@
 
 #include <stdlib.h>
 #include <unistd.h>
-#include "ft_printf.h"
-#include "libft.h"
+#include "../../libft/includes/ft_printf.h"
+#include "../../libft/includes/libft.h"
 
-void	create_links(int block_size, int room_count)
+static void	create_links(int block_size, int room_count)
 {
 	int link1;
 	int link2;
@@ -42,7 +42,7 @@ void	create_links(int block_size, int room_count)
 	}
 }
 
-void	create_rooms(int path_count, int room_count, int ant_amount,
+static void	create_rooms(int path_count, int room_count, int ant_amount,
 int block_size)
 {
 	int x;
@@ -68,14 +68,14 @@ int block_size)
 	ft_printf("##end\n%d %d %d\n", room_name, block_size + 1, y);
 }
 
-void	print_error(void)
+static void	print_error(void)
 {
 	ft_printf("Program needs 1+ ants, 3+ rooms and 1+ paths.\n");
 	ft_printf("Arguments need to be positive integers.\n");
 	exit(2);
 }
 
-void	set_limits(int *path_count, int *ant_count, int *room_count)
+static void	set_limits(int *path_count, int *ant_count, int *room_count)
 {
 	if (*room_count > 4000)
 	{
@@ -99,7 +99,7 @@ void	set_limits(int *path_count, int *ant_count, int *room_count)
 	}
 }
 
-int		main(int argc, char **argv)
+int			main(int argc, char **argv)
 {
 	int		room_name;
 	int		path_count;

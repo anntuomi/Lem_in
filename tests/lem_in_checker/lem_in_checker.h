@@ -13,8 +13,8 @@
 #ifndef LEM_IN_CHECKER_H
 # define LEM_IN_CHECKER_H
 
-# include "../libft/includes/libft.h"
-# include "../libft/includes/get_next_line.h"
+# include "../../libft/includes/libft.h"
+# include "../../libft/includes/get_next_line.h"
 # include <stdlib.h>
 
 # define START 0

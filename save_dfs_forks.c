@@ -75,7 +75,6 @@ t_room *end)
 {
 	t_fork	*fork_head;
 	t_fork	*fork;
-	t_path	*path;
 	t_room	*previous;
 
 	if (current->visited == 2)
@@ -84,7 +83,6 @@ t_room *end)
 	if (current->type != END)
 		current->visited = 2;
 	fork_head = fork;
-	path = current->paths;
 	while (current->type != END)
 	{
 		previous = current;
