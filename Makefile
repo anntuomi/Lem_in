@@ -18,7 +18,7 @@ free_memory.c ft_append.c get_branches_to_end.c handle_error.c handle_room.c \
 input_and_output.c is_connected_to_end.c main.c move_ants.c order_routes.c \
 rebuild_routes_dfs.c save_dfs_forks.c set_branches.c set_links.c solve.c
 OBJECT = $(SRC:%.c=%.o)
-LIBRARY = libft
+LIBRARY = lib
 
 all: $(LIBRARY) $(NAME)
 
@@ -35,6 +35,6 @@ clean:
 
 fclean:		clean
 			/bin/rm -f $(NAME)
-			#make fclean -C libft/
+			make fclean -C libft/
 
 re:			fclean all
