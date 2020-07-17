@@ -86,7 +86,7 @@ static void		delete_levels(t_level *network, t_room *room_list)
 **    (create_starting_level)
 ** 2. Creates new BFS levels until one or more node reaches end. (create_level)
 **    When one does, end counter is increased. This function can move through
-**    paths that have either flow UNUSED or -1, and to rooms of which visited
+**    paths that have either flow UNUSED or -1, and to rooms of which used
 **    is not marked yet.
 ** 3. Once end counter is above zero, we find one of the nodes that reached end
 **    and move backwards in the tree (set_augmenting_path). On the way back we

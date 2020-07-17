@@ -28,7 +28,7 @@ t_group			*save_group_copy(t_group *group, t_group *old)
 	return (new);
 }
 
-t_group			*rebuild_routes(t_farm farm)
+t_group			*rebuild_routes(t_farm farm, int state)
 {
 	t_group		*group;
 	t_branch	*branches;
@@ -38,7 +38,7 @@ t_group			*rebuild_routes(t_farm farm)
 
 	if (!(group = (t_group *)malloc(sizeof(t_group))))
 		handle_error(0, "Malloc error");
-	branches = get_branches_to_end(farm.start);
+	branches = get_branches_to_end(farm.start, state);
 	group->path_count = count_routes(branches);
 	group->routes = routes_to_array(group->path_count, branches);
 	delete_branches(branches);
@@ -59,7 +59,7 @@ t_group			*rebuild_routes(t_farm farm)
 
 void			clear_used_status(t_room *rooms)
 {
-	t_room		*current;
+	t_room	*current;
 
 	current = rooms;
 	while (current)
@@ -82,29 +82,48 @@ void			clear_used_status(t_room *rooms)
 **    edmonds_karp_traverse.c
 */
 
+void			check_dfs(t_farm *farm, t_group **best)
+{
+	t_room		**starting_rooms;
+	t_group		*groups;
+	int			group_size;
+
+	groups = NULL;
+	starting_rooms = count_group_size(farm->start, &group_size);
+	groups = rebuild_routes_dfs(*farm, group_size, starting_rooms, 0);
+	if ((*best)->moves == -1 || (groups->moves != -1 && \
+	groups->moves < (*best)->moves))
+		*best = save_group_copy(groups, *best);
+	else if (groups)
+		delete_group(groups);
+	if (starting_rooms)
+		free(starting_rooms);
+}
+
 void			find_best_routes(t_farm *farm)
 {
 	int			path_found;
 	t_group		*groups;
 	t_group		*best;
+	t_room		**starting_rooms;
 
 	groups = NULL;
-	if ((path_found = edmonds_karp_traverse(*farm)))
-		best = rebuild_routes(*farm);
+	best = rebuild_routes(*farm, SIMPLE);
+	path_found = 1;
 	while (path_found)
 	{
 		clear_used_status(farm->rooms);
 		if ((path_found = edmonds_karp_traverse(*farm)))
 		{
-			groups = rebuild_routes(*farm);
+			groups = rebuild_routes(*farm, FLOWS);
 			if (best->moves == -1 || (groups->moves != -1 && \
 			groups->moves < best->moves))
 				best = save_group_copy(groups, best);
 			else if (groups)
 				delete_group(groups);
+			check_dfs(farm, &best);
 		}
 	}
-	farm->path_count = best->path_count;
 	farm->route_count = best->path_count;
 	farm->ordered = best->routes;
 	free(best);

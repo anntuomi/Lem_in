@@ -66,9 +66,13 @@ static t_branch	*get_branch(t_room *room, t_room *prev, int fork)
 	return (branch);
 }
 
-static t_branch	*get_branches(t_room *start)
+/*
+** State can be either SIMPLE for pathfinding without flows,
+** or FLOWS for finding paths where flows are 1.
+*/
+
+static t_branch	*get_branches(t_room *start, int state, t_branch *head)
 {
-	t_branch	*head;
 	t_branch	*branch;
 	t_path		*path;
 	t_room		*room;
@@ -76,17 +80,17 @@ static t_branch	*get_branches(t_room *start)
 
 	room = NULL;
 	fork = 0;
-	if (is_connected_to_end(start, &room, &fork))
+	if (is_connected_to_end(start, &room, &fork, state))
 		return (get_branch(room, start, fork));
 	path = start->paths;
-	while (path->flow != 1)
+	while (path->flow != 1 && state == FLOWS)
 		path = path->next;
 	head = get_branch(path->room, start, fork);
 	branch = head;
 	path = path->next;
 	while (path)
 	{
-		if (path->flow == 1)
+		if (path->flow == 1 || state == SIMPLE)
 		{
 			branch->next = get_branch(path->room, start, 1);
 			branch = branch->next;
@@ -96,11 +100,11 @@ static t_branch	*get_branches(t_room *start)
 	return (head);
 }
 
-t_branch		*get_branches_to_end(t_room *start)
+t_branch		*get_branches_to_end(t_room *start, int state)
 {
 	t_branch	*branches;
 
-	branches = get_branches(start);
-	set_branches(&branches);
+	branches = get_branches(start, state, NULL);
+	set_branches(&branches, state);
 	return (branches);
 }

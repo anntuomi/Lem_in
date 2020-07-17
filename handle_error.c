@@ -14,9 +14,9 @@
 
 void			handle_error(int flags, char *str)
 {
-	static int static_flags = 0;
+	static int static_flags;
 
-	if (str == NULL)
+	if (str == SET_FLAGS_FOR_FUTURE_USE)
 	{
 		static_flags = flags;
 		return ;

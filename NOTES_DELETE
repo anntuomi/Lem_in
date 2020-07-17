@@ -1,3 +1,9 @@
 Checklist (delete this before submit)
 - Check max int ant count
 - Flags in makefile (And other makefile fixes)
+- Are certain error handling test files supposed to run?
+
+- Kato normi joka paikasta
+- Tarkista viel ettei jaany mitaan -10 + NULL juttuja
+- Tarkista kaikki errorhandling virheet myos map 8
+- Kato viel ettei oo jotain flagimuuttujaa jossain

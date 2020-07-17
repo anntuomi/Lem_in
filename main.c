@@ -12,11 +12,20 @@
 
 #include "lemin.h"
 
+static int		get_nbr_of_ants(char *line)
+{
+	long long tmp;
+
+	if (!line || !ft_isnum(line) || (tmp = ft_atoll(line)) < 1 ||
+	tmp > INT_MAX || ft_strlen(line) > 10)
+		handle_error(0, "Number_of_ants is missing or invalid");
+	return ((int)tmp);
+}
+
 static t_ant	**get_ants(int *ant_count, t_input **input)
 {
 	t_ant		**ants;
 	char		*line;
-	long long	tmp;
 
 	while (get_next_line(0, &line) == 1 && line[0] == '#')
 	{
@@ -30,10 +39,7 @@ static t_ant	**get_ants(int *ant_count, t_input **input)
 		else
 			free(line);
 	}
-	if (!line || !ft_isnum(line) || (tmp = ft_atoll(line)) < 1 || tmp > INT_MAX ||
-	ft_strlen(line) > 10)
-		handle_error(0, "Number_of_ants is missing or invalid");
-	*ant_count = (int)tmp;
+	*ant_count = get_nbr_of_ants(line);
 	(*input)->line = line;
 	(*input)->next = NULL;
 	if (!(ants = (t_ant **)malloc(sizeof(t_ant *) * (*ant_count + 1))))
@@ -76,7 +82,7 @@ int				main(int ac, char **av)
 	char		*line;
 
 	flags = get_flags(ac, av);
-	handle_error(flags, NULL);
+	handle_error(flags, SET_FLAGS_FOR_FUTURE_USE);
 	if (!(head = (t_input *)malloc(sizeof(t_input))))
 		handle_error(0, "Malloc error");
 	input = head;

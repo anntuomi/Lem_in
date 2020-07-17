@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   delete.c                                           :+:      :+:    :+:   */
+/*   count_group_size.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atuomine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,61 +12,45 @@
 
 #include "lemin.h"
 
-void	ft_delete(char **array)
+static t_room	**create_starting_room_array(t_room *start, int group_size)
 {
-	int			i;
+	t_path	*current;
+	t_room	**starting_rooms;
+	int		i;
 
+	starting_rooms = (t_room **)malloc(sizeof(t_room *) * group_size + 1);
+	current = start->paths;
 	i = 0;
-	while (array[i] != NULL)
-	{
-		ft_strdel(&array[i]);
-		i++;
-	}
-	free(array);
-	array = NULL;
-}
-
-void	delete_group(t_group *group)
-{
-	t_route		**route;
-	int			i;
-
-	route = group->routes;
-	i = 0;
-	while (route[i])
-	{
-		free_route(route[i]);
-		i++;
-	}
-	free(group->routes);
-	free(group);
-	group = NULL;
-}
-
-void	delete_branches(t_branch *branch)
-{
-	t_branch	*current;
-	t_branch	*next;
-
-	current = branch;
 	while (current)
 	{
-		next = current->next;
-		free(current);
-		current = next;
+		if (current->flow == 1)
+		{
+			starting_rooms[i] = (t_room *)current->room;
+			i++;
+		}
+		current = current->next;
 	}
+	starting_rooms[i] = NULL;
+	return (starting_rooms);
 }
 
-void	delete_forks(t_fork *fork_head)
+t_room			**count_group_size(t_room *start, int *group_size)
 {
-	t_fork *tmp;
-	t_fork *fork;
+	int		size;
+	t_path	*current;
+	t_room	**starting_rooms;
+	int		i;
 
-	fork = fork_head;
-	while (fork)
+	size = 0;
+	current = start->paths;
+	while (current)
 	{
-		tmp = fork;
-		fork = fork->next;
-		free(tmp);
+		if (current->flow == 1)
+			size++;
+		current = current->next;
 	}
+	*group_size = size;
+	if (size == 0)
+		return (NULL);
+	return (create_starting_room_array(start, *group_size));
 }

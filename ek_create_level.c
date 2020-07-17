@@ -20,6 +20,8 @@ t_node *prev)
 	if (!(node = (t_node *)malloc(sizeof(t_node) * 1)))
 		return (NULL);
 	node->room = room;
+	if (node->room->type != END)
+		node->room->used = 1;
 	node->prev_room = prev_room;
 	node->next = head;
 	node->previous = prev;
