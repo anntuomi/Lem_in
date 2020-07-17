@@ -49,7 +49,6 @@ t_group			*rebuild_routes(t_farm farm, int state)
 	}
 	else
 		group->moves = -1;
-	group->next = NULL;
 	return (group);
 }
 

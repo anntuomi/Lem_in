@@ -16,7 +16,8 @@ t_fork			*create_fork(t_room *from, t_room *to)
 {
 	t_fork *fork;
 
-	fork = (t_fork *)malloc(sizeof(t_fork));
+	if (!(fork = (t_fork *)malloc(sizeof(t_fork))))
+		handle_error(0, "Malloc error");
 	fork->from = from;
 	fork->to = to;
 	fork->next = NULL;
@@ -28,19 +29,18 @@ int *group_size, int j)
 {
 	int		i;
 	t_route **routes;
-	int		length;
 
-	routes = (t_route **)malloc(sizeof(t_route *) * *group_size + 1);
+	if (!(routes = (t_route **)malloc(sizeof(t_route *) * *group_size + 1)))
+		handle_error(0, "Malloc error");
 	i = 0;
-	j = *group_size - 1;
 	while (i < *group_size)
 	{
-		routes[i] = (t_route *)malloc(sizeof(t_route));
-		length = 2;
+		if (!(routes[i] = (t_route *)malloc(sizeof(t_route))))
+			handle_error(0, "Malloc error");
+		routes[i]->rooms = 2;
 		routes[i]->forks = save_dfs_forks(farm.start, starting_rooms[j],
-		&length, farm.end);
-		routes[i]->rooms = length;
-		if (length == 0)
+		&routes[i]->rooms, farm.end);
+		if (routes[i]->rooms == 0)
 		{
 			*group_size = *group_size - 1;
 			free(routes[i]);
@@ -58,12 +58,12 @@ t_room **starting_rooms, int j)
 {
 	t_group *group;
 	int		group_size;
-	t_route	**routes;
-	int		i;
 	t_path	*current;
 
-	group = (t_group *)malloc(sizeof(t_group));
+	if (!(group = (t_group *)malloc(sizeof(t_group))))
+		handle_error(0, "Malloc error");
 	group_size = orig_group_size;
+	j = orig_group_size - 1;
 	group->routes = create_dfs_routes(farm, starting_rooms, &group_size, j);
 	group->path_count = group_size;
 	if (group->path_count > 0)
@@ -71,6 +71,5 @@ t_room **starting_rooms, int j)
 		farm.ant_count);
 	else
 		group->moves = -1;
-	group->next = NULL;
 	return (group);
 }

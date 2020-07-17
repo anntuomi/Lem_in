@@ -15,23 +15,24 @@
 static t_room	**create_starting_room_array(t_room *start, int group_size)
 {
 	t_path	*current;
-	t_room	**starting_rooms;
+	t_room	**start_rooms;
 	int		i;
 
-	starting_rooms = (t_room **)malloc(sizeof(t_room *) * group_size + 1);
+	if (!(start_rooms = (t_room **)malloc(sizeof(t_room *) * group_size + 1)))
+		handle_error(0, "Malloc error");
 	current = start->paths;
 	i = 0;
 	while (current)
 	{
 		if (current->flow == 1)
 		{
-			starting_rooms[i] = (t_room *)current->room;
+			start_rooms[i] = (t_room *)current->room;
 			i++;
 		}
 		current = current->next;
 	}
-	starting_rooms[i] = NULL;
-	return (starting_rooms);
+	start_rooms[i] = NULL;
+	return (start_rooms);
 }
 
 t_room			**count_group_size(t_room *start, int *group_size)

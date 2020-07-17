@@ -119,8 +119,6 @@ typedef struct	s_group
 	t_route			**routes;
 	int				path_count;
 	int				moves;
-	struct s_group	*next;
-
 }				t_group;
 
 typedef struct	s_node
