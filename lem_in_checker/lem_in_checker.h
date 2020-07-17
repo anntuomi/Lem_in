@@ -16,7 +16,6 @@
 # include "../libft/includes/libft.h"
 # include "../libft/includes/get_next_line.h"
 # include <stdlib.h>
-# include <stdio.h>
 
 # define START 0
 # define NORMAL 1

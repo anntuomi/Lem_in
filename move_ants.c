@@ -12,7 +12,7 @@
 
 #include "lemin.h"
 
-static void			take_step(t_ant *ant, t_room *room, int is_fork)
+static void		take_step(t_ant *ant, t_room *room, int is_fork)
 {
 	ant->room->ant_count--;
 	ant->prev = ant->room;
@@ -22,9 +22,9 @@ static void			take_step(t_ant *ant, t_room *room, int is_fork)
 		ant->fork = ant->fork->next;
 }
 
-static t_block		*make_block(char *name, int i)
+static t_block	*make_block(char *name, int i)
 {
-	t_block *block;
+	t_block		*block;
 
 	if (!(block = (t_block *)malloc(sizeof(t_block))))
 		handle_error(0, "Malloc error");
@@ -34,9 +34,9 @@ static t_block		*make_block(char *name, int i)
 	return (block);
 }
 
-static t_room		*set_up(t_ant **ants, int i, int *is_fork)
+static t_room	*set_up(t_ant **ants, int i, int *is_fork)
 {
-	t_room *room;
+	t_room		*room;
 
 	if (!ants[i]->fork || ants[i]->room->id != ants[i]->fork->from->id)
 	{
@@ -54,7 +54,7 @@ static t_room		*set_up(t_ant **ants, int i, int *is_fork)
 	return (room);
 }
 
-char				*move_ants(t_ant **ants)
+char			*move_ants(t_ant **ants)
 {
 	int			first;
 	int			i;

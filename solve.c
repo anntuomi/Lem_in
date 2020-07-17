@@ -12,8 +12,7 @@
 
 #include "lemin.h"
 
-int				calculate_moves(t_route **routes, int path_count,
-int ant_count)
+int				calculate_moves(t_route **routes, int path_count, int ant_count)
 {
 	int			moves;
 	int			rooms;

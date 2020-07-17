@@ -12,7 +12,7 @@
 
 #include "lemin.h"
 
-void	ft_delete(char **array)
+void			ft_delete(char **array)
 {
 	int			i;
 
@@ -26,7 +26,7 @@ void	ft_delete(char **array)
 	array = NULL;
 }
 
-void	delete_group(t_group *group)
+void			delete_group(t_group *group)
 {
 	t_route		**route;
 	int			i;
@@ -43,7 +43,7 @@ void	delete_group(t_group *group)
 	group = NULL;
 }
 
-void	delete_branches(t_branch *branch)
+void			delete_branches(t_branch *branch)
 {
 	t_branch	*current;
 	t_branch	*next;
@@ -57,10 +57,10 @@ void	delete_branches(t_branch *branch)
 	}
 }
 
-void	delete_forks(t_fork *fork_head)
+void			delete_forks(t_fork *fork_head)
 {
-	t_fork *tmp;
-	t_fork *fork;
+	t_fork		*tmp;
+	t_fork		*fork;
 
 	fork = fork_head;
 	while (fork)

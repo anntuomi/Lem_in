@@ -15,11 +15,9 @@
 static t_route	*get_route(t_fork *forks, int rooms, t_room *room, t_room *prev)
 {
 	t_route		*route;
-	static int	id = 0;
 
 	if (!(route = (t_route *)malloc(sizeof(t_route))))
 		handle_error(0, "Malloc error");
-	route->id = id++;
 	route->forks = forks;
 	route->rooms = rooms;
 	route->room = room;
@@ -36,7 +34,6 @@ t_route			*get_fork_route(t_route *before_fork, t_room *room)
 	t_fork		*fork;
 
 	route = get_route(NULL, before_fork->rooms + 1, room, before_fork->room);
-	route->branch = before_fork->branch;
 	fork = before_fork->forks;
 	while (fork)
 	{
@@ -56,10 +53,8 @@ static t_branch	*get_branch(t_room *room, t_room *prev, int fork)
 		handle_error(0, "Malloc error");
 	branch->id = id++;
 	branch->route = get_route(NULL, 2, room, prev);
-	branch->route->branch = branch;
 	if (fork)
 		set_fork(branch->route, prev, room);
-	branch->array = NULL;
 	branch->routes = 1;
 	branch->next = NULL;
 	room->connection = START;
@@ -71,8 +66,9 @@ static t_branch	*get_branch(t_room *room, t_room *prev, int fork)
 ** or FLOWS for finding paths where flows are 1.
 */
 
-static t_branch	*get_branches(t_room *start, int state, t_branch *head)
+static t_branch	*get_branches(t_room *start, int state)
 {
+	t_branch	*head;
 	t_branch	*branch;
 	t_path		*path;
 	t_room		*room;
@@ -87,16 +83,15 @@ static t_branch	*get_branches(t_room *start, int state, t_branch *head)
 		path = path->next;
 	head = get_branch(path->room, start, fork);
 	branch = head;
-	path = path->next;
-	while (path)
+	while ((path = path->next))
 	{
 		if (path->flow == 1 || state == SIMPLE)
 		{
 			branch->next = get_branch(path->room, start, 1);
 			branch = branch->next;
 		}
-		path = path->next;
 	}
+	start->visited = 1;
 	return (head);
 }
 
@@ -104,7 +99,7 @@ t_branch		*get_branches_to_end(t_room *start, int state)
 {
 	t_branch	*branches;
 
-	branches = get_branches(start, state, NULL);
+	branches = get_branches(start, state);
 	set_branches(&branches, state);
 	return (branches);
 }

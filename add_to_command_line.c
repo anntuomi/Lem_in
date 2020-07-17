@@ -34,8 +34,7 @@ static char		*prefix_char(char *str, char *prefix, int prefix_len)
 	return (result);
 }
 
-char			*add_to_command_line(char *line, t_block *block,
-int *first)
+char			*add_to_command_line(char *line, t_block *block, int *first)
 {
 	char	*result;
 	char	*block_text;

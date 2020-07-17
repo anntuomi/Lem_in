@@ -17,8 +17,6 @@
 # include <stdlib.h>
 # include "libft.h"
 # include "get_next_line.h"
-//remove me later
-# include <stdio.h>
 
 # define ERROR 1
 # define TURNS 2
@@ -59,8 +57,6 @@ typedef struct	s_room
 	int				connection;
 	int				used;
 	int				visited;
-	void			*branch;
-	void			*route;
 	t_path			*paths;
 	struct s_room	*prev;
 	struct s_room	*next;
@@ -75,8 +71,6 @@ typedef struct	s_fork
 
 typedef struct	s_route
 {
-	int				id;
-	void			*branch;
 	t_fork			*forks;
 	int				rooms;
 	t_room			*room;
@@ -89,7 +83,6 @@ typedef struct	s_branch
 {
 	int				id;
 	t_route			*route;
-	t_route			**array;
 	int				routes;
 	struct s_branch	*next;
 }				t_branch;
@@ -163,42 +156,43 @@ char			*ft_append(char const *s1, char const *s2, int *len, char c);
 char			*move_ants(t_ant **ants);
 int				calculate_moves(t_route **routes, int path_count,
 				int ant_count);
-void			find_edges(t_room **head, t_room **start, t_room **end);
 int				count_routes(t_branch *branch);
-int				determine_room_type(char *line);
-int				edmonds_karp_traverse(t_farm farm);
-t_level			*create_starting_level(t_room *start);
-t_level			*create_level(t_level *previous);
-int				is_connected_to_end(t_room *room, t_room **end, int *fork,
-				int state);
-int				is_unvisited(t_room *room, t_room *prev, t_fork *fork);
-t_branch		*get_branches_to_end(t_room *start, int state);
-t_route			**routes_to_array(int count, t_branch *branch);
-t_route			*get_fork_route(t_route *before_fork, t_room *room);
-void			create_room_list(t_room **head, char **line, t_input **input);
 int				del_route(t_branch **branch, t_branch **prev_branch,
 				t_route **route, t_route *prev_route);
+int				determine_room_type(char *line);
+int				edmonds_karp_traverse(t_farm farm);
+int				handle_room_is_end(t_branch_set *set, t_route **prev_route,
+				t_route **route);
+int				is_connected_to_end(t_room *room, t_room **end, int *fork,
+				int state);
+t_branch		*get_branches_to_end(t_room *start, int state);
+t_fork			*create_fork(t_room *from, t_room *to);
+t_fork			*save_dfs_forks(t_room *start, t_room *current, int *length,
+				t_room *end);
+t_group			*rebuild_routes_dfs(t_farm farm, int orig_group_size,
+				t_room **starting_rooms, int j);
+t_level			*create_level(t_level *previous);
+t_level			*create_starting_level(t_room *start);
+t_room			**count_group_size(t_room *start, int *group_size);
+t_route			**routes_to_array(int count, t_branch *branch);
+t_route			*get_fork_route(t_route *before_fork, t_room *room);
+void			create_room_list(t_room **head, char **line, t_input **lines);
+void			delete_branches(t_branch *branch);
+void			delete_forks(t_fork *fork_head);
+void			delete_group(t_group *group);
 void			find_best_routes(t_farm *farm);
+void			find_edges(t_room **head, t_room **start, t_room **end);
 void			free_memory(t_farm farm);
 void			free_route(t_route *route);
 void			ft_delete(char **array);
-void			delete_group(t_group *group);
-void			delete_branches(t_branch *branch);
-void			delete_forks(t_fork *fork_head);
 void			handle_error(int flags, char *str);
 void			order_routes(t_route **array);
 void			print_input(t_input *input);
 void			print_output(char **output, int *len);
 void			set_branches(t_branch **head, int state);
 void			set_fork(t_route *route, t_room *from, t_room *to);
-void			set_input(t_input **input, char *line, int room);
+void			set_input(t_input **input, char *line, int rooms);
 void			set_links(char *line, t_room *room, t_input **input);
 void			solve(t_farm farm, int flags);
-t_fork			*save_dfs_forks(t_room *start, t_room *current, int *length,
-				t_room *end);
-t_room			**count_group_size(t_room *start, int *group_size);
-t_group			*rebuild_routes_dfs(t_farm farm, int orig_group_size,
-				t_room **starting_rooms, int j);
-t_fork			*create_fork(t_room *from, t_room *to);
 
 #endif

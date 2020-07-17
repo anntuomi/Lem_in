@@ -54,50 +54,23 @@ t_room **room, int state)
 	path = first->room->paths;
 	while (path)
 	{
-		if (is_unvisited(path->room, first->prev, first->forks))
+		if (((t_room *)path->room)->connection != START &&
+		!((t_room *)path->room)->visited &&
+		(path->flow == 1 || state == SIMPLE))
 		{
-			if (!((t_room *)path->room)->visited && 
-			(path->flow == 1 || state == SIMPLE))
+			if (!*room)
+				*room = path->room;
+			else
 			{
-				if (!*room)
-					*room = path->room;
-				else
-				{
-					tmp = *route;
-					*route = get_fork_route(first, path->room);
-					(*route)->next = tmp->next;
-					tmp->next = *route;
-					branch->routes++;
-				}
+				tmp = *route;
+				*route = get_fork_route(first, path->room);
+				(*route)->next = tmp->next;
+				tmp->next = *route;
+				branch->routes++;
 			}
 		}
 		path = path->next;
 	}
-}
-
-static int		handle_room_is_end(t_branch_set *set, t_route **prev_route,
-t_route **route)
-{
-	int id;
-
-	id = (set->branch)->id;
-	*prev_route = NULL;
-	*route = (set->branch)->route;
-	while (set->branch && (set->branch)->id == id)
-	{
-		if ((*route)->room->type != END)
-			del_route(&set->branch, &set->prev, route, *prev_route);
-		else
-		{
-			*prev_route = *route;
-			if (!(*route = (*route)->next))
-			{
-				set->prev = set->branch;
-				set->branch = (set->branch)->next;
-			}
-		}
-	}
-	return (0);
 }
 
 static int		set_routes(t_branch_set *set,
