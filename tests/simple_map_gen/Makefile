@@ -11,28 +11,28 @@
 # **************************************************************************** #
 
 NAME = gen
-INC = ../../libft/includes
+INC = libft/includes
 SRC = simple_map_gen.c
-OBJECT = $(SRC:%.c=%.o)
+OBJECT = $(SRC:.c=.o)
 LIBRARY = libft
 
 all: $(LIBRARY) $(NAME)
 
 $(LIBRARY):
-			make -C ../../libft/
+			make -C libft/
 
 $(NAME):
 			gcc -Wall -Wextra -Werror -I $(INC) -c $(SRC)
-			gcc -Wall -Wextra -Werror $(OBJECT) ../../libft/libft.a -o $(NAME)
+			gcc -Wall -Wextra -Werror $(OBJECT) libft/libft.a -o $(NAME)
 
 clean:
 			/bin/rm -f $(OBJECT)
-			make clean -C ../../libft/
+			make -C libft/ clean
 
 fclean:		clean
+			make -C libft/ fclean
 			/bin/rm -f $(NAME)
-			make fclean -C ../../libft/
 
 re:			fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re libft

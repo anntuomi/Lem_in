@@ -12,28 +12,27 @@
 
 LIB = libft
 NAME = lem-in-checker
-INCS = ../../libft/includes
+INCS = libft/includes
 SRCS = main.c handle_error.c get_rooms.c set_links.c
-OBJS = $(SRCS:%.c=%.o)
+OBJS = $(SRCS:.c=.o)
 
 all: $(LIB) $(NAME)
 
 $(LIB):
-			make re -C ../../libft/
+			make -C libft/ re
 
 $(NAME):
 			gcc -I $(INCS) -c $(SRCS)
-			gcc $(OBJS) ../../libft/libft.a -o $(NAME)
-			make fclean -C ../../libft/
+			gcc $(OBJS) libft/libft.a -o $(NAME)
 
 clean:
 			/bin/rm -f $(OBJS)
-			make clean -C ../../libft/
+			make -C libft/ clean
 
 fclean:		clean
 			/bin/rm -f $(NAME)
-			make fclean -C ../../libft/
+			make -C libft/ fclean
 
 re:			fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re libft

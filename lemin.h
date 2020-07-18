@@ -196,5 +196,7 @@ void			set_fork(t_route *route, t_room *from, t_room *to);
 void			set_input(t_input **input, char *line, int rooms);
 void			set_links(char *line, t_room *room, t_input **input);
 void			solve(t_farm farm, int flags);
+void			optimize_path_count(t_group *group, int ant_count,
+				int all_moves);
 
 #endif
