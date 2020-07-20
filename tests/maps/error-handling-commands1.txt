@@ -1,3 +1,4 @@
+## An unknown command at the beginning of the file
 1
 ##start
 s 1 1
@@ -8,3 +9,4 @@ e 3 3
 s-b
 ## An unknown command between links
 b-e
+## An unknown command at the end of the file

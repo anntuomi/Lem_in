@@ -113,6 +113,6 @@ void			create_room_list(t_room **head, char **line, t_input **lines)
 			if (!(*head))
 				*head = room;
 		}
-		set_input(lines, *line, 1);
+		set_input(lines, *line);
 	}
 }

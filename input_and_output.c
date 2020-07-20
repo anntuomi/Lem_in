@@ -46,14 +46,10 @@ void			print_input(t_input *input)
 	ft_putchar('\n');
 }
 
-void			set_input(t_input **input, char *line, int rooms)
+void			set_input(t_input **input, char *line)
 {
-	if (line[0] == '#' && line[1] == '#' &&
-	((rooms && determine_room_type(line) == NORMAL) || !rooms))
-	{
-		free(line);
-		line = NULL;
-	}
+	if (!(*input)->line)
+		(*input)->line = line;
 	else
 	{
 		if (!((*input)->next = (t_input *)malloc(sizeof(t_input))))

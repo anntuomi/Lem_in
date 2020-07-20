@@ -96,7 +96,7 @@ void			set_links(char *line, t_room *room, t_input **input)
 			}
 			ft_delete(rooms);
 		}
-		set_input(input, line, 0);
+		set_input(input, line);
 		first = 0;
 	}
 }

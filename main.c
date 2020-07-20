@@ -28,21 +28,12 @@ static t_ant	**get_ants(int *ant_count, t_input **input)
 	t_ant		**ants;
 	char		*line;
 
-	while (get_next_line(0, &line) == 1 && line[0] == '#')
-	{
-		if (line[1] != '#')
-		{
-			(*input)->line = line;
-			if (!((*input)->next = (t_input *)malloc(sizeof(t_input))))
-				handle_error(0, "Malloc error");
-			*input = (*input)->next;
-		}
-		else
-			free(line);
-	}
-	*ant_count = get_nbr_of_ants(line);
-	(*input)->line = line;
+	(*input)->line = NULL;
 	(*input)->next = NULL;
+	while (get_next_line(0, &line) == 1 && line[0] == '#')
+		set_input(input, line);
+	*ant_count = get_nbr_of_ants(line);
+	set_input(input, line);
 	if (!(ants = (t_ant **)malloc(sizeof(t_ant *) * (*ant_count + 1))))
 		handle_error(0, "Malloc error");
 	return (ants);
