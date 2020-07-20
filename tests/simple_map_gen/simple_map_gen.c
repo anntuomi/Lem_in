@@ -87,10 +87,10 @@ static void	set_limits(int *path_count, int *ant_count, int *room_count)
 		ft_printf("# Ant count too big - count set to 1000\n");
 		*ant_count = 1000;
 	}
-	if (*path_count > 2000)
+	if (*path_count > 600)
 	{
-		ft_printf("# Path count too big - count set to 2000\n");
-		*path_count = 2000;
+		ft_printf("# Path count too big - count set to 600\n");
+		*path_count = 600;
 	}
 	if (*path_count > *room_count - 2)
 	{
