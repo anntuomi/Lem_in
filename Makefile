@@ -65,6 +65,12 @@ $(GEN):
 			gcc -Wall -Wextra -Werror -I $(INC) -c $(GENSRC)
 			gcc -Wall -Wextra -Werror $(GENOBJ) $(LIBRARY) -o $(GEN)
 
-bonus_re: 	fclean bonus
+b_fclean:	
+			/bin/rm -f $(CHECKEROBJ)
+			/bin/rm -f $(GENOBJ)
+			/bin/rm -f $(GEN)
+			/bin/rm -f $(CHECKER)
 
-.PHONY: all clean fclean re bonus bonus_re
+bonus_re: 	b_fclean bonus
+
+.PHONY: all clean fclean re bonus b_fclean bonus_re
