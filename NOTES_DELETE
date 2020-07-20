@@ -1,4 +1,0 @@
-Checklist (delete this before submit)
-- Ask someone to take a look at makefile
-- Test memory leaks with different error cases
-- Verify that test programs work properly in many different cases
