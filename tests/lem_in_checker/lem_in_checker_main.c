@@ -120,7 +120,7 @@ int				main(void)
 
 	farm.ants = get_ants(&farm.ant_count);
 	farm.rooms = get_rooms(&line);
-	set_links(line, farm.rooms);
+	set_links(line, farm.rooms, 1);
 	set_start_end(farm.rooms, &farm.start, &farm.end);
 	mv_ants(farm.ant_count, farm.ants, farm.start, farm.end);
 	ft_putstr("OK\n");

@@ -58,7 +58,7 @@ void			handle_error(char *str);
 t_room			*get_rooms(char **line);
 int				count_words(char **array);
 int				is_nbr(char	*str);
-void			set_links(char *line, t_room *room);
+void			set_links(char *line, t_room *room, int first);
 void			del_array(char **array);
 
 #endif

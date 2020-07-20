@@ -24,7 +24,7 @@ void	del_array(char **array)
 			ft_strdel(&array[i]);
 			i++;
 		}
-		ft_strdel(array);
+		free(array);
 		array = NULL;
 	}
 }

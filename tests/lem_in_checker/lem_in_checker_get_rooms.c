@@ -45,6 +45,7 @@ static void		set_room(int *type, char **input, t_room **head, t_room **room)
 		*room = (*room)->next;
 	}
 	*type = NORMAL;
+	del_array(input);
 }
 
 static int		is_room(char **input, t_room *room)
@@ -101,7 +102,6 @@ t_room			*get_rooms(char **line)
 			if (!is_room(input, head))
 				break ;
 			set_room(&type, input, &head, &room);
-			del_array(input);
 		}
 		ft_strdel(line);
 	}

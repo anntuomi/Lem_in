@@ -71,14 +71,12 @@ static int		is_link(char *line, char ***rooms)
 	return (1);
 }
 
-void			set_links(char *line, t_room *room)
+void			set_links(char *line, t_room *room, int first)
 {
 	char	**rooms;
 	t_room	*room1;
 	t_room	*room2;
-	int		first;
 
-	first = 1;
 	while (first || get_next_line(0, &line) == 1)
 	{
 		if (line[0] != '#')
@@ -94,6 +92,8 @@ void			set_links(char *line, t_room *room)
 			}
 			del_array(rooms);
 		}
+		else
+			ft_strdel(&line);
 		if (first)
 			first = 0;
 	}

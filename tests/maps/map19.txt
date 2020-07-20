@@ -35,6 +35,7 @@
 # 1       r________/
 #   1 2 3 4 5 6 7 8 9 x
 40
+#aaaaa
 a 4 4
 b 4 5
 c 5 3
@@ -64,6 +65,8 @@ x 2 5
 y 3 2
 z 1 2
 A 1 1
+#aaaaa
+#rrrrrrr
 B 1 1
 C 1 1
 D 1 1
@@ -94,6 +97,7 @@ s-p
 s-f
 s-u
 s-h
+#aaaaa
 s-y
 a-b
 a-j
@@ -147,3 +151,6 @@ V-e
 W-X
 X-Y
 Y-i
+# comment
+# asdf
+# hey
