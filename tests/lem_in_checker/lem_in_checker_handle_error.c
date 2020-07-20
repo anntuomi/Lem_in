@@ -21,10 +21,10 @@ void	del_array(char **array)
 	{
 		while (array[i])
 		{
-			free(array[i]);
+			ft_strdel(&array[i]);
 			i++;
 		}
-		free(array);
+		ft_strdel(array);
 		array = NULL;
 	}
 }
@@ -32,12 +32,12 @@ void	del_array(char **array)
 int		is_nbr(char *str)
 {
 	if (*str == '-')
-		*str++;
+		str++;
 	while (*str)
 	{
 		if (*str < '0' || *str > '9')
 			return (0);
-		*str++;
+		str++;
 	}
 	return (1);
 }

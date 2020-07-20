@@ -102,6 +102,7 @@ t_room			*get_rooms(char **line)
 				break ;
 			set_room(&type, input, &head, &room);
 		}
+		ft_strdel(line);
 	}
 	return (head);
 }
