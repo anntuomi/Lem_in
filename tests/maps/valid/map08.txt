@@ -1,0 +1,55 @@
+# map08.txt
+#
+# A map where the longest route should be used with a lot of ants
+#
+# y
+#
+# 6         end ------m
+#           |  \      |
+# 5         |   \___. l
+#           |       | |
+# 4 d-------b       f k
+#    \      |       | |
+# 3   \     |       | j
+#      \    |       | |
+# 2     c   a-------e i
+#       |   |         |
+# 1     |   |         h
+#        \  |         |
+# 0       start-------g
+#   0 1 2 3 4 5 6 7 8 9 x
+3
+##start
+start 4 0
+a 4 2
+b 4 4
+c 2 2
+d 0 4
+e 8 2
+f 8 4
+g 9 0
+h 9 1
+i 9 2
+j 9 3
+k 9 4
+l 9 5
+m 9 6
+##end
+end 4 6
+start-a
+a-b
+b-end
+start-c
+c-d
+d-b
+a-e
+e-f
+f-end
+start-g
+g-h
+h-i
+i-j
+j-k
+k-l
+l-m
+m-end

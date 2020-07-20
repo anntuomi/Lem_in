@@ -1,0 +1,101 @@
+# map12.txt
+#
+# A map with four four-room routes or eight five-room routes
+# Four-room routes:
+# 1. s-a-b-e
+# 2. s-c-d-e
+# 3. s-f-g-e
+# 4. s-h-i-e
+# Five-room routes:
+# 1. s-a-j-k-e
+# 2. s-l-m-b-e
+# 3. s-c-n-o-e
+# 4. s-p-q-d-e
+# 5. s-f-r-t-e
+# 6. s-u-v-g-e
+# 7. s-h-w-x-e
+# 8. s-y-z-i-e
+#
+# y
+#
+# 8        _______
+#         |______ \
+# 7       |____  \ \
+#         |___ \  \ \
+# 6   ____e-k | | | |
+#    / /  | | | | | |
+# 5 i x m-b j d o g t
+#   | | | |/ /|\|/| |
+# 4 | w l a p-q|||| |
+#   |  \ \|/ _// || |
+# 3 |\__h-s-c-n  || |
+#   |    /|\     /| |
+# 2 z---y f u---v | |
+#         |\_____/  |
+# 1       r________/
+#   1 2 3 4 5 6 7 8 9 x
+8
+a 4 4
+b 4 5
+c 5 3
+d 6 5
+##end
+e 4 6
+f 4 2
+g 8 5
+h 3 3
+i 1 5
+j 5 5
+k 5 6
+l 3 4
+m 3 5
+n 6 3
+o 7 5
+p 5 4
+q 6 4
+r 4 1
+##start
+s 4 3
+t 9 5
+u 5 2
+v 7 2
+w 2 4
+x 2 5
+y 3 2
+z 1 2
+s-a
+s-l
+s-c
+s-p
+s-f
+s-u
+s-h
+s-y
+a-b
+a-j
+b-e
+c-d
+c-n
+d-e
+f-g
+f-r
+g-e
+h-i
+h-w
+i-e
+j-k
+k-e
+l-m
+m-b
+n-o
+o-e
+p-q
+q-d
+r-t
+t-e
+u-v
+v-g
+w-x
+x-e
+y-z
+z-i

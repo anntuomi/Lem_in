@@ -1,0 +1,21 @@
+# map03.txt
+#
+# A map with a two-way crossroad
+#
+# y
+#
+# 2 a-e
+#   | |
+# 1 s-b
+#   1 2 x
+2
+##start
+s 1 1
+a 1 2
+b 2 1
+##end
+e 2 2
+s-a
+s-b
+a-e
+b-e

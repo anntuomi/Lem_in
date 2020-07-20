@@ -1,0 +1,14 @@
+#A comment at the beginning of the file
+1
+#A comment before the declarations of the rooms
+##start
+s 1 1
+#A comment between the declarations of the rooms
+a 2 2
+##end
+e 3 3
+#A comment before the declarations of the links
+s-a
+#A comment between the declarations of the links
+a-e
+#A comment at the end of the file

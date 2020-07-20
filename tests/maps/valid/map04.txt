@@ -1,0 +1,19 @@
+# map04.txt
+#
+# Multiple paths with one direct end connection
+#
+# y
+#
+# 2 a-e
+#   |/
+# 1 s
+#   1 2 3 x
+2
+##start
+s 1 1
+a 1 2
+##end
+e 2 2
+s-a
+s-e
+a-e

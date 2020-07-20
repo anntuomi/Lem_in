@@ -1,0 +1,32 @@
+# Example 2.1
+#
+# In example 2.1, it is not required to use all paths, (you are free to do so as
+# long as the result does not have more lines, in some cases, however, it would
+# be unwise to do so) However, you MUST use several paths if this is necessary
+# (see example 2.2).
+#
+#     [0]
+#    /   \
+# [1]     [2]
+#  |       |
+#  |      [3]
+#   \    /
+#     [4]
+#
+# Solution:
+# L1-1
+# L1-4 L2-1
+# L2-4
+2
+1 0 2
+##start
+0 2 0
+##end
+4 2 6
+2 4 2
+3 4 4
+0-1
+0-2
+2-3
+3-4
+4-1

@@ -1,0 +1,88 @@
+# map16.txt
+#
+# A map with a spider web
+#
+# y
+#
+# 7 r     s     t
+#    \    |    /
+# 6   j---k---l
+#     |\  |  /|
+# 5   | b-c-d |
+#     | |\|/| |
+# 4 y-q-i-a-e-m-u
+#     | |/|\| |
+# 3   | h-g-f |
+#     |/  |  \|
+# 2   p---o---n
+#    /    |    \
+# 1 x     w     v
+#   1 2 3 4 5 6 7 x
+4
+a 4 4
+b 3 5
+c 4 5
+##end
+d 5 5
+e 5 4
+f 5 3
+g 4 3
+##start
+h 3 3
+i 3 4
+j 2 6
+k 4 6
+l 6 6
+m 6 4
+n 6 2
+o 4 2
+p 2 2
+q 2 4
+r 1 7
+s 4 7
+t 7 7
+u 7 4
+v 7 1
+w 4 1
+x 1 1
+y 1 4
+a-b
+a-c
+a-d
+a-e
+a-f
+a-g
+a-h
+a-i
+b-i
+b-j
+b-c
+c-k
+c-d
+d-l
+d-e
+e-m
+e-f
+f-n
+f-g
+g-o
+g-h
+h-p
+h-i
+i-q
+j-q
+j-r
+j-k
+k-s
+k-l
+l-t
+l-m
+m-u
+m-n
+n-v
+n-o
+o-w
+o-p
+p-x
+p-q
+q-y

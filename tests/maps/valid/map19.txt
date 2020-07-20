@@ -1,0 +1,14 @@
+##An unknown command at the beginning of the file
+1
+##An unknown command before the declarations of the rooms
+##start
+s 1 1
+##An unknown command between the declarations of the rooms
+a 2 2
+##end
+e 3 3
+##An unknown command before the declarations of the links
+s-a
+##An unknown command between the declarations of the links
+a-e
+##An unknown command at the end of the file

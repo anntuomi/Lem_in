@@ -1,0 +1,23 @@
+# map06.txt
+#
+# A map with either a three-room route or a four-room route
+#
+# y
+#
+# 3   b-e
+#     |/
+# 2   a
+#    /
+# 1 s
+#   1 2 3 x
+2
+##start
+s 1 1
+a 2 2
+b 2 3
+##end
+e 3 3
+s-a
+a-b
+a-e
+b-e

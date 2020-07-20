@@ -1,0 +1,20 @@
+# map02.txt
+#
+# A map with three rooms in a line
+#
+# y
+#
+# 3     e
+#      /
+# 2   a
+#    /
+# 1 s
+#   1 2 3 x
+1
+##start
+s 1 1
+a 2 2
+##end
+e 3 3
+s-a
+a-e
