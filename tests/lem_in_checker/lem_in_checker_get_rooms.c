@@ -24,7 +24,7 @@ static t_room	*get_room(int type, char **input)
 	room->name = ft_strdup(input[0]);
 	room->x = ft_atoi(input[1]);
 	room->y = ft_atoi(input[2]);
-	del_array(input);
+	input = NULL;
 	room->id = id++;
 	room->ant_count = 0;
 	room->paths = NULL;
@@ -101,6 +101,7 @@ t_room			*get_rooms(char **line)
 			if (!is_room(input, head))
 				break ;
 			set_room(&type, input, &head, &room);
+			del_array(input);
 		}
 		ft_strdel(line);
 	}
