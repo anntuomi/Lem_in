@@ -39,16 +39,14 @@ static void		mv_ant(char *mv, int ant_count, t_ant **ants)
 	ants[ant]->mvd = 1;
 }
 
-static void		mv_ants(int ant_count, t_ant **ants, t_room *start, t_room *end)
+static int		mv_ants(int ant_count, t_ant **ants, t_room *end)
 {
 	char	*line;
 	char	**array;
+	int		turns;
 	int		i;
 
-	i = 0;
-	while (ants[i])
-		ants[i++]->room = start;
-	start->ant_count = ant_count;
+	turns = 0;
 	while (get_next_line(0, &line) == 1)
 	{
 		if (!(array = ft_strsplit(line, ' ')))
@@ -61,9 +59,11 @@ static void		mv_ants(int ant_count, t_ant **ants, t_room *start, t_room *end)
 		i = 0;
 		while (ants[i])
 			ants[i++]->mvd = 0;
+		turns++;
 	}
 	if (end->ant_count != ant_count)
 		handle_error("All the ants are not brought to ##end");
+	return (turns);
 }
 
 static void		set_start_end(t_room *head, t_room **start, t_room **end)
@@ -117,12 +117,19 @@ int				main(void)
 {
 	t_farm	farm;
 	char	*line;
+	int		i;
 
 	farm.ants = get_ants(&farm.ant_count);
 	farm.rooms = get_rooms(&line);
 	set_links(line, farm.rooms, 1);
 	set_start_end(farm.rooms, &farm.start, &farm.end);
-	mv_ants(farm.ant_count, farm.ants, farm.start, farm.end);
-	ft_putstr("OK\n");
+	i = 0;
+	while (farm.ants[i])
+		farm.ants[i++]->room = farm.start;
+	farm.start->ant_count = farm.ant_count;
+	i = mv_ants(farm.ant_count, farm.ants, farm.end);
+	ft_putstr("OK: ");
+	ft_putnbr(i);
+	ft_putchar('\n');
 	return (0);
 }
