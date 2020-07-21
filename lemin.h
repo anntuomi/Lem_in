@@ -178,7 +178,9 @@ t_room			**reorder(t_room **original, int *group_size, int reorder_by,
 				int offset);
 t_route			**routes_to_array(int count, t_branch *branch);
 t_route			*get_fork_route(t_route *before_fork, t_room *room);
-void			create_room_list(t_room **head, char **line, t_input **lines);
+void			check_if_command(char *line);
+void			create_room_list(t_room **head, char **line, t_input **lines,
+				int room_type);
 void			delete_branches(t_branch *branch);
 void			delete_forks(t_fork *fork_head);
 void			delete_group(t_group *group);
@@ -194,7 +196,8 @@ void			print_output(char **output, int *len);
 void			set_branches(t_branch **head, int state);
 void			set_fork(t_route *route, t_room *from, t_room *to);
 void			set_input(t_input **input, char *line);
-void			set_links(char *line, t_room *room, t_input **input);
+void			set_links(char *line, t_room *room, t_input **input,
+				int first);
 void			solve(t_farm farm, int flags);
 void			optimize_path_count(t_group *group, int ant_count,
 				int all_moves);

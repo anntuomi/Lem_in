@@ -91,9 +91,9 @@ int				determine_room_type(char *line, int room_type)
 		return (NORMAL);
 }
 
-void			create_room_list(t_room **head, char **line, t_input **lines)
+void			create_room_list(t_room **head, char **line, t_input **lines,
+int room_type)
 {
-	int			room_type;
 	char		**input;
 	t_room		*room;
 
@@ -117,4 +117,6 @@ void			create_room_list(t_room **head, char **line, t_input **lines)
 		}
 		set_input(lines, *line);
 	}
+	if (room_type != NORMAL)
+		handle_error(0, "An invalid command placements");
 }
