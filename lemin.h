@@ -159,7 +159,7 @@ int				calculate_moves(t_route **routes, int path_count,
 int				count_routes(t_branch *branch);
 int				del_route(t_branch **branch, t_branch **prev_branch,
 				t_route **route, t_route *prev_route);
-int				determine_room_type(char *line);
+int				determine_room_type(char *line, int room_type);
 int				edmonds_karp_traverse(t_farm farm);
 int				handle_room_is_end(t_branch_set *set, t_route **prev_route,
 				t_route **route);

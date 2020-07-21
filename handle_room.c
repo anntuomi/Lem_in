@@ -79,8 +79,10 @@ static int		validate_room_input(char **input, t_room **head)
 	return (IS_ROOM);
 }
 
-int				determine_room_type(char *line)
+int				determine_room_type(char *line, int room_type)
 {
+	if (room_type != NORMAL)
+		handle_error(0, "Command not followed by a valid line");
 	if (ft_strequ(line, "##start"))
 		return (START);
 	else if (ft_strequ(line, "##end"))
@@ -102,7 +104,7 @@ void			create_room_list(t_room **head, char **line, t_input **lines)
 		if (*line[0] == 'L')
 			handle_error(0, "Room name starts with 'L'");
 		if (*line[0] == '#')
-			room_type = determine_room_type(*line);
+			room_type = determine_room_type(*line, room_type);
 		else
 		{
 			if (!(input = ft_strsplit(*line, ' ')))
