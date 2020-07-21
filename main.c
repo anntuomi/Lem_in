@@ -23,6 +23,12 @@ static int		get_nbr_of_ants(char *line)
 	return ((int)tmp);
 }
 
+void			check_if_command(char *line)
+{
+	if (ft_strequ(line, "##start") || ft_strequ(line, "##end"))
+		handle_error(0, "##start or ##end in a wrong place");
+}
+
 static t_ant	**get_ants(int *ant_count, t_input **input)
 {
 	t_ant		**ants;
@@ -31,7 +37,10 @@ static t_ant	**get_ants(int *ant_count, t_input **input)
 	(*input)->line = NULL;
 	(*input)->next = NULL;
 	while (get_next_line(0, &line) == 1 && line[0] == '#')
+	{
+		check_if_command(line);
 		set_input(input, line);
+	}
 	*ant_count = get_nbr_of_ants(line);
 	set_input(input, line);
 	if (!(ants = (t_ant **)malloc(sizeof(t_ant *) * (*ant_count + 1))))
@@ -80,10 +89,10 @@ int				main(int ac, char **av)
 	input = head;
 	farm.ants = get_ants(&farm.ant_count, &input);
 	farm.rooms = NULL;
-	create_room_list(&farm.rooms, &line, &input);
+	create_room_list(&farm.rooms, &line, &input, NORMAL);
 	if (!line)
 		handle_error(0, "No links");
-	set_links(line, farm.rooms, &input);
+	set_links(line, farm.rooms, &input, 1);
 	find_edges(&farm.rooms, &farm.start, &farm.end);
 	find_best_routes(&farm);
 	print_input(head);

@@ -72,12 +72,11 @@ static int		count_words(char **array)
 	return (words);
 }
 
-void			set_links(char *line, t_room *room, t_input **input)
+void			set_links(char *line, t_room *room, t_input **input, int first)
 {
 	char		**rooms;
 	t_room		*room1;
 	t_room		*room2;
-	int			first;
 
 	first = 1;
 	while (first || get_next_line(0, &line) == 1)
@@ -85,8 +84,7 @@ void			set_links(char *line, t_room *room, t_input **input)
 		if (line[0] != '#')
 		{
 			if (!(rooms = ft_strsplit(line, '-')) || count_words(rooms) != 2)
-				handle_error(0,
-				"Malloc error or a link is not defined by: name1-name2");
+				handle_error(0, "Malloc error/wrong link format: name1-name2");
 			if (!ft_strequ(rooms[0], rooms[1]))
 			{
 				room1 = get_room(rooms[0], room);
@@ -96,6 +94,8 @@ void			set_links(char *line, t_room *room, t_input **input)
 			}
 			ft_delete(rooms);
 		}
+		else
+			check_if_command(line);
 		set_input(input, line);
 		first = 0;
 	}
